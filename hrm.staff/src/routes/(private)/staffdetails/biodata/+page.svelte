@@ -1,12 +1,18 @@
 <script>
-	import { activePage } from '$data/appStore';
-	import Biodata from '$modules/membership/biodata/index.svelte';
-	import { breadCrumbData } from '../+layout.svelte';
-	$activePage.title = 'Membership';
-	$breadCrumbData = [
-		{ title: 'Home', path: '/membership' },
-		{ title: 'Bio Details', path: '/membership/biodata' }
-	];
+	import { activePage, breadCrumb } from '$data/appStore';
+	import Biodata from '$modules/staffdetails/biodata/index.svelte';
+	$activePage = {
+		title: 'Bio Details',
+		showBreadCrumb: true
+	};
+
+	$: breadCrumb.addToFirstIndex(
+		[
+			{ title: 'Staff Details', path: '/staffdetails' },
+			{ title: 'Bio Details', path: '/staffdetails/biodata' }
+		],
+		true
+	);
 </script>
 
 <Biodata />

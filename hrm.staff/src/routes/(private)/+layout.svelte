@@ -3,8 +3,15 @@
 	import AlertDialog from '$cmps/alerts/alertDialog.svelte';
 	import HeaderPanel from '$cmps/layout/headerPanel.svelte';
 	import SidePanel from '$cmps/layout/sidePanel.svelte';
+	import BreadCrumb from '$cmps/ui/breadCrumb.svelte';
 	import CommandPallete from '$cmps/ui/commandPallete.svelte';
-	import { hideNavDrawer, hideRightDrawer, sideQuickActions } from '$data/appStore';
+	import {
+		activePage,
+		hideNavDrawer,
+		hideRightDrawer,
+		sideQuickActions,
+		breadCrumb
+	} from '$data/appStore';
 	import { adminMenuItems, menuItems } from '$data/userStore';
 	import { logoutStaff } from '$svc/auth';
 	import { showSearchBox } from '$svc/command';
@@ -24,6 +31,7 @@
 	};
 
 	$: rightDrawerOptions = $sideQuickActions;
+	$: activeBreadCrumb = $breadCrumb[$breadCrumb.length - 1].title;
 
 	let showAlert = false;
 
@@ -39,6 +47,11 @@
 			showAlert = true;
 		}
 	};
+	function optionClicked({ detail }: any) {
+		const { index, path } = detail;
+		breadCrumb.removeFromFront(index);
+		goto(path);
+	}
 </script>
 
 {#if $showSearchBox}
@@ -61,7 +74,16 @@
 				on:rightDrawer={() => ($hideRightDrawer = !$hideRightDrawer)}
 			/>
 			<div class="h-full w-full px-6">
-				<slot />
+				{#if $activePage.showBreadCrumb}
+					<div class="">
+						<div class="left">
+							<BreadCrumb options={$breadCrumb} {activeBreadCrumb} on:click={optionClicked} />
+						</div>
+					</div>
+				{/if}
+				<div class="pt-5 w-full h-full flex-grow overflow-hidden">
+					<slot />
+				</div>
 			</div>
 		</div>
 	</div>
@@ -83,7 +105,12 @@
 			<div
 				class="flex-grow overflow-y-auto scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch"
 			>
-				<SidePanel menuItems={$menuItems} adminItems={$adminMenuItems} on:click={toggleLogout} />
+				<SidePanel
+					user={data.user}
+					menuItems={$menuItems}
+					adminItems={$adminMenuItems}
+					on:click={toggleLogout}
+				/>
 			</div>
 		</div>
 	</Drawer>

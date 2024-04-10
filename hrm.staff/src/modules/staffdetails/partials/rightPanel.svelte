@@ -4,13 +4,13 @@
 			label: 'Bio Details',
 			kind: 'form',
 			subLabel: 'Update your biography details',
-			path: '/membership/biodata'
+			path: '/staffdetails/biodata'
 		},
 		{
 			label: 'Bank Details',
 			kind: 'form',
 			subLabel: 'Update your bank details',
-			path: '/membership/bank',
+			path: '/staffdetails/bank',
 			icon: 'mdi:bank-outline',
 			iconBgColor: 'bg-orange-100',
 			iconColor: 'text-orange-500'
@@ -20,7 +20,7 @@
 			kind: 'generic',
 			icon: 'fluent-mdl2:family',
 			subLabel: 'Update your family details',
-			path: '/membership/familyDetails'
+			path: '/staffdetails/family'
 		},
 		{
 			label: 'Children Details',
@@ -29,7 +29,7 @@
 			subLabel: 'Update your children details',
 			iconBgColor: 'bg-pink-100',
 			iconColor: 'text-pink-500',
-			path: '/membership/children'
+			path: '/staffdetails/children'
 		},
 		{
 			label: 'Professional Licence',
@@ -49,6 +49,8 @@
 </script>
 
 <script lang="ts">
+	import { goto } from '$app/navigation';
+
 	import { page } from '$app/stores';
 	import CardButton, { type IButtonConfig } from '$cmps/ui/cardButton.svelte';
 	import { createEventDispatcher } from 'svelte';
@@ -75,7 +77,7 @@
 						iconBgColor={item.iconBgColor}
 						iconColor={item.iconColor}
 						active={activePage === item.path}
-						on:click={() => dispatch('actionClicked', item)}
+						on:click={() => goto(item.path ?? '')}
 					/>
 				</li>
 			{/each}

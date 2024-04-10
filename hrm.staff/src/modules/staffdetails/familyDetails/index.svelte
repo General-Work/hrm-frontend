@@ -9,7 +9,7 @@
 	import SlideDown from '$cmps/ui/slideDown.svelte';
 </script>
 
-<SlideDown transitionIn="slide">
+<SlideDown>
 	<ScrollArea otherClasses="w-full h-full pt-3 px-1">
 		<Form class="w-full h-full flex flex-col gap-6">
 			<Fieldset label="Parents' Info" icon="fluent-mdl2:edit-contact" kind="pink">
@@ -30,12 +30,7 @@
 					<TextField label="Phone Number" required />
 				</div>
 			</Fieldset>
-			<Fieldset
-				label="Emergency Contact"
-				icon="fluent-mdl2:edit-contact"
-				kind="pink"
-		
-			>
+			<Fieldset label="Emergency Contact" icon="fluent-mdl2:edit-contact" kind="pink">
 				<div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
 					<TextField label="Name" required />
 					<TextField label="Phone Number" required />

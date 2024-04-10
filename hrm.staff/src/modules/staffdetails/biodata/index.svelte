@@ -9,7 +9,7 @@
 	import SlideDown from '$cmps/ui/slideDown.svelte';
 </script>
 
-<SlideDown transitionIn="slide">
+<SlideDown>
 	<ScrollArea otherClasses="w-full h-full pt-3 px-1">
 		<Fieldset label="Contact Info" icon="fluent-mdl2:edit-contact" kind="pink">
 			<Form class="w-full h-full flex flex-col gap-6">

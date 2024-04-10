@@ -8,7 +8,7 @@
 	import SlideDown from '$cmps/ui/slideDown.svelte';
 </script>
 
-<SlideDown transitionIn="slide">
+<SlideDown>
 	<ScrollArea otherClasses="w-full h-full pt-3 px-1">
 		<Fieldset label="Banking Info" icon="mdi:bank-outline" kind="pink">
 			<Form class="w-full h-full flex flex-col gap-6">
