@@ -1,0 +1,8 @@
+@import '@fontsource/fira-mono';
+@import 'filepond/dist/filepond.css';
+@import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
+@import 'nprogress.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
