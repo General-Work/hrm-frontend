@@ -32,7 +32,7 @@
 	import type { IButtonConfig } from '$cmps/ui/cardButton.svelte';
 </script>
 
-<div class=" w-full h-full flex gap-4 overflow-hidden pb-32 lg:pb-0">
+<div class=" w-full h-full flex gap-4 overflow-hidden pb-32 lg:pb-0 pr-1 pl-6">
 	<section class=" flex-grow flex flex-col gap-2 h-full">
 		<slot />
 	</section>

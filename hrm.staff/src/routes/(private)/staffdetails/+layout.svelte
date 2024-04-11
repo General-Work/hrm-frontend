@@ -57,7 +57,7 @@
 	import RightPanel from '$cmps/ui/rightPanel.svelte';
 </script>
 
-<div class=" w-full h-full flex gap-4 overflow-hidden pb-32 lg:pb-0">
+<div class=" w-full h-full flex gap-4 overflow-hidden pb-32 lg:pb-0 pl-6 pr-1">
 	<section class=" flex-grow flex flex-col gap-2 h-full">
 		<slot />
 	</section>

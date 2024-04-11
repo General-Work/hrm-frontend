@@ -68,10 +68,10 @@
 				on:leftDrawer={() => ($hideNavDrawer = false)}
 				on:rightDrawer={() => ($hideRightDrawer = !$hideRightDrawer)}
 			/>
-			<div class="h-full w-full px-6">
+			<div class="h-full w-full ">
 				{#if $activePage.showBreadCrumb}
 					<div class="">
-						<div class="left">
+						<div class="pl-6">
 							<BreadCrumb options={$breadCrumb} {activeBreadCrumb} on:click={optionClicked} />
 						</div>
 					</div>

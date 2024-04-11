@@ -1,6 +1,10 @@
 <script>
-	import { activePage } from "$data/appStore";
+	import { activePage } from '$data/appStore';
 
-  $activePage.title = 'Overview'
+	$activePage = {
+		title: 'Overview',
+		showBreadCrumb: false
+	};
 </script>
+
 home
