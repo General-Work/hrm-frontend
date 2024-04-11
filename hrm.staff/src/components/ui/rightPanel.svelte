@@ -1,5 +1,3 @@
-
-
 <script lang="ts">
 	import { goto } from '$app/navigation';
 
@@ -13,7 +11,7 @@
 	$: activePage = $page.url.pathname;
 </script>
 
-<div class="w-full h-full flex flex-col">
+<aside class="w-full h-full flex flex-col">
 	<div class="flex flex-col w-full gap-4">
 		<span class=" text-gray-500 font-medium" class:hidden={!showActionLabel}>Actions</span>
 		<ul class="flex flex-col gap-4 w-full pr-1">
@@ -36,4 +34,4 @@
 			{/each}
 		</ul>
 	</div>
-</div>
+</aside>

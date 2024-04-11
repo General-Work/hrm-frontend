@@ -1,36 +1,60 @@
+<script lang="ts" context="module">
+	const actionsButtons: IButtonConfig[] = [
+		{
+			label: 'Bio Details',
+			kind: 'form',
+			subLabel: 'Update your biography details',
+			path: '/staffdetails/biodata'
+		},
+		{
+			label: 'Bank Details',
+			kind: 'form',
+			subLabel: 'Update your bank details',
+			path: '/staffdetails/bank',
+			icon: 'mdi:bank-outline',
+			iconBgColor: 'bg-orange-100',
+			iconColor: 'text-orange-500'
+		},
+		{
+			label: 'Family Details',
+			kind: 'generic',
+			icon: 'fluent-mdl2:family',
+			subLabel: 'Update your family details',
+			path: '/staffdetails/family'
+		},
+		{
+			label: 'Children Details',
+			kind: 'form',
+			icon: 'fa6-solid:children',
+			subLabel: 'Update your children details',
+			iconBgColor: 'bg-pink-100',
+			iconColor: 'text-pink-500',
+			path: '/staffdetails/children'
+		},
+		{
+			label: 'Professional Licence',
+			kind: 'form',
+			icon: 'material-symbols:license',
+			subLabel: 'Update your licence details',
+			path: '/staffdetails/professionallicence'
+		},
+		{
+			label: 'Accomodation',
+			kind: 'form',
+			icon: 'solar:home-bold',
+			subLabel: 'Update your accomodation details',
+			iconBgColor: 'bg-yellow-100',
+			iconColor: 'text-yellow-600',
+			path: '/staffdetails/accomodation'
+		}
+	];
+</script>
+
 <script lang="ts">
-	import RightPanel from '$modules/staffdetails/partials/rightPanel.svelte';
-	import { goto } from '$app/navigation';
-	import { hideRightDrawer, sideQuickActions } from '$data/appStore';
-	import { writable } from 'svelte/store';
+	import { hideRightDrawer } from '$data/appStore';
 
-	// breadCrumb.addToFirstIndex({ title: 'Home', path: '/membership' });
-
-	// $: $breadCrumbData = breadCrumb.crumbs;
-
-	// const actionClicked = ({ detail }: any) => {
-	// 	goto(detail.path);
-	// 	breadCrumb.makeFirst({ title: detail.label, path: detail.path ?? '' });
-	// 	updateBreadCrumbOptions();
-	// };
-
-	// const removeCrumb = ({ detail }: any) => {
-	// 	goto(detail.path);
-	// 	breadCrumb.removeFromFront(detail.index);
-	// 	updateBreadCrumbOptions();
-	// };
-
-	// const updateBreadCrumbOptions = () => {
-	// 	$breadCrumbData = breadCrumb.crumbs;
-	// };
-
-	// $: activeBreadCrumb = $breadCrumbData[$breadCrumbData.length - 1]?.title;
-
-	// $sideQuickActions = {
-	// 	component: RightPanel,
-	// 	props: { actionClicked },
-	// 	title: 'Quick Actions'
-	// };
+	import type { IButtonConfig } from '$cmps/ui/cardButton.svelte';
+	import RightPanel from '$cmps/ui/rightPanel.svelte';
 </script>
 
 <div class=" w-full h-full flex gap-4 overflow-hidden pb-32 lg:pb-0">
@@ -39,6 +63,6 @@
 	</section>
 	<div class="h-full bg-gray-200 w-0.5 pb-10 hidden md:block" />
 	<aside class="hidden w-[21rem] shrink-0" class:md:block={$hideRightDrawer}>
-		<RightPanel showActionLabel />
+		<RightPanel showActionLabel buttons={actionsButtons} />
 	</aside>
 </div>

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { IMenuItems } from '$types/appTypes';
+	import type { IMenuItems } from '$lib/types';
 	import NavLink from './navLink.svelte';
 	import { page } from '$app/stores';
 

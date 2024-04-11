@@ -12,7 +12,7 @@
 		sideQuickActions,
 		breadCrumb
 	} from '$data/appStore';
-	import { adminMenuItems, menuItems } from '$data/userStore';
+	import { menuItems } from '$data/userStore';
 	import { logoutStaff } from '$svc/auth';
 	import { showSearchBox } from '$svc/command';
 	import { Drawer, CloseButton } from 'flowbite-svelte';
@@ -60,12 +60,7 @@
 <div class="w-screen h-svh overflow-hidden">
 	<div class="flex w-full h-full">
 		<div class="w-[19rem] h-full hidden lg:flex">
-			<SidePanel
-				menuItems={$menuItems}
-				adminItems={$adminMenuItems}
-				on:click={toggleLogout}
-				user={data.user}
-			/>
+			<SidePanel menuItems={$menuItems} on:click={toggleLogout} user={data.user} />
 		</div>
 		<div class="flex-grow flex flex-col h-full gap-4">
 			<HeaderPanel
@@ -105,12 +100,7 @@
 			<div
 				class="flex-grow overflow-y-auto scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch"
 			>
-				<SidePanel
-					user={data.user}
-					menuItems={$menuItems}
-					adminItems={$adminMenuItems}
-					on:click={toggleLogout}
-				/>
+				<SidePanel user={data.user} menuItems={$menuItems} on:click={toggleLogout} />
 			</div>
 		</div>
 	</Drawer>

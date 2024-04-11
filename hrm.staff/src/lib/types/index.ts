@@ -6,6 +6,11 @@ export type IMenuItems = {
 	count?: number;
 };
 
+export interface IRouteItems {
+	title: string;
+	items: IMenuItems[];
+}
+
 export interface IRouteInfo {
 	title: string;
 	showBreadCrumb?: boolean;
