@@ -132,6 +132,10 @@ export function extractQueryParam(queryString: string, index: string = 'q'): str
 export function addCommasToNumber(val: number | string) {
 	return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
+export function validateGhanaCard(value: string) {
+	const reqex = /^GHA-\d{9}-\d{1}$/;
+	return reqex.test(value);
+}
 
 export function startProgress() {
 	NProgress.start();

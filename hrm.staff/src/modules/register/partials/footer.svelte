@@ -11,7 +11,7 @@
 			</div>
 			<p class="text-gray-500">
 				© {dayjs(new Date()).year()} HRM - Employee Services Powered by
-				<span class="text-[#993306]">Connect Solutions</span>
+				<span class="text-[#993306]">Variable X Solutions</span>
 			</p>
 		</div>
 	</div>

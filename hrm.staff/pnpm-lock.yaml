@@ -60,8 +60,8 @@ dependencies:
     specifier: ^8.4.38
     version: 8.4.38
   svelecte:
-    specifier: ^4.0.1
-    version: 4.0.1(svelte@4.2.12)
+    specifier: 3.17.2
+    version: 3.17.2
   svelte-filepond:
     specifier: ^0.2.2
     version: 0.2.2(filepond@4.30.6)
@@ -2867,12 +2867,9 @@ packages:
     engines: {node: '>= 0.4'}
     dev: true
 
-  /svelecte@4.0.1(svelte@4.2.12):
-    resolution: {integrity: sha512-J7OZcRFZ3JY4RxxF2UZazKsTVJid3yb12M/as3Pl/TBeDhT5pSFa8eeF10HCJbA4m6FO/3xJz6MXK3VG9FhtAw==}
-    peerDependencies:
-      svelte: ^3.43.0 || ^4.0.0
+  /svelecte@3.17.2:
+    resolution: {integrity: sha512-dKm50Em11f4DNP3UMI+6oGUBHSrPWDOVsuG44T+2f/Vh/RVJYWjdTGJy87BfetDRTHKmuGMiwaGmMBh58tHmGg==}
     dependencies:
-      svelte: 4.2.12
       svelte-tiny-virtual-list: 2.0.5
     dev: false
 

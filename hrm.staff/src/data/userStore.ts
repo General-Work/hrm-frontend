@@ -33,9 +33,9 @@ const allMenuItems: IRouteItems[] = [
 		items: [
 			{
 				label: 'Approvals',
-				icon: 'fluent:approvals-app-28-filled',
+				icon: 'material-symbols:verified-outline',
 				path: '/admin/approvals',
-				iconSize: 20,
+				iconSize: 22,
 				count: 10
 			}
 		]

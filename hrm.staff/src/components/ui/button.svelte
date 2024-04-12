@@ -10,14 +10,7 @@
 		gold: 'bg-[#993306] text-white',
 		goldOutline: 'border border-[#993306] text-[#993306] disabled:border-gray-300'
 	};
-</script>
-
-<script lang="ts">
-	import { cn } from '$lib/utils';
-
-	export let label = '';
-	export let type: 'submit' | 'button' | 'reset' = 'button';
-	export let color:
+	export type ButtonColor =
 		| 'primary'
 		| 'success'
 		| 'warning'
@@ -26,7 +19,15 @@
 		| 'pink'
 		| 'gold'
 		| 'darkBlue'
-		| 'goldOutline' = 'default';
+		| 'goldOutline';
+</script>
+
+<script lang="ts">
+	import { cn } from '$lib/utils';
+
+	export let label = '';
+	export let type: 'submit' | 'button' | 'reset' = 'button';
+	export let color: ButtonColor = 'default';
 	export let disabled = false;
 	export let busy = false;
 	export let leadingIcon = '';
