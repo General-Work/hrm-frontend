@@ -9,6 +9,11 @@ const routesItems: IRouteItem[] = [
 				title: 'Dashboard*',
 				icon: 'radix-icons:dashboard',
 				path: '/dashboard'
+			},
+			{
+				title: 'Campaigns*',
+				icon: 'ion:megaphone',
+				path: '/campaigns', 
 			}
 			// {
 			// 	title: 'Reports*',

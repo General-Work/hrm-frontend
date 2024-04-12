@@ -43,7 +43,7 @@
 	// Extract form, data, setData, and setFields from formInfo
 	const { form, data, setData, errors, isValid, setFields, handleSubmit } = formInfo;
 	const disposeSub = data.subscribe((values: any) => {
-		dispatch('change', { values: $data, isValid: $isValid, form: formInfo });
+		dispatch('change', { values: $data, isValid: $isValid, form: formInfo, data });
 	});
 
 	// $: ready && dispatch('change', { values: $data, form: formInfo });
