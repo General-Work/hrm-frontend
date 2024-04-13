@@ -9,14 +9,14 @@
 	export let moreHeight = true;
 </script>
 
-<SlideDown otherClasses="w-full h-full">
-	{#if cards && cards.length}
-		<ScrollArea otherClasses="w-full h-full">
-			<div class="flex flex-col gap-8">
+<ScrollArea otherClasses="w-full h-full ">
+	<SlideDown otherClasses="w-full h-full pr-2">
+		{#if cards && cards.length}
+			<div class="flex flex-col gap-8 pb-4">
 				{#each cards as card}
 					<div class="space-y-3">
 						<div class="border-b border-gray-300 text-teal-500 text-lg">{card.title}</div>
-						<div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+						<div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
 							{#if card?.items && card.items.length}
 								{#each card?.items as item (item.title)}
 									<ActionButton
@@ -29,9 +29,7 @@
 										showIconHover={false}
 										{moreHeight}
 										iconSize={20}
-										on:click={() => {
-											goto(item.path ? item.path : '');
-										}}
+										href={item.path ?? ''}
 									/>
 								{/each}
 							{/if}
@@ -39,6 +37,6 @@
 					</div>
 				{/each}
 			</div>
-		</ScrollArea>
-	{/if}
-</SlideDown>
+		{/if}
+	</SlideDown>
+</ScrollArea>

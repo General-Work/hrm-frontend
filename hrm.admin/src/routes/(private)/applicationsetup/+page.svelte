@@ -10,6 +10,6 @@
 	};
 </script>
 
-<div class="h-full w-full px-6 pb-6 pt-4">
+<div class="h-full w-full pt-4">
 	<SetupsView cards={data.pages} moreHeight={false} />
 </div>

@@ -35,7 +35,7 @@
 		maximumStep: null
 	};
 	const schema = z.object({
-		grade: z.string().min(1, 'Name is required'),
+		grade: z.string().min(1, 'Name is required')
 		// category: z.number({
 		// 	invalid_type_error: 'Category is required',
 		// 	required_error: 'Category is required'
@@ -54,7 +54,7 @@
 <Form
 	{schema}
 	initialValues={formData}
-	class="p-4 space-y-4"
+	class="p-4 space-y-5"
 	on:submit
 	on:change={handleChange}
 	bind:this={form}
@@ -69,15 +69,17 @@
 		options={scale}
 		labelAsValue
 	/>
-	<TextField name="level" label="Level" required placeholder="Enter level" type="number" />
-	<SelectField
-		label="High / Low"
-		name="high"
-		required
-		placeholder="Select high / low"
-		options={high}
-		labelAsValue
-	/>
+	<div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+		<TextField name="level" label="Level" required placeholder="Enter level" type="number" />
+		<SelectField
+			label="High / Low"
+			name="high"
+			required
+			placeholder="Select high / low"
+			options={high}
+			labelAsValue
+		/>
+	</div>
 	<TextField
 		name="marketPremium"
 		label="Market Premium (%)"
@@ -85,6 +87,8 @@
 		placeholder="Enter market premium"
 		type="number"
 	/>
-	<TextField name="minimumStep" label="Minimum Step" required type="number" />
-	<TextField name="maximumStep" label="Maximum Step" required type="number" />
+	<div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+		<TextField name="minimumStep" label="Minimum Step" required type="number" />
+		<TextField name="maximumStep" label="Maximum Step" required type="number" />
+	</div>
 </Form>

@@ -59,7 +59,7 @@
 		<Divider otherClasses="mx-6 mb-5 mt-3 bg-gray-200" />
 		<SidePanel routeItems={$menuItems} {hideSidebar} />
 	</aside>
-	<section id="content" class="w-full h-full">
+	<section id="content" class="w-full h-full overflow-hidden">
 		<Navbar user={data.user} bind:hideSidebar on:signout={() => (showAlert = true)} />
 		<section class="bg-[#f5e9eb78] w-full h-full flex-grow flex flex-col">
 			<div

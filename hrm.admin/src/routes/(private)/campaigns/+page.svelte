@@ -1,0 +1,15 @@
+<script lang="ts">
+	import SetupsView from '$cmps/layout/setupsView.svelte';
+	import { activePage } from '$data/appStore';
+
+	export let data;
+
+	$activePage = {
+		title: 'Campaigns',
+		showBreadCrumb: false
+	};
+</script>
+
+<div class="h-full w-full pt-4">
+	<SetupsView cards={data.pages} moreHeight />
+</div>

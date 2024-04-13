@@ -115,7 +115,7 @@
 	export let showArrow = false;
 	export let showIconHover = false;
 	export let moreHeight = false;
-
+	export let href: string | null = null;
 	export let kind = 'generic';
 
 	// when kind is set, use the defaults from the kind
@@ -134,15 +134,16 @@
 	}
 </script>
 
-<button
-	class=" rounded-[6px] border-gray-400/40 pl-4 py-2.5 {!showBg && 'hover:bg-blue-200/40'} "
+<a
+	class=" rounded-[6px] border-gray-400/40 pl-4 py-2.5 {!showBg && 'hover:bg-blue-200/40'} flex items-center"
 	class:bg-white={showBg}
 	class:shadow={showBg}
 	class:hover:scale-95={showBg}
 	class:h-20={moreHeight}
 	on:click
+	{href}
 >
-	<div class="flex justify-between items-center">
+	<div class="flex justify-between items-center w-full">
 		<div class="flex justify-start items-center gap-3">
 			<div class="{iconBgColor} grid place-content-center p-2.5 rounded-[5px]">
 				<iconify-icon {icon} style="font-size: {iconSize}px;" class={iconColor} />
@@ -153,13 +154,9 @@
 			</div>
 		</div>
 		{#if showArrow}
-			<button
-				on:click
-				class=" rounded-full w-9 h-9 grid place-content-center"
-				class:hover:bg-gray-200={showIconHover}
-			>
+			<p class=" rounded-full w-9 h-9 grid place-content-center">
 				<iconify-icon icon="iconamoon:arrow-right-2-light" style="font-size: 25px;" />
-			</button>
+			</p>
 		{/if}
 	</div>
-</button>
+</a>
