@@ -6,14 +6,19 @@ const routesItems: IRouteItem[] = [
 		name: 'Basics',
 		items: [
 			{
-				title: 'Dashboard*',
+				title: 'Dashboard',
 				icon: 'radix-icons:dashboard',
 				path: '/dashboard'
 			},
 			{
-				title: 'Campaigns*',
+				title: 'Staff Records',
+				icon: 'vaadin:records',
+				path: '/staffrecords'
+			},
+			{
+				title: 'Campaigns',
 				icon: 'ion:megaphone',
-				path: '/campaigns', 
+				path: '/campaigns'
 			}
 			// {
 			// 	title: 'Reports*',

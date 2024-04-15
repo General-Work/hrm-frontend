@@ -19,13 +19,14 @@
 <ul class="breadcrumb flex items-center gap-2">
 	{#each options as { title, path }, index}
 		<li>
-			<button
+			<a
 				on:click={() => activeBreadCrumb !== title && dispatch('click', { title, path, index })}
+				href={path ?? ''}
 				class="capitalize"
 				class:text-blue-500={activeBreadCrumb === title}
 				class:text-gray-500={activeBreadCrumb !== title}
 				class:hover:text-gray-400={activeBreadCrumb !== title}
-				class:cursor-text={activeBreadCrumb === title}>{title}</button
+				class:cursor-text={activeBreadCrumb === title}>{title}</a
 			>
 		</li>
 		<!-- <li><i class="bx bx-chevron-right" /></li> -->

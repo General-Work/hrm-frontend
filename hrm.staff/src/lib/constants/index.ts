@@ -17,3 +17,4 @@ export const DISABILITYLIST = [
 
 export const TITLELIST = ['Mr', 'Mrs', 'Miss', 'Dr', 'Prof'].map((item) => item.toUpperCase());
 export const GENDERLIST = ['MALE', 'FEMALE'];
+

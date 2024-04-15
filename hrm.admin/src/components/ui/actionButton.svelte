@@ -117,6 +117,7 @@
 	export let moreHeight = false;
 	export let href: string | null = null;
 	export let kind = 'generic';
+	export let active = false;
 
 	// when kind is set, use the defaults from the kind
 	$: if (kind) {
@@ -135,8 +136,9 @@
 </script>
 
 <a
-	class=" rounded-[6px] border-gray-400/40 pl-4 py-2.5 {!showBg && 'hover:bg-blue-200/40'} flex items-center"
-	class:bg-white={showBg}
+	class=" rounded-[6px] border-gray-400/40 pl-4 py-2.5 {!showBg &&
+		'hover:bg-blue-200/40'} flex items-center"
+	class:bg-white={showBg || active}
 	class:shadow={showBg}
 	class:hover:scale-95={showBg}
 	class:h-20={moreHeight}

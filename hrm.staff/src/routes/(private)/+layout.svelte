@@ -48,9 +48,9 @@
 		}
 	};
 	function optionClicked({ detail }: any) {
-		const { index, path } = detail;
+		const { index } = detail;
 		breadCrumb.removeFromFront(index);
-		goto(path);
+		// goto(path);
 	}
 </script>
 
@@ -68,7 +68,7 @@
 				on:leftDrawer={() => ($hideNavDrawer = false)}
 				on:rightDrawer={() => ($hideRightDrawer = !$hideRightDrawer)}
 			/>
-			<div class="h-full w-full ">
+			<div class="h-full w-full">
 				{#if $activePage.showBreadCrumb}
 					<div class="">
 						<div class="pl-6">
