@@ -11,6 +11,11 @@ const routesItems: IRouteItem[] = [
 				path: '/dashboard'
 			},
 			{
+				title: 'Staff Requests',
+				icon: 'medical-icon:i-registration',
+				path: '/staffrequests'
+			},
+			{
 				title: 'Staff Records',
 				icon: 'vaadin:records',
 				path: '/staffrecords'

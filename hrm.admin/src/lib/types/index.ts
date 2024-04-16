@@ -33,6 +33,8 @@ export interface IUserInfo {
 export interface IRouteInfo {
 	title: string;
 	showBreadCrumb?: boolean;
+	dropdownOptions?: IMenuItem[];
+	currentDropdownOption?: IMenuItem;
 }
 
 export interface ICampaignTemplate {
@@ -59,3 +61,16 @@ export interface ITableDataProps<T> {
 	totalCount: number;
 	items: T[];
 }
+
+export type DocumentKind =
+	| ''
+	| 'all'
+	| 'registration'
+	| 'biodata'
+	| 'bank'
+	| 'family'
+	| 'children'
+	| 'licence'
+	| 'accomodation'
+	| 'leave_plan'
+	| 'leave_request';

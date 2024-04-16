@@ -67,11 +67,12 @@
 	import Editor from './editor.svelte';
 	import axios from 'axios';
 	import type { ITableDataProps } from '$lib/types';
+	import Box from '$cmps/ui/box.svelte';
 
 	export let tableDataInfo: ITableDataProps<any> | undefined;
 </script>
 
-<div>
+<Box bgWhite otherClasses="p-4 mt-4" rounded>
 	<DatatablePage
 		{tableDataInfo}
 		tableColumns={columns}
@@ -85,4 +86,4 @@
 		createEntry={create}
 		{read}
 	/>
-</div>
+</Box>

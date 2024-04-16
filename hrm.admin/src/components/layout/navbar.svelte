@@ -2,16 +2,23 @@
 	import IconButton from '$cmps/ui/iconButton.svelte';
 	import { activePage } from '$data/appStore';
 	import type { IUserInfo } from '$lib/types';
-	import { Avatar, Button } from 'flowbite-svelte';
+	import { Avatar, Button, DropdownDivider } from 'flowbite-svelte';
 	import { createEventDispatcher } from 'svelte';
 	import Dropdown from '$cmps/ui/dropdown.svelte';
 	import DropdownItem from '$cmps/ui/dropdownItem.svelte';
 	import Divider from '$cmps/ui/divider.svelte';
+	import { clickOutsideAction } from 'svelte-legos';
+	import SlideDown from '$cmps/ui/slideDown.svelte';
+	import ScrollArea from '$cmps/ui/scrollArea.svelte';
+	import { page } from '$app/stores';
 
 	export let hideSidebar = false;
 	export let user: IUserInfo | null | undefined;
 
 	let showUser = false;
+	let showRequests = false;
+	let dropdownOpen = false;
+
 	const dispatch = createEventDispatcher();
 </script>
 
@@ -21,10 +28,60 @@
 		color="default"
 		on:click={() => (hideSidebar = !hideSidebar)}
 	/>
-	<div class="flex-grow">
+	<div class="hidden sm:flex flex-grow gap-4 items-center">
 		<p class=" font-semibold">
 			{$activePage.title}
 		</p>
+
+		{#if $activePage.dropdownOptions && $activePage.dropdownOptions.length}
+			<div use:clickOutsideAction on:clickoutside={() => (showRequests = false)}>
+				<button
+					on:click={() => (showRequests = !showRequests)}
+					class="flex items-center gap-1 bg-blue-300 hover:bg-blue-400 rounded-[5px] px-2 py-[4px] min-w-[230px] justify-between"
+				>
+					<span>{$activePage.currentDropdownOption?.title}</span>
+					<iconify-icon
+						icon={dropdownOpen ? 'ri:arrow-up-s-fill' : 'gridicons:dropdown'}
+						style="font-size: 20px;"
+					/>
+				</button>
+				{#if showRequests}
+					<div
+						class="min-w-[230px] mt-1 bg-white shadow-md shadow-gray-300 rounded-md absolute z-10 divide-y py-1"
+						use:clickOutsideAction
+					>
+						<SlideDown otherClasses="w-full h-full">
+							<ScrollArea otherClasses="max-h-96 overflow-y-auto">
+								{#each $activePage.dropdownOptions as item, index}
+									<DropdownItem
+										href={`${$page.url.pathname}?q=${item.path}`}
+										on:click={() => {
+											showRequests = false;
+											$activePage = {
+												...$activePage,
+												currentDropdownOption: item
+											};
+										}}
+									>
+										<div class="flex items-center gap-2 whitespace-nowrap">
+											{#if item.icon}
+												<div class="{item.iconBg} grid place-content-center p-1 rounded-[5px]">
+													<iconify-icon icon={item.icon} class={item.iconColor} />
+												</div>
+											{/if}
+											<span>{item.title}</span>
+										</div>
+									</DropdownItem>
+									{#if index !== $activePage.dropdownOptions.length - 1}
+										<DropdownDivider />
+									{/if}
+								{/each}
+							</ScrollArea>
+						</SlideDown>
+					</div>
+				{/if}
+			</div>
+		{/if}
 	</div>
 	<div class="flex flex-grow sm:hidden" />
 	<div class="flex items-center gap-4">

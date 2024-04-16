@@ -9,6 +9,6 @@
 	};
 </script>
 
-<Box bgWhite otherClasses="p-4 mt-4" rounded>
+<!-- <Box bgWhite otherClasses="p-4 mt-4" rounded> -->
 	<UserManagement tableDataInfo={data.data} />
-</Box>
+<!-- </Box> -->
