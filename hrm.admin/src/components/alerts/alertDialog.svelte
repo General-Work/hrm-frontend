@@ -10,15 +10,17 @@
 	export let iconColor = '';
 	export let confirmText = "Yes, I'm sure";
 	export let buttonType: 'submit' | 'button' | 'reset' = 'button';
+	export let dismissable = true;
 
 	const dispatch = createEventDispatcher();
 </script>
 
-<div class="fixed z-[1000]">
+<div class="fixed z-[2000]">
 	<Modal
 		bind:open
 		size="xs"
 		backdropClass="bg-opacity-30 fixed inset-0 z-50 bg-gray-900 dark:bg-opacity-80"
+		{dismissable}
 	>
 		<div class="text-center">
 			<iconify-icon {icon} style="font-size: 100px;" class={iconColor} />

@@ -1,4 +1,7 @@
 <script lang="ts">
+	import { browser } from '$app/environment';
+	import { goto } from '$app/navigation';
+	import AlertDialog from '$cmps/alerts/alertDialog.svelte';
 	import DateField from '$cmps/forms/dateField.svelte';
 	import Form from '$cmps/forms/form.svelte';
 	import SelectField from '$cmps/forms/selectField.svelte';
@@ -10,9 +13,23 @@
 	import * as z from 'zod';
 
 	const schema = z.object({});
+	let openAlert = false;
+
+	function handleSubmit({ detail }: any) {
+		openAlert = true;
+	}
+
+	function handleCancel() {
+		openAlert = false;
+		// if (browser) window.history.back();
+	}
+	function handleYes() {
+		goto(`/staffrecords/MS0001/postings`);
+		openAlert = false;
+	}
 </script>
 
-<Form {schema} class="flex flex-col gap-4">
+<Form {schema} class="flex flex-col gap-4" on:submit={handleSubmit}>
 	<Fieldset label="Appointments" kind="blue" icon="mingcute:pencil-3-fill">
 		<SelectField
 			label="Appointment Type"
@@ -65,3 +82,12 @@
 		<Button label="Submit" type="submit" color="success" />
 	</div>
 </Form>
+
+<AlertDialog
+	open={openAlert}
+	message="Do you want to continue with staff's Posting Details?"
+	confirmText="Yes, I want"
+	dismissable={false}
+	on:yes={handleYes}
+	on:cancel={handleCancel}
+/>

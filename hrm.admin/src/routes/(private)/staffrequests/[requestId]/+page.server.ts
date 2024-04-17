@@ -35,14 +35,68 @@ function getActions(type: DocumentType, id: string, staffNumber?: string) {
 							}
 						}
 					}
+				},
+				{
+					kind: 'reject',
+					label: 'Reject Request',
+					// subLabel?: string;
+					cmd: {
+						action: 'modalViewer',
+						args: {
+							type: 'rejectRequest',
+							title: 'Reject Request',
+							props: {
+								documentId: id,
+								staffNumber: staffNumber
+								// size?: IModalSize;
+							}
+						}
+					}
 				}
 			];
-			return buttons;
-
+			break;
+		case 'ANNUAL LEAVE PLAN':
+			buttons = [
+				{
+					kind: 'approve',
+					label: 'Accept Request',
+					// subLabel?: string;
+					cmd: {
+						action: 'modalViewer',
+						args: {
+							type: 'acceptRequest',
+							title: 'Accept Request',
+							props: {
+								documentId: id,
+								staffNumber: staffNumber
+								// size?: IModalSize;
+							}
+						}
+					}
+				},
+				{
+					kind: 'reject',
+					label: 'Reject Request',
+					// subLabel?: string;
+					cmd: {
+						action: 'modalViewer',
+						args: {
+							type: 'rejectRequest',
+							title: 'Reject Request',
+							props: {
+								documentId: id,
+								staffNumber: staffNumber
+								// size?: IModalSize;
+							}
+						}
+					}
+				}
+			];
 		default:
 			console.log('not found', type);
-			return buttons;
+			break;
 	}
+	return buttons;
 }
 export async function load({ url, params }) {
 	// const paths = url.pathname.split('/');
@@ -53,7 +107,7 @@ export async function load({ url, params }) {
 		error(res.status, res.message ?? 'Failed to load data');
 	}
 	const component = getComponet(type as DocumentType);
-	const actions = getActions(type as DocumentType, id);
+	const actions = getActions(type as DocumentType, id, 'MS0012');
 	// console.log(actions)
 	return {
 		data: res.data,

@@ -143,10 +143,13 @@ export function extractRedirectToRoute(queryString: string): string | null {
 	return match ? match : null;
 }
 
-export function extractQueryParam(queryString: string, index: string = 'q'): string  {
+export function extractQueryParam(queryString: string, index: string = 'q'): string {
 	const urlParams = new URLSearchParams(queryString);
 	const warehouse = urlParams.get(index);
-	return warehouse ??'';
+	return warehouse ?? '';
+}
+export function isPdf(path: string) {
+	return path.toLowerCase().includes('pdf');
 }
 
 export function addCommasToNumber(val: number | string) {

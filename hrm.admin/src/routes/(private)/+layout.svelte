@@ -10,6 +10,7 @@
 	import logo from '$lib/images/logo_full.png';
 	import Divider from '$cmps/ui/divider.svelte';
 	import { logoutUser } from '$svc/auth.js';
+	import Dialog from '$cmps/ui/dialog.svelte';
 
 	export let data;
 
@@ -85,3 +86,5 @@
 	on:cancel={() => (showAlert = false)}
 	on:yes={signOut}
 />
+
+<Dialog />

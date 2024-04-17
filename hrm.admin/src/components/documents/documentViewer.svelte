@@ -5,7 +5,9 @@
 
 	const map: Record<string, ConstructorOfATypedSvelteComponent> = {
 		staffRegistration: RegistrationEditor,
-		annualLeavePlan: LeavePlanEditor
+		annualLeavePlan: LeavePlanEditor,
+		rejectRequest: RejectRequestEditor,
+		acceptRequest: AcceptRequestEditor
 	};
 
 	function textToComponent(typeName: string): ConstructorOfATypedSvelteComponent {
@@ -30,6 +32,8 @@
 	import { page } from '$app/stores';
 	import RegistrationEditor from './editors/registrationEditor.svelte';
 	import LeavePlanEditor from './editors/leavePlanEditor.svelte';
+	import RejectRequestEditor from './editors/rejectRequestEditor.svelte';
+	import AcceptRequestEditor from './editors/acceptRequestEditor.svelte';
 
 	initMappers(); // set the component mappers
 
@@ -164,8 +168,9 @@
 						title: cmd.args?.title || '',
 						componentConfig: { ...cmd.args, showTitle: false, title: '' },
 						onDone: async (refresh: boolean) => {
-							if (refresh) await loadDocument();
-							if (browser) window.history.back();
+							if (refresh && browser) {
+								window.history.back();
+							}
 						}
 					};
 				});
@@ -225,7 +230,7 @@
 				actions={meta.actions}
 				otherActions={document.otherActions}
 				status={meta.status}
-        feeds={meta.feeds}
+				feeds={meta.feeds}
 				on:click={onAction}
 				{documentId}
 			/>
