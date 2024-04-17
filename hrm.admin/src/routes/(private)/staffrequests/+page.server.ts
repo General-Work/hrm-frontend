@@ -1,3 +1,7 @@
+import { readRequests } from '$svc/staffrequests';
+import { generateTableDataProps } from '$types/utils';
+import { error } from '@sveltejs/kit';
+
 const documentKinds = {
 	all: {
 		icon: 'ph:files',
@@ -46,17 +50,28 @@ const documentKinds = {
 		title: 'Staff Accomodation',
 		path: 'accomodation',
 		iconBg: 'bg-blue-200'
+	},
+	leave_plan: {
+		icon: 'solar:money-bag-bold',
+		title: 'Annual Leave Plan',
+		path: 'leave_plan',
+		iconBg: 'bg-blue-200'
+	},
+	leave_request: {
+		icon: 'solar:money-bag-bold',
+		title: 'Leave Request',
+		path: 'leave_request',
+		iconBg: 'bg-blue-200'
 	}
-	// leave_request: {
-	// 	icon: 'solar:money-bag-bold',
-	// 	title: 'Leave Request',
-	// 	path: 'leave_request',
-	// 	iconBg: 'bg-blue-200'
-	// }
 };
 
 export async function load() {
+	const res = await readRequests();
+	if (!res.success) {
+		error(res.status, res.message ?? 'Failed to load data');
+	}
 	return {
-		documentKinds
+		documentKinds,
+		data: generateTableDataProps(1, 10, res.data!)
 	};
 }

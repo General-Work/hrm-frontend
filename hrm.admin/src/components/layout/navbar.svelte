@@ -29,7 +29,7 @@
 		on:click={() => (hideSidebar = !hideSidebar)}
 	/>
 	<div class="hidden sm:flex flex-grow gap-4 items-center">
-		<p class=" font-semibold">
+		<p class=" font-semibold capitalize">
 			{$activePage.title}
 		</p>
 

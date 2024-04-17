@@ -1,3 +1,6 @@
+import type { IButtonConfigKind } from '$cmps/ui/actionButton.svelte';
+import type { IModalSize } from '$cmps/ui/modal.svelte';
+
 export interface IMenuItem {
 	title: string;
 	icon?: string;
@@ -61,6 +64,33 @@ export interface ITableDataProps<T> {
 	totalCount: number;
 	items: T[];
 }
+export interface IActivity {
+	date: Date;
+	title: string;
+	notes?: string;
+	activity?: string;
+	type?: string;
+}
+
+type ViewerKind = 'inlineViewer' | 'modalViewer';
+
+export interface IRequestAction {
+	kind: IButtonConfigKind;
+	label: string;
+	subLabel?: string;
+	cmd: {
+		action: ViewerKind;
+		args: {
+			type: string;
+			title: string;
+			props: {
+				documentId: string;
+				staffNumber?: string;
+				size?: IModalSize;
+			};
+		};
+	};
+}
 
 export type DocumentKind =
 	| ''
@@ -74,3 +104,5 @@ export type DocumentKind =
 	| 'accomodation'
 	| 'leave_plan'
 	| 'leave_request';
+
+export type DocumentType = 'STAFF REGISTRATION' | 'ANNUAL LEAVE PLAN';

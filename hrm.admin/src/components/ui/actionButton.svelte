@@ -4,6 +4,15 @@
 		label: string;
 		subLabel: string;
 	}
+	export type IButtonConfigKind =
+		| 'generic'
+		| 'accept'
+		| 'approve'
+		| 'reject'
+		| 'transfer'
+		| 'recommendation'
+		| 'file'
+		| 'form';
 	const kinds = {
 		generic: {
 			icon: 'solar:verified-check-bold',
@@ -116,7 +125,7 @@
 	export let showIconHover = false;
 	export let moreHeight = false;
 	export let href: string | null = null;
-	export let kind = 'generic';
+	export let kind: IButtonConfigKind = 'generic';
 	export let active = false;
 
 	// when kind is set, use the defaults from the kind
@@ -136,7 +145,7 @@
 </script>
 
 <a
-	class=" rounded-[6px] border-gray-400/40 pl-4 py-2.5 {!showBg &&
+	class=" rounded-[6px] border-gray-400/40 pl-4 py-2.5 cursor-pointer {!showBg &&
 		'hover:bg-blue-200/40'} flex items-center"
 	class:bg-white={showBg || active}
 	class:shadow={showBg}

@@ -51,6 +51,7 @@
 	export let showEdit = false;
 	export let allowDispatchAfterAction = false;
 	export let allowLoadAfterCreate = true;
+	export let showAdd = true
 	export let read = async (skip: number, take: number, defn?: TableFilter) => {
 		return <any>[];
 	};
@@ -179,7 +180,7 @@
 						bind:hiddenColumns
 					/>
 				</div>
-				<div>
+				<div class:hidden={!showAdd}>
 					<Button label={addButtonLabel} color="primary" on:click={addNew} />
 				</div>
 			</div>

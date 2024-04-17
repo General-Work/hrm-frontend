@@ -3,7 +3,7 @@
 		{
 			header: 'ID',
 			id: 'id',
-			accessor: (row: any) => `000000000${row.id}`.slice(-9)
+			accessor: (row: any) => `00000${row.id}`.slice(-9)
 		},
 		{
 			header: 'Request Type',
@@ -15,12 +15,12 @@
 		{
 			header: 'Staff ID',
 			// id: 'member.staffNumber',
-			accessor: (row: any) => row.staffId ?? 'N/A'
+			accessor: (row: any) => row.staffId ?? '-'
 		},
 		{
 			header: 'Staff Name',
 			// id: 'memberId',
-			accessor: (row: any) => row.staffName ?? 'N/A',
+			accessor: (row: any) => row.staffName ?? '-',
 			plugins: {
 				sort: { disable: true }
 			}
@@ -28,12 +28,12 @@
 		{
 			header: 'Request Date',
 			id: 'createdOn',
-			accessor: (row: any) => dayjs(row.requestDateTime).format('DD-MMM-YYYY') ?? 'N/A'
+			accessor: (row: any) => dayjs(row.requestDateTime).format('DD-MMM-YYYY') ?? '-'
 		},
 		{
 			header: 'Status',
 			// id: 'status',
-			accessor: (row: any) => row.currentStatus ?? 'N/A',
+			accessor: (row: any) => row.status ?? '-',
 			plugins: {
 				sort: { disable: true }
 			}
@@ -49,7 +49,7 @@
 		{
 			header: 'Last Updated At',
 			// id: 'updatedOn',
-      plugins: {
+			plugins: {
 				sort: { disable: true }
 			},
 			accessor: (row: any) => dayjs(row.lastUpdatedAt).format('DD-MMM-YYYY') ?? 'N/A'
@@ -58,6 +58,8 @@
 </script>
 
 <script lang="ts">
+	import { goto } from '$app/navigation';
+
 	import Box from '$cmps/ui/box.svelte';
 
 	import DatatablePage from '$cmps/ui/datatablePage.svelte';
@@ -67,8 +69,24 @@
 	import dayjs from 'dayjs';
 
 	export let tableDataInfo: ITableDataProps<any> | undefined;
+	export let searchParam = '';
 </script>
 
 <Box bgWhite otherClasses="p-4 mt-4" rounded>
-	<Table {tableColumns} data={[]} headerColor="sky" />
+	<!-- <Table {tableColumns} data={[]} headerColor="sky" /> -->
+	<DatatablePage
+		{tableColumns}
+		{tableDataInfo}
+		editorComponent
+		showAdd={false}
+		rowClickable
+		searchPlaceholder="Staff Number..."
+		on:view={({ detail }) => {
+			if (searchParam) {
+				goto(`/staffrequests/${detail.id}?q=${searchParam}&&type=${detail.type}`);
+			} else {
+				goto(`/staffrequests/${detail.id}?type=${detail.type}`);
+			}
+		}}
+	/>
 </Box>

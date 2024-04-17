@@ -1,5 +1,5 @@
 <script>
-// @ts-nocheck
+	// @ts-nocheck
 
 	import { page } from '$app/stores';
 	import { activePage } from '$data/appStore';
@@ -7,7 +7,7 @@
 	import { extractQueryParam } from '$types/utils';
 	export let data;
 
-	$: searchParam = extractQueryParam($page.url.search) || '';
+	$: searchParam = extractQueryParam($page.url.search) ?? '';
 	$activePage = {
 		title: 'Staff Requests',
 		showBreadCrumb: false,
@@ -19,4 +19,4 @@
 	};
 </script>
 
-<RequestTable tableDataInfo={undefined} />
+<RequestTable tableDataInfo={data.data} {searchParam} />

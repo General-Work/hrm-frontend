@@ -11,3 +11,11 @@ export const documentType = writable<DocumentKind>('');
 export const breadCrumb = createBreadCrumb();
 export const showPageLoader = writable(false);
 export const hideRightDrawer = writable(true);
+
+export const modalConfig = writable({
+	show: false,
+	title: '',
+	size: 'xs',
+	componentConfig: null,
+	onDone: (refresh: boolean) => {}
+});

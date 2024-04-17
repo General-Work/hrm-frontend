@@ -7,6 +7,8 @@ import { toast, type ToastOptions } from 'svelte-french-toast';
 import { nanoid } from 'nanoid';
 import NProgress from 'nprogress';
 import type { IPageInfo, ITableDataProps } from '../types';
+import { crossfade } from 'svelte/transition';
+import { quintOut } from 'svelte/easing';
 
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
@@ -15,6 +17,23 @@ export function validatePhoneNumber(value: string) {
 	const phoneRegex = /^\d{10}$/;
 	return phoneRegex.test(value);
 }
+export const [send, receive] = crossfade({
+	duration: (d) => Math.sqrt(d * 200),
+
+	fallback(node, params) {
+		const style = getComputedStyle(node);
+		const transform = style.transform === 'none' ? '' : style.transform;
+
+		return {
+			duration: 600,
+			easing: quintOut,
+			css: (t) => `
+				        transform: ${transform} translateX(${(1 - t) * 100}%);
+				opacity: ${t}
+			`
+		};
+	}
+});
 
 export function createBreadCrumb() {
 	const { subscribe, set, update } = writable<IBreadCrumb[]>([{ title: 'Home' }]);
@@ -124,10 +143,10 @@ export function extractRedirectToRoute(queryString: string): string | null {
 	return match ? match : null;
 }
 
-export function extractQueryParam(queryString: string, index: string = 'q'): string | null {
+export function extractQueryParam(queryString: string, index: string = 'q'): string  {
 	const urlParams = new URLSearchParams(queryString);
 	const warehouse = urlParams.get(index);
-	return warehouse;
+	return warehouse ??'';
 }
 
 export function addCommasToNumber(val: number | string) {
