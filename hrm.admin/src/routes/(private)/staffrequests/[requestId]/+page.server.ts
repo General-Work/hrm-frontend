@@ -5,19 +5,19 @@ import { error } from '@sveltejs/kit';
 
 function getComponet(type: DocumentType) {
 	switch (type) {
-		case 'STAFF REGISTRATION':
+		case 'NEW REGISTRATION':
 			return 'staffRegistration';
-		case 'ANNUAL LEAVE PLAN':
-			return 'annualLeavePlan';
+		case 'BANK UPDATE':
+			return 'bankUpdate';
 		default:
-			console.log('not found', type);
+			// console.log('not found', type);
 			return null;
 	}
 }
 function getActions(type: DocumentType, id: string, staffNumber?: string) {
 	let buttons: IRequestAction[] = [];
 	switch (type) {
-		case 'STAFF REGISTRATION':
+		case 'NEW REGISTRATION':
 			buttons = [
 				{
 					kind: 'approve',
@@ -45,6 +45,22 @@ function getActions(type: DocumentType, id: string, staffNumber?: string) {
 						args: {
 							type: 'rejectRequest',
 							title: 'Reject Request',
+							props: {
+								documentId: id,
+								staffNumber: staffNumber
+								// size?: IModalSize;
+							}
+						}
+					}
+				},
+				{
+					kind: 'transfer',
+					label: 'Transfer Request',
+					cmd: {
+						action: 'modalViewer',
+						args: {
+							type: 'transferRequest',
+							title: 'Transfer Request',
 							props: {
 								documentId: id,
 								staffNumber: staffNumber
@@ -55,7 +71,7 @@ function getActions(type: DocumentType, id: string, staffNumber?: string) {
 				}
 			];
 			break;
-		case 'ANNUAL LEAVE PLAN':
+		case "BANK UPDATE":
 			buttons = [
 				{
 					kind: 'approve',
@@ -93,7 +109,7 @@ function getActions(type: DocumentType, id: string, staffNumber?: string) {
 				}
 			];
 		default:
-			console.log('not found', type);
+			// console.log('not found', type);
 			break;
 	}
 	return buttons;

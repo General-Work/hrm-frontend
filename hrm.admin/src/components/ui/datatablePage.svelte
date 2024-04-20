@@ -51,7 +51,7 @@
 	export let showEdit = false;
 	export let allowDispatchAfterAction = false;
 	export let allowLoadAfterCreate = true;
-	export let showAdd = true
+	export let showAdd = true;
 	export let read = async (skip: number, take: number, defn?: TableFilter) => {
 		return <any>[];
 	};
@@ -160,9 +160,9 @@
 	});
 </script>
 
-<div class="w-full h-full flex flex-col gap-4">
+<div class="w-full h-full flex flex-col gap-2">
 	<div class="flex flex-col gap-2">
-		<div class="flex justify-between">
+		<div class="flex flex-col sm:flex-row gap-2 sm:justify-between">
 			<div class:hidden={hideSearchBox} class="flex-grow max-w-md">
 				<TableSearchBox placeholder={searchPlaceholder} bind:value={query} />
 			</div>
@@ -186,6 +186,7 @@
 			</div>
 		</div>
 	</div>
+	<slot name="filters" />
 	<DataTable
 		{height}
 		{headerColor}
@@ -228,7 +229,7 @@
 >
 	<div>
 		<svelte:component
-			this={editor}
+			this={editorComponent}
 			recordId={activeEntry.recordId}
 			bind:this={editor}
 			bind:isValid

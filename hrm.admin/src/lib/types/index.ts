@@ -105,4 +105,4 @@ export type DocumentKind =
 	| 'leave_plan'
 	| 'leave_request';
 
-export type DocumentType = 'STAFF REGISTRATION' | 'ANNUAL LEAVE PLAN';
+export type DocumentType = 'NEW REGISTRATION' | "BANK UPDATE";

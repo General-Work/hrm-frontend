@@ -5,9 +5,10 @@
 	import { nanoid } from 'nanoid';
 	import Flatpickr from 'svelte-flatpickr';
 	import 'flatpickr/dist/flatpickr.css';
+	import { cn } from '$types/utils';
 
 	export let name = '';
-	export let label = name;
+	export let label = '';
 	export let required = false;
 	export let readonly = false;
 	export let placeholder = '';
@@ -18,6 +19,7 @@
 	export let altInput = true;
 	export let weekNumbers = false;
 	export let mode: 'single' | 'multiple' | 'range' = 'single';
+	export let otherClasses = '';
 
 	let id = nanoid();
 	let pickerId = nanoid();
@@ -53,7 +55,7 @@
 </script>
 
 <fieldset class="flex flex-col gap-1.5">
-	<label for={id} class=" font-light text-gray-600 dark:text-white">
+	<label for={id} class=" font-light text-gray-600 dark:text-white" class:hidden={!label}>
 		{label}
 		{#if required}
 			<span class="text-red-500 pl-1">*</span>
@@ -68,7 +70,10 @@
 		{placeholder}
 		{name}
 		{readonly}
-		class="border border-gray-300 border-solid h-10 rounded-[5px] w-full placeholder:font-thin"
+		class={cn(
+			'border border-gray-300 border-solid h-[38.4px] rounded-[5px] w-full placeholder:font-thin cursor-pointer disabled:cursor-default',
+			otherClasses
+		)}
 	/>
 
 	{#if hasError}

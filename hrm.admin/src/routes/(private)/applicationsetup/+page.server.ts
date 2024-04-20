@@ -8,7 +8,7 @@ const dataPages: IMenuItem[] = [
 				title: 'Directorate',
 				description: 'Manage all directorates',
 				icon: 'mingcute:department-fill',
-				path: '',
+				path: '/applicationsetup/directorate',
 				iconBg: 'bg-blue-300'
 			},
 			{
@@ -16,14 +16,14 @@ const dataPages: IMenuItem[] = [
 				description: 'Manage all departments',
 				iconBg: 'bg-yellow-300',
 				icon: 'mingcute:department-fill',
-				path: ''
+				path: '/applicationsetup/departments'
 			},
 			{
 				title: 'Unit',
 				description: "Manage all department's units",
 				iconBg: 'bg-green-300',
 				icon: 'mingcute:department-fill',
-				path: ''
+				path: '/applicationsetup/units'
 			}
 		]
 	},

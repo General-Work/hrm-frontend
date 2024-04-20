@@ -9,6 +9,8 @@
 </script>
 
 <script lang="ts">
+	import { cn } from '$types/utils';
+
 	export let label = '';
 	export let type: 'submit' | 'button' | 'reset' = 'button';
 	export let color: 'primary' | 'success' | 'warning' | 'default' | 'ghost' = 'default';
@@ -16,12 +18,16 @@
 	export let busy = false;
 	export let leadingIcon = '';
 	export let trailingIcon = '';
+	export let otherClasses = '';
 </script>
 
 <button
 	disabled={disabled || busy}
 	{type}
-	class=" rounded-[5px] px-4 py-2 {kind[color]} disabled:bg-gray-300 disabled:text-gray-400"
+	class={cn(
+		` rounded-[5px] px-4 py-2 ${kind[color]} disabled:bg-gray-300 disabled:text-gray-400`,
+		otherClasses
+	)}
 	on:click
 >
 	<div class="flex items-center gap-1.5 justify-center whitespace-nowrap">

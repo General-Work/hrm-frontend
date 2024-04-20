@@ -4,7 +4,7 @@
 	export let readonly = false
 </script>
 
-<section class="bg-gray-200/70 rounded-md flex items-center  p-2  border border-gray-300">
+<section class="bg-gray-50/70 rounded-md flex items-center  p-2  border border-gray-300">
 	<iconify-icon icon="eva:search-outline" class="text-xl text-gray-500" />
 	<input
 		bind:value

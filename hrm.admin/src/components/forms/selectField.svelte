@@ -7,7 +7,7 @@
 	import { nanoid } from 'nanoid';
 
 	export let name = '';
-	export let label = name;
+	export let label = '';
 	// export let noLabel = false;
 	export let required = false;
 	export let readonly = false;
@@ -47,7 +47,7 @@
 </script>
 
 <fieldset class="flex flex-col gap-2">
-	<label for={id} class="font-light text-gray-600 dark:text-white">
+	<label for={id} class="font-light text-gray-600 dark:text-white" class:hidden={!label}>
 		{label}
 		{#if required}
 			<span class="text-red-500 pl-1">*</span>

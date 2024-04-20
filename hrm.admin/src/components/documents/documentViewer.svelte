@@ -7,7 +7,9 @@
 		staffRegistration: RegistrationEditor,
 		annualLeavePlan: LeavePlanEditor,
 		rejectRequest: RejectRequestEditor,
-		acceptRequest: AcceptRequestEditor
+		acceptRequest: AcceptRequestEditor,
+		transferRequest: TransferEditor,
+		bankUpdate: BankUpdateEditor
 	};
 
 	function textToComponent(typeName: string): ConstructorOfATypedSvelteComponent {
@@ -34,6 +36,8 @@
 	import LeavePlanEditor from './editors/leavePlanEditor.svelte';
 	import RejectRequestEditor from './editors/rejectRequestEditor.svelte';
 	import AcceptRequestEditor from './editors/acceptRequestEditor.svelte';
+	import TransferEditor from './editors/transferEditor.svelte';
+	import BankUpdateEditor from './editors/bankUpdateEditor.svelte';
 
 	initMappers(); // set the component mappers
 

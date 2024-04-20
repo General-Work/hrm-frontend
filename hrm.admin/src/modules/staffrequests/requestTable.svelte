@@ -65,11 +65,14 @@
 	import DatatablePage from '$cmps/ui/datatablePage.svelte';
 	import type { ITableColumn } from '$cmps/ui/table.svelte';
 	import Table from '$cmps/ui/table.svelte';
+	import TableFilters from '$cmps/ui/tableFilters.svelte';
 	import type { ITableDataProps } from '$types/types';
 	import dayjs from 'dayjs';
 
 	export let tableDataInfo: ITableDataProps<any> | undefined;
 	export let searchParam = '';
+	export let requestTypes: any[] = [];
+	export let currentRequest: any = {};
 </script>
 
 <Box bgWhite otherClasses="p-4 mt-4" rounded>
@@ -88,5 +91,9 @@
 				goto(`/staffrequests/${detail.id}?type=${detail.type}`);
 			}
 		}}
-	/>
+	>
+		<div slot="filters">
+			<TableFilters {requestTypes} {currentRequest} />
+		</div>
+	</DatatablePage>
 </Box>

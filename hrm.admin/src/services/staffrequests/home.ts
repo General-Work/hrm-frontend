@@ -3,7 +3,7 @@ import type { IActivity, ICampaignTemplate, IPageInfo } from '$lib/types';
 const x = [
 	{
 		id: 1,
-		type: 'STAFF REGISTRATION',
+		type: 'NEW REGISTRATION',
 		staffId: '-',
 		staffName: 'Yaw Kusi',
 		requestDate: new Date(),
@@ -13,7 +13,7 @@ const x = [
 	},
 	{
 		id: 2,
-		type: 'ANNUAL LEAVE PLAN',
+		type: "BANK UPDATE",
 		staffId: 'MS00012',
 		staffName: 'Paul Jackson',
 		requestDate: new Date(),

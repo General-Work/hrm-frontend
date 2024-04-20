@@ -33,7 +33,7 @@
 			{$activePage.title}
 		</p>
 
-		{#if $activePage.dropdownOptions && $activePage.dropdownOptions.length}
+		<!-- {#if $activePage.dropdownOptions && $activePage.dropdownOptions.length}
 			<div use:clickOutsideAction on:clickoutside={() => (showRequests = false)}>
 				<button
 					on:click={() => (showRequests = !showRequests)}
@@ -81,7 +81,7 @@
 					</div>
 				{/if}
 			</div>
-		{/if}
+		{/if} -->
 	</div>
 	<div class="flex flex-grow sm:hidden" />
 	<div class="flex items-center gap-4">

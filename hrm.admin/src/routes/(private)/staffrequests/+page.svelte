@@ -10,13 +10,20 @@
 	$: searchParam = extractQueryParam($page.url.search) ?? '';
 	$activePage = {
 		title: 'Staff Requests',
-		showBreadCrumb: false,
-		dropdownOptions: Object.values(data.documentKinds),
-		currentDropdownOption:
-			searchParam && data.documentKinds
-				? data.documentKinds[searchParam]
-				: data.documentKinds['all']
+		showBreadCrumb: false
+		// dropdownOptions: Object.values(data.documentKinds),
+		// currentDropdownOption:
+		// 	searchParam && data.documentKinds
+		// 		? data.documentKinds[searchParam]
+		// 		: data.documentKinds['all']
 	};
 </script>
 
-<RequestTable tableDataInfo={data.data} {searchParam} />
+<RequestTable
+	tableDataInfo={data.data}
+	{searchParam}
+	requestTypes={Object.values(data.documentKinds)}
+	currentRequest={searchParam && data.documentKinds
+		? data.documentKinds[searchParam]
+		: data.documentKinds['all']}
+/>
