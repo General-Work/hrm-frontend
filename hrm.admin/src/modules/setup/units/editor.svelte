@@ -8,7 +8,8 @@
 </script>
 
 <Form {schema} class="p-4 space-y-4">
-	<TextField label="Directorate Name" name="name" required />
-	<SelectField label="Director" name="director" required />
-	<SelectField label="Deputy director" name="deputyDirector" />
+	<SelectField label="Directorate" name="directorate" required />
+	<SelectField label="Department" name="department" required />
+	<TextField label="Unit Name" name="name" required />
+	<SelectField label="Unit Head" name="hod" required />
 </Form>

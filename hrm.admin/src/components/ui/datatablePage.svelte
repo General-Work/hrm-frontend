@@ -23,7 +23,7 @@
 	export let hideSearchBox = false;
 	export let searchPlaceholder = 'Search...';
 	export let take = 10;
-	export let addNewHeading = 'Add New Record';
+	export let addNewHeading = 'Add New Record'
 	export let addButtonLabel = 'Add New';
 	export let updateHeading = 'Update';
 	export let newRecord: any = {};

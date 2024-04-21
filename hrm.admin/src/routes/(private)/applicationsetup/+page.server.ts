@@ -41,7 +41,7 @@ const dataPages: IMenuItem[] = [
 				title: 'Holidays',
 				description: 'Manage all holidays within the year',
 				icon: 'clarity:date-solid-badged',
-				path: '',
+				path: '/applicationsetup/holidays',
 				iconBg: 'bg-blue-300'
 			},
 			{
