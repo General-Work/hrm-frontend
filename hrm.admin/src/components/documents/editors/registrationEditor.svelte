@@ -10,7 +10,7 @@
 	import AttachementsEditor from './attachementsEditor.svelte';
 
 	export let data: IStaffRegistration;
-	export let requestId = '';
+	// export let requestId = '';
 </script>
 
 <div>
