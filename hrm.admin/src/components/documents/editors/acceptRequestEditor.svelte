@@ -39,7 +39,7 @@
 		// goto('')
 		// dispatch('close', 'refresh');
 		const type = extractQueryParam($page.url.search, 'type');
-		if (type === 'STAFF REGISTRATION') {
+		if (type === 'NEW REGISTRATION') {
 			openAlert = true;
 			// $modalConfig = {
 			// 	show: false,
