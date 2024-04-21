@@ -1,10 +1,10 @@
 <script lang="ts">
-	import { onMount, onDestroy } from 'svelte';
+	import { onMount, onDestroy, afterUpdate } from 'svelte';
 	import { Calendar } from '@fullcalendar/core';
 	import dayGridPlugin from '@fullcalendar/daygrid';
 	import interaction from '@fullcalendar/interaction';
 	import multiMonth from '@fullcalendar/multimonth';
-	import googleCalenda from '@fullcalendar/google-calendar';
+	import googleCalendar from '@fullcalendar/google-calendar';
 	import list from '@fullcalendar/list';
 	import timeGrid from '@fullcalendar/timegrid';
 	import CalendarDetail from './calendarDetail.svelte';
@@ -25,18 +25,29 @@
 	let showDetails = false;
 	let open = false;
 	let selectedDate = '';
-	let activeEvent: any = {
+	let activeEvent = {
 		title: '',
 		start: '',
 		end: ''
 	};
 
-	// $: options = {
+	let calendarElement: HTMLDivElement;
 
-	// }
 	onMount(() => {
-		calendar = new Calendar(document.getElementById('calendar')!, {
-			plugins: [dayGridPlugin, interaction, multiMonth, googleCalenda, list, timeGrid],
+		initializeCalendar();
+	});
+
+	afterUpdate(() => {
+		updateCalendar();
+	});
+
+	onDestroy(() => {
+		destroyCalendar();
+	});
+
+	function initializeCalendar() {
+		calendar = new Calendar(calendarElement, {
+			plugins: [dayGridPlugin, interaction, multiMonth, googleCalendar, list, timeGrid],
 			initialView: 'dayGridMonth', // Set initial view to month view
 			events: [...events, ...holidays],
 			droppable: true,
@@ -58,23 +69,33 @@
 				};
 			},
 			dateClick: function (info) {
+				info.dayEl.style.backgroundColor = 'red';
 				selectedDate = info.dateStr;
 				open = true;
 			},
 			eventContent: function (info) {
 				let html = `<div class="">${info.timeText}</div>
-                    <div id="info" class="truncate pl-1 cursor-pointer">${info.event.title}</div>
-                    `;
+											<div id="info" class="truncate pl-1 cursor-pointer">${info.event.title}</div>
+											`;
 				return { html };
 			}
 		});
 
 		calendar.render();
+	}
 
-		return onDestroy(() => {
+	function updateCalendar() {
+		if (calendar && calendarElement) {
 			calendar.destroy();
-		});
-	});
+			initializeCalendar();
+		}
+	}
+
+	function destroyCalendar() {
+		if (calendar) {
+			calendar.destroy();
+		}
+	}
 
 	function closeSideModal() {
 		open = false;
@@ -90,7 +111,7 @@
 		on:click={() => (open = true)}
 	/>
 </div>
-<div id="calendar"></div>
+<div bind:this={calendarElement}></div>
 
 <Modal
 	bind:open={showDetails}

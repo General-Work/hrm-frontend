@@ -49,21 +49,21 @@ const dataPages: IMenuItem[] = [
 				description: 'Manage plan year for leave scheduling',
 				iconBg: 'bg-pink-300',
 				icon: 'iwwa:year',
-				path: ''
+				path: '/applicationsetup/planyear'
 			},
 			{
 				title: 'Leave Year',
 				description: 'Manage leave year for leave scheduling',
 				iconBg: 'bg-green-300',
 				icon: 'iwwa:year',
-				path: ''
+				path: '/applicationsetup/leaveyear'
 			},
 			{
 				title: 'Leave Type',
 				description: 'Manage leave types and its policies',
 				iconBg: 'bg-sky-300',
 				icon: 'mingcute:department-fill',
-				path: ''
+				path: '/applicationsetup/leavetypes'
 			}
 		]
 	},
@@ -75,7 +75,7 @@ const dataPages: IMenuItem[] = [
 				title: 'Man Power Levels',
 				description: 'Manage man power levels for staffing',
 				icon: 'fa6-solid:people-line',
-				path: '',
+				path: '/applicationsetup/manpowerlevels',
 				iconBg: 'bg-blue-300'
 			},
 			{
@@ -83,14 +83,14 @@ const dataPages: IMenuItem[] = [
 				description: 'Manage all professional bodies',
 				iconBg: 'bg-yellow-300',
 				icon: 'vaadin:institution',
-				path: ''
+				path: '/applicationsetup/professionalbodies'
 			},
 			{
 				title: 'Events',
 				description: 'Manage all events with in the year',
 				iconBg: 'bg-sky-300',
 				icon: 'clarity:event-solid-badged',
-				path: ''
+				path: '/applicationsetup/events'
 			}
 		]
 	},
