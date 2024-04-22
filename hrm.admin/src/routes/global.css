@@ -234,3 +234,21 @@ left: 60px;
 .scrollbar-thumb-rounded::-webkit-scrollbar-thumb {
   border-radius: 0.25rem;
 }
+
+.loginscreen::after {
+	content: '';
+	inset: 0;
+	height: 30vh;
+	position: absolute;
+	z-index: -10;
+	@apply bg-sky-600
+}
+
+.loginscreen::before {
+	content: '';
+	inset: 0;
+	height: 70vh;
+	transform: skewY(-13deg);
+	position: absolute;
+	@apply bg-sky-600
+}

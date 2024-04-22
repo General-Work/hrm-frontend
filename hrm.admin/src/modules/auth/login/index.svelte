@@ -1,29 +1,14 @@
-<script lang="ts">
-	import { goto } from '$app/navigation';
-	import { page } from '$app/stores';
-	import Button from '$cmps/ui/button.svelte';
-	import { loginUser } from '$svc/auth';
-	import { extractRedirectToRoute, showError } from '$types/utils';
-
-	let busy = false;
-	async function handleLogin() {
-		try {
-			busy = true;
-			await loginUser({ staffId: 'Msas', password: 'wewe' });
-			const redirect = extractRedirectToRoute($page.url.search);
-			if (redirect) {
-				goto(redirect);
-				return;
-			}
-			goto('/dashboard');
-		} catch (error: any) {
-			showError(error.message || error);
-		} finally {
-			busy = false;
-		}
-	}
+<script>
+	import Editor from './editor.svelte';
+	import Info from './info.svelte';
 </script>
 
-<div class="w-screen h-screen grid justify-center items-center">
-	<Button color="primary" label="Login" {busy} on:click={handleLogin} />
+<div
+	class="relative h-screen w-screen loginscreen overflow-hidden isolate p-1
+"
+>
+	<div class="lg:flex flex items-center justify-center w-full container mx-auto lg:flex-row h-full">
+		<Info />
+		<Editor />
+	</div>
 </div>

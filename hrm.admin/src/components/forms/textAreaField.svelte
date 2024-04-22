@@ -1,83 +1,83 @@
 <script lang="ts">
-  import { fade } from "svelte/transition";
-  import { getContext, createEventDispatcher } from "svelte";
-  import { nanoid } from "nanoid";
-  import { key } from "./form";
+	import { fade } from 'svelte/transition';
+	import { getContext, createEventDispatcher } from 'svelte';
+	import { nanoid } from 'nanoid';
+	import { key } from './form';
 
-  export let label: string = "";
-  export let name: string = "";
-  export let required: Boolean = false;
-  export let placeholder: string = "";
-  export let readonly = false;
-  export let rows = 3;
-  export let allowAutoSpan = false;
+	export let label: string = '';
+	export let name: string = '';
+	export let required: Boolean = false;
+	export let placeholder: string = '';
+	export let readonly = false;
+	export let rows = 3;
+	export let allowAutoSpan = false;
 
-  const { touched, errors, data, setData }: any = getContext(key);
-  let id = nanoid();
-  let dispatch = createEventDispatcher();
+	const { touched, errors, data, setData }: any = getContext(key);
+	let id = nanoid();
+	let dispatch = createEventDispatcher();
 
-  function onChange() {
-    dispatch("change", { name, value: $data[name] });
-  }
+	function onChange() {
+		dispatch('change', { name, value: $data[name] });
+	}
 
-  $: hasError = $touched[name] && $errors[name]?.length;
-  $: error = $errors[name]?.join(", ");
+	$: hasError = $touched[name] && $errors[name]?.length;
+	$: error = $errors[name]?.join(', ');
 
-  function autoExpandTextarea(event: any) {
-    if (!allowAutoSpan) {
-      return;
-    }
-    event.target.style.height = "auto";
-    event.target.style.height = event.target.scrollHeight + "px";
-  }
+	function autoExpandTextarea(event: any) {
+		if (!allowAutoSpan) {
+			return;
+		}
+		event.target.style.height = 'auto';
+		event.target.style.height = event.target.scrollHeight + 'px';
+	}
 </script>
 
 <fieldset class="flex flex-col gap-1.5">
-  <label for={id} class="  font-light text-gray-600 dark:text-white">
-    {label}
-    {#if required}
-      <span class="text-red-500 pl-1">*</span>
-    {/if}
-  </label>
+	<label for={id} class=" text-gray-600 dark:text-white">
+		{label}
+		{#if required}
+			<span class="text-red-500 pl-1">*</span>
+		{/if}
+	</label>
 
-  <textarea
-    class:error={hasError}
-    class:success={!readonly && !hasError && $touched[name]}
-    class:touched={!readonly && $touched[name]}
-    class:readonly
-    class="border resize-none overflow-y-hidden border-gray-300 shadow-gray-50 rounded-[5px] shadow text-black w-full py-2 outline-transparent focus:outline-transparent focus:outline-none px-3 placeholder:text-gray-500/80 dark:shadow-transparent"
-    {rows}
-    {placeholder}
-    {readonly}
-    {id}
-    value={$data[name] || ""}
-    on:change={onChange}
-    on:input={autoExpandTextarea}
-    {name}
-    {...$$restProps}
-  />
+	<textarea
+		class:error={hasError}
+		class:success={!readonly && !hasError && $touched[name]}
+		class:touched={!readonly && $touched[name]}
+		class:readonly
+		class="border resize-none overflow-y-hidden border-gray-300 shadow-gray-50 rounded-[5px] shadow text-black w-full py-2 outline-transparent focus:outline-transparent focus:outline-none px-3 placeholder:text-gray-500/80 dark:shadow-transparent"
+		{rows}
+		{placeholder}
+		{readonly}
+		{id}
+		value={$data[name] || ''}
+		on:change={onChange}
+		on:input={autoExpandTextarea}
+		{name}
+		{...$$restProps}
+	/>
 
-  {#if hasError}
-    <label
-      for={id}
-      transition:fade
-      class="flex items-center gap-1 pt-1 text-sm"
-      class:text-red-600={hasError}
-    >
-      <iconify-icon icon="solar:danger-circle-bold-duotone" />
-      {error}
-    </label>
-  {/if}
+	{#if hasError}
+		<label
+			for={id}
+			transition:fade
+			class="flex items-center gap-1 pt-1 text-sm"
+			class:text-red-600={hasError}
+		>
+			<iconify-icon icon="solar:danger-circle-bold-duotone" />
+			{error}
+		</label>
+	{/if}
 </fieldset>
 
 <style>
-  .error {
-    @apply border-red-600;
-  }
-  .success {
-    @apply border-green-600;
-  }
-  .readonly {
-    @apply bg-[#f1f1f1];
-  }
+	.error {
+		@apply border-red-600;
+	}
+	.success {
+		@apply border-green-600;
+	}
+	.readonly {
+		@apply bg-[#f1f1f1];
+	}
 </style>

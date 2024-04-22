@@ -43,7 +43,7 @@
 </script>
 
 <fieldset class="flex flex-col gap-1.5 {otherClasses}">
-	<label for={id} class=" font-light text-gray-600 dark:text-white">
+	<label for={id} class="text-gray-600 dark:text-white">
 		{label}
 		{#if required}
 			<span class="text-red-500 pl-1">*</span>
