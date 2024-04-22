@@ -64,7 +64,7 @@
 			</div>
 			<p class=" text-gray-600 text-lg text-center font-medium">{getTime()}</p>
 			<h2 class="mt-1 text-2xl font-bold leading-9 tracking-tight text-gray-900">
-				Sign in to your Staff ID
+				Sign in to your HRM Account
 			</h2>
 		</div>
 
