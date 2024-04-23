@@ -3,6 +3,7 @@
 	import FileUpload from '$cmps/forms/fileUpload.svelte';
 	import Form from '$cmps/forms/form.svelte';
 	import SelectField from '$cmps/forms/selectField.svelte';
+	import TextAreaField from '$cmps/forms/textAreaField.svelte';
 	import TextField from '$cmps/forms/textField.svelte';
 	import Fieldset from '$cmps/ui/fieldset.svelte';
 	import { generateEndDate } from '$types/utils';
@@ -11,7 +12,7 @@
 
 	const schema = z.object({});
 	let init = {
-		planYear: '2024',
+		leaveYear: '2025',
 		noOfDays: null,
 		startDate: null,
 		endDate: null,
@@ -33,25 +34,23 @@
 	}
 </script>
 
-<Fieldset label="Excuse duty Form" kind="pink" icon="game-icons:archive-register">
+<Fieldset label="Deferment Form" kind="pink" icon="game-icons:archive-register">
 	{#key renderId}
 		<Form {schema} class="flex flex-col gap-4 p-2" initialValues={init} on:change={handleChange}>
+			<TextField
+				required
+				name="leaveYear"
+				label="Year defering to"
+				readonly
+				placeholder="Enter number of days given"
+			/>
 			<TextField
 				required
 				name="noOfDays"
 				label="No. of days"
 				type="number"
-				placeholder="Enter number of days given"
+				placeholder="Enter number of days defering"
 			/>
-			<div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-				<DateField
-					required
-					name="startDate"
-					label="Start Date"
-					placeholder="Select when you want your plan to begin"
-				/>
-				<TextField required name="endDate" label="End Date" readonly />
-			</div>
 			<div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
 				<SelectField
 					required
@@ -68,24 +67,20 @@
 					options={unit}
 				/>
 			</div>
-			<div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-				<SelectField
-					required
-					name="supervisor"
-					label="Supervisor"
-					placeholder="Select your supervisor"
-					options={supervisor}
-				/>
-				<TextField
-					name="altContact"
-					label="Contact when away"
-					required
-					placeholder="Enter emergency contact"
-				/>
-				<TextField label="Medical Officer" name="officer" required placeholder="Enter medical officer's name"/>
-				<TextField label="Facility" name="facility" required placeholder="Enter facility' name"/>
-			</div>
-			<FileUpload label="Medical report" name="file" required />
+			<SelectField
+				required
+				name="supervisor"
+				label="Supervisor"
+				placeholder="Select your supervisor"
+				options={supervisor}
+			/>
+
+			<TextAreaField
+				label="Reason"
+				name="reason"
+				placeholder="Enter reason for deferment"
+				required
+			/>
 			<slot />
 		</Form>
 	{/key}
