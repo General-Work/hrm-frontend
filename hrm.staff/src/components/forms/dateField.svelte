@@ -44,6 +44,7 @@
 	function handleChange(event: any) {
 		const [selectedDates, dateStr] = event.detail;
 		// console.log({ selectedDates, dateStr });
+		dispatch('change', { selectedDates, dateStr });
 	}
 
 	$: hasError = $touched[name] && $errors[name]?.length;
@@ -61,6 +62,7 @@
 	</label>
 
 	<Flatpickr
+		disabled={readonly}
 		{options}
 		bind:value={$data[name]}
 		bind:formattedValue
@@ -68,7 +70,7 @@
 		{placeholder}
 		{name}
 		{readonly}
-		class="border border-gray-300 border-solid h-10 rounded-[5px] w-full placeholder:font-thin"
+		class="border border-gray-300 placeholder:text-gray-500/80 border-solid h-10 rounded-[5px] w-full disabled:bg-gray-50"
 	/>
 
 	{#if hasError}

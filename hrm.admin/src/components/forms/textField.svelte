@@ -60,7 +60,7 @@
 			class:success={!readonly && !hasError && $touched[name]}
 			class:touched={!readonly && $touched[name]}
 			class:readonly
-			class="border border-gray-300 shadow-gray-50 rounded-[5px] shadow text-black w-full h-[38.4px] outline-transparent focus:outline-transparent focus:outline-none px-3 placeholder:text-gray-500/80 dark:shadow-transparent"
+			class="border border-gray-300 shadow-gray-50 rounded-[5px] shadow text-black w-full h-[38.4px] outline-transparent focus:outline-transparent focus:outline-none px-3 placeholder:text-gray-500/80 dark:shadow-transparent disabled:bg-gray-50"
 			{placeholder}
 			{readonly}
 			{id}

@@ -28,7 +28,7 @@
 						iconBgColor={item.iconBgColor}
 						iconColor={item.iconColor}
 						active={activePage === item.path}
-						on:click={() => goto(item.path ?? '')}
+						href={item.path ?? ''}
 					/>
 				</li>
 			{/each}

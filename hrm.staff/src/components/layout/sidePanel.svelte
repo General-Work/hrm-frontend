@@ -8,7 +8,7 @@
 	export let user: IUserInfo | null = null;
 </script>
 
-<aside class="w-full h-full bg-gray-100/50 px-4 pt-8">
+<aside class="w-full h-full bg-gray-100/50 px-4 pt-8 ">
 	<div class="flex flex-col h-full">
 		<div class="w-full h-full flex flex-col gap-6 flex-grow">
 			<UserContent on:click {user} />

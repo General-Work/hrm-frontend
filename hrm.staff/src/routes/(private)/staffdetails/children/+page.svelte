@@ -1,18 +1,19 @@
 <script>
 	import { activePage, breadCrumb } from '$data/appStore';
 	import Children from '$modules/staffdetails/children/index.svelte';
+	export let data;
 	$activePage = {
 		title: 'Children Details',
 		showBreadCrumb: true
 	};
 
-	$: breadCrumb.addToFirstIndex(
+	breadCrumb.addToFirstIndex(
 		[
 			{ title: 'Staff Details', path: '/staffdetails' },
-			{ title: 'Children Details', path: '/staffdetails/children' }
+			{ title: 'Children Details', path: '' }
 		],
 		true
 	);
 </script>
 
-<Children />
+<Children tableDataInfo={data.data} />

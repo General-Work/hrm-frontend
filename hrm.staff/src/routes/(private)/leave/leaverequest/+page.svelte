@@ -1,5 +1,7 @@
 <script>
 	import { activePage, breadCrumb } from '$data/appStore';
+	import Request from '$modules/leave/request/index.svelte';
+
 	$activePage = {
 		title: 'Leave Request',
 		showBreadCrumb: true
@@ -13,3 +15,5 @@
 		true
 	);
 </script>
+
+<Request />

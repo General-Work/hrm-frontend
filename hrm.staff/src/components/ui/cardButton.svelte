@@ -100,7 +100,7 @@
 	export let showShadow = false;
 	export let kind = 'generic';
 	export let active = false;
-
+	export let href = '';
 	// when kind is set, use the defaults from the kind
 	$: if (kind) {
 		const config = (kinds as any)[kind] ?? kinds.generic;
@@ -117,8 +117,9 @@
 	}
 </script>
 
-<button
-	class=" rounded-[6px] border-gray-400/20 pl-4 py-2.5 w-full {!showBg && 'hover:bg-pink-50'} "
+<a
+	class=" rounded-[6px] border-gray-400/20 pl-4 py-2.5 w-full cursor-pointer {!showBg &&
+		'hover:bg-pink-50'} flex items-center"
 	class:bg-white={showBg}
 	class:shadow-sm={showBg}
 	class:shadow={showShadow}
@@ -128,8 +129,9 @@
 	class:h-20={moreHeight}
 	class:bg-pink-50={active}
 	on:click
+	{href}
 >
-	<div class="flex justify-between items-center">
+	<div class="flex justify-between items-center w-full">
 		<div class="flex justify-start items-center gap-3">
 			<div class="{iconBgColor} grid place-content-center p-2.5 rounded-[5px]">
 				<iconify-icon {icon} style="font-size: {iconSize}px;" class={iconColor} />
@@ -140,9 +142,9 @@
 			</div>
 		</div>
 		{#if showArrow}
-			<button on:click class=" rounded-full w-9 h-9 grid place-content-center">
+			<p class=" rounded-full w-9 h-9 grid place-content-center">
 				<iconify-icon icon="iconamoon:arrow-right-2-light" style="font-size: 25px;" />
-			</button>
+			</p>
 		{/if}
 	</div>
-</button>
+</a>

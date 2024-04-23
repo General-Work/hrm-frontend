@@ -6,6 +6,8 @@ import { twMerge } from 'tailwind-merge';
 import { toast, type ToastOptions } from 'svelte-french-toast';
 import { nanoid } from 'nanoid';
 import NProgress from 'nprogress';
+import type { IPageInfo, ITableDataProps } from '$types/types';
+import dayjs from 'dayjs';
 
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
@@ -149,4 +151,33 @@ export function hideSpinner() {
 	NProgress.configure({
 		showSpinner: false
 	});
+}
+
+export function generateTableDataProps<T>(
+	currentPage: number,
+	pageSize: number,
+	data: { pageInfo: IPageInfo; totalCount: number; items: T[] }
+): ITableDataProps<T> {
+	return {
+		currentPage,
+		pageSize,
+		pageInfo: data.pageInfo,
+		totalCount: data.totalCount,
+		items: data.items
+	};
+}
+
+export function generateEndDate(startDate: string, countOfDays: number) {
+	let currentDate = dayjs(startDate);
+
+	let weekdaysCount = 0;
+
+	while (weekdaysCount < countOfDays) {
+		if (currentDate.day() !== 0 && currentDate.day() !== 6) {
+			weekdaysCount++;
+		}
+		currentDate = currentDate.add(1, 'day');
+	}
+
+	return currentDate.subtract(1, 'day').format('YYYY-MM-DD');
 }

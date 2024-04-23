@@ -18,3 +18,17 @@ export const DISABILITYLIST = [
 export const TITLELIST = ['Mr', 'Mrs', 'Miss', 'Dr', 'Prof'].map((item) => item.toUpperCase());
 export const GENDERLIST = ['MALE', 'FEMALE'];
 
+export const ACCOMODATIONSOURCE = ['Official', 'Rented', 'Personal'].map((item) =>
+	item.toUpperCase()
+);
+
+export const ACCOMODATIONTYPE = [
+	'Flat',
+	'Compound house',
+	'Self-contained',
+	'Semi-detached',
+	'Detached',
+	'Out-house'
+].map((item) => item.toUpperCase());
+
+export const DELIVERYTPES = ['CS', 'Normal'].map((item) => item.toUpperCase());

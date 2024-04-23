@@ -18,6 +18,7 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
 	import Button, { type ButtonColor } from './button.svelte';
+	import ScrollArea from './scrollArea.svelte';
 
 	export let steps: IStepper[];
 	export let isActiveStep = 0;
@@ -39,10 +40,9 @@
 	};
 </script>
 
-<div class="w-full h-full flex flex-col gap-4">
+<div class="w-full h-full flex flex-col gap-4 overflow-y-hidden">
 	<ol
-		class="flex items-center w-full text-sm font-medium text-center text-gray-500 dark:text-gray-400 sm:text-base"
-		class:justify-evenly={!disabledEvenly}
+		class="flex items-center text-sm font-medium text-center text-gray-500 dark:text-gray-400 sm:text-base"
 	>
 		{#each steps as { icon, label, size }, index}
 			<li
@@ -73,30 +73,32 @@
 			{/if}
 		{/each}
 	</ol>
-	<svelte:component
-		this={steps[isActiveStep].component}
-		active={true}
-		{...props[steps[isActiveStep].id]}
-		on:message={(e) => {
-			onMessage(steps[isActiveStep], e.detail);
-		}}
-		bind:isValid
-		bind:busy
-	>
-		<div class="pt-5 flex flex-col md:flex-row md:justify-end gap-3 pr-1">
-			<Button
-				on:click={() => isActiveStep--}
-				label="Back"
-				disabled={isActiveStep == 0}
-				color={backButtonColor}
-			/>
-			<Button
-				type="submit"
-				disabled={isValid === false || busy}
-				{busy}
-				label={nextText}
-				color={nextButtonColor}
-			/>
-		</div>
-	</svelte:component>
+	<ScrollArea otherClasses="w-full h-96 flex-grow mb-4 pr-3">
+		<svelte:component
+			this={steps[isActiveStep].component}
+			active={true}
+			{...props[steps[isActiveStep].id]}
+			on:message={(e) => {
+				onMessage(steps[isActiveStep], e.detail);
+			}}
+			bind:isValid
+			bind:busy
+		>
+			<div class="pt-5 flex flex-col md:flex-row md:justify-end gap-3 pr-1">
+				<Button
+					on:click={() => isActiveStep--}
+					label="Back"
+					disabled={isActiveStep == 0}
+					color={backButtonColor}
+				/>
+				<Button
+					type="submit"
+					disabled={isValid === false || busy}
+					{busy}
+					label={nextText}
+					color={nextButtonColor}
+				/>
+			</div>
+		</svelte:component>
+	</ScrollArea>
 </div>

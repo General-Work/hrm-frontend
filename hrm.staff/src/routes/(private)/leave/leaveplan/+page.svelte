@@ -1,5 +1,6 @@
 <script>
 	import { activePage, breadCrumb } from '$data/appStore';
+	import Plan from "$modules/leave/plan/index.svelte"
 	$activePage = {
 		title: 'Annual Leave Plan',
 		showBreadCrumb: true
@@ -12,4 +13,6 @@
 		],
 		true
 	);
+
 </script>
+<Plan />

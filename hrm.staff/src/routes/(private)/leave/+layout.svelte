@@ -21,6 +21,15 @@
 			icon: 'iconoir:healthcare',
 			subLabel: 'Request for an excuse duty',
 			path: '/leave/excueduty'
+		},
+		{
+			label: 'Deferment',
+			kind: 'rejection',
+			icon: 'mdi:cancel-network',
+			iconBgColor: 'bg-red-100',
+			iconColor: 'text-red-500',
+			subLabel: 'Request leave deferment',
+			path: '/leave/deferment'
 		}
 	];
 </script>

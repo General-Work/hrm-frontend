@@ -35,3 +35,18 @@ export interface IUserInfo {
 	phoneNumber: string;
 	staffId: string;
 }
+
+export interface IPageInfo {
+	hasNextPage: false;
+	hasPreviousPage: false;
+	nextPageUrl?: string;
+	previousPageUrl?: string;
+}
+
+export interface ITableDataProps<T> {
+	currentPage: number;
+	pageSize: number;
+	pageInfo: IPageInfo;
+	totalCount: number;
+	items: T[];
+}

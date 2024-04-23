@@ -59,7 +59,7 @@
 {/if}
 <div class="w-screen h-svh overflow-hidden">
 	<div class="flex w-full h-full">
-		<div class="w-[19rem] h-full hidden lg:flex">
+		<div class="w-[19rem] h-full hidden lg:flex shrink-0">
 			<SidePanel menuItems={$menuItems} on:click={toggleLogout} user={data.user} />
 		</div>
 		<div class="flex-grow flex flex-col h-full gap-4">
@@ -71,12 +71,12 @@
 			<div class="h-full w-full">
 				{#if $activePage.showBreadCrumb}
 					<div class="">
-						<div class="pl-6">
+						<div class="pl-6 lg:container lg:mx-auto">
 							<BreadCrumb options={$breadCrumb} {activeBreadCrumb} on:click={optionClicked} />
 						</div>
 					</div>
 				{/if}
-				<div class="pt-5 w-full h-full flex-grow overflow-hidden">
+				<div class="pt-5 w-full h-full flex-grow overflow-hidden lg:container lg:mx-auto">
 					<slot />
 				</div>
 			</div>
@@ -98,7 +98,7 @@
 				<CloseButton on:click={(_) => ($hideNavDrawer = true)} />
 			</div>
 			<div
-				class="flex-grow overflow-y-auto scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch"
+				class="flex-grow shrink-0 overflow-y-auto scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch"
 			>
 				<SidePanel user={data.user} menuItems={$menuItems} on:click={toggleLogout} />
 			</div>
