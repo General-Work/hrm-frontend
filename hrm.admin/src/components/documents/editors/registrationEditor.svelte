@@ -46,8 +46,8 @@
 		<Title label="Attachments" icon="dashicons:images-alt" />
 		<AttachementsEditor
 			passportPicture="https://t3.ftcdn.net/jpg/03/73/52/24/360_F_373522464_UzkM3IvqgqpS0qIy2kpkB5QiV7Bw7NyS.jpg"
-			birthCertificate="https://t3.ftcdn.net/jpg/03/73/52/24/360_F_373522464_UzkM3IvqgqpS0qIy2kpkB5QiV7Bw7NyS.jpg"
-			schoolCertificate="https://t3.ftcdn.net/jpg/03/73/52/24/360_F_373522464_UzkM3IvqgqpS0qIy2kpkB5QiV7Bw7NyS.jpg"
+			birthCertificate="https://images.yen.com.gh/images/3o3bpdgm4bc8mqmk4.jpg?imwidth=720"
+			schoolCertificate="https://www.rch.edu.gh/img/partners/SCAN1.jpg"
 		/>
 	</div>
 </div>
