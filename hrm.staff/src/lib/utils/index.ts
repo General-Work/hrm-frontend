@@ -8,6 +8,7 @@ import { nanoid } from 'nanoid';
 import NProgress from 'nprogress';
 import type { IPageInfo, ITableDataProps } from '$types/types';
 import dayjs from 'dayjs';
+import Holidays from 'date-holidays';
 
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
@@ -180,4 +181,21 @@ export function generateEndDate(startDate: string, countOfDays: number) {
 	}
 
 	return currentDate.subtract(1, 'day').format('YYYY-MM-DD');
+}
+
+const holiday = new Holidays();
+
+export function readHolidays(year: number) {
+	holiday.init('GH');
+	const holidays: any[] = holiday.getHolidays(year);
+	// console.log(holidays);
+	const holidayEvents = holidays.map((h) => ({
+		title: h.name,
+		start:
+			dayjs(h.date).format('YYYY-MM-DD') !== 'Invalid Date'
+				? dayjs(h.date).format('YYYY-MM-DD')
+				: dayjs(h.end).format('YYYY-MM-DD'),
+		end: dayjs(h.end).format('YYYY-MM-DD')
+	}));
+	return holidayEvents;
 }

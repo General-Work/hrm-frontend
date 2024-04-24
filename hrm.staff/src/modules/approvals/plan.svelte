@@ -23,7 +23,6 @@
 		},
 		{ header: 'Start Date', accessor: (row) => dayjs(row.startDate).format('ddd DD MMM YYYY') },
 		{ header: 'End Date', accessor: (row) => dayjs(row.endDate).format('ddd DD MMM YYYY') }
-
 	];
 
 	export async function create(data: any) {
@@ -44,19 +43,17 @@
 	export let tableDataInfo: ITableDataProps<any> | undefined;
 </script>
 
-<div>
-	<DatatablePage
-		{tableDataInfo}
-		tableColumns={columns}
-		showEditorIn="side-modal"
-		showAdd={false}
-		addButtonLabel="Add Child"
-		addNewHeading="Add Child"
-		updateHeading="Update Child"
-		editorComponent
-		sideModalSize="sm"
-		showModalButtons
-		createEntry={create}
-		{read}
-	/>
-</div>
+<DatatablePage
+	{tableDataInfo}
+	tableColumns={columns}
+	showEditorIn="side-modal"
+	showAdd={false}
+	addButtonLabel="Add Child"
+	addNewHeading="Add Child"
+	updateHeading="Update Child"
+	editorComponent
+	sideModalSize="sm"
+	showModalButtons
+	createEntry={create}
+	{read}
+/>

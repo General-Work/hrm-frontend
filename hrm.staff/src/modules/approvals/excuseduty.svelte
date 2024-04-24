@@ -44,7 +44,6 @@
 	export let tableDataInfo: ITableDataProps<any> | undefined;
 </script>
 
-<div>
 	<DatatablePage
 		{tableDataInfo}
 		tableColumns={columns}
@@ -59,4 +58,3 @@
 		createEntry={create}
 		{read}
 	/>
-</div>

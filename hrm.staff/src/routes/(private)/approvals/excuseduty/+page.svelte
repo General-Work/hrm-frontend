@@ -1,7 +1,7 @@
 <script>
 	import { activePage, breadCrumb } from '$data/appStore';
 	import Approval from '$modules/approvals/excuseduty.svelte';
-  export let data
+	export let data;
 	$activePage = {
 		title: 'Excuse Duty Approval',
 		showBreadCrumb: true
@@ -16,4 +16,6 @@
 	);
 </script>
 
-<Approval tableDataInfo={data.data} />
+<div class="px-6 w-full h-full">
+	<Approval tableDataInfo={data.data} />
+</div>

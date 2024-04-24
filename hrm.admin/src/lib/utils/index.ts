@@ -10,6 +10,7 @@ import type { IPageInfo, ITableDataProps } from '../types';
 import { crossfade } from 'svelte/transition';
 import { quintOut } from 'svelte/easing';
 
+
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
 }
@@ -187,3 +188,4 @@ export function generateTableDataProps<T>(
 		items: data.items
 	};
 }
+

@@ -16,4 +16,6 @@
 	);
 </script>
 
-<Approval tableDataInfo={data.data} />
+<div class="px-6 w-full h-full">
+	<Approval tableDataInfo={data.data} />
+</div>
