@@ -24,8 +24,8 @@
 				</div> -->
 			<SideRoutes {menuItems} />
 		</div>
-		<div class="pb-4">
+		<!-- <div class="pb-4">
 			<div class="bg-pink-100 h-52 rounded-xl">here</div>
-		</div>
+		</div> -->
 	</div>
 </aside>

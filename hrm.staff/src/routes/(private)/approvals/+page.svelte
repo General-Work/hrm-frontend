@@ -1,10 +1,11 @@
-<script lang="ts">
+<script>
 	import { activePage } from '$data/appStore';
-	import Demo from '$modules/dashboards/demo.svelte';
+	import Home from '$modules/approvals/home.svelte';
 
 	$activePage = {
-		title: 'Dashboard',
+		title: 'Approvals',
 		showBreadCrumb: false
 	};
 </script>
-<Demo />
+
+<Home />

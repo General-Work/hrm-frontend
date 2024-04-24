@@ -6,9 +6,9 @@
 <div >
 	<Title label="Bank Details" icon="clarity:bank-solid" />
 	<div class="p-6 space-y-4">
-		<FieldPair label="Bank Name" subLabel="" />
-		<FieldPair label="Branch" subLabel="" />
-		<FieldPair label="Account Name" subLabel="" />
-		<FieldPair label="Account Number" subLabel="" />
+		<FieldPair label="Bank Name" subLabel="Ecobank" />
+		<FieldPair label="Branch" subLabel="Tesano" />
+		<FieldPair label="Account Name" subLabel="Paul Jackson" />
+		<FieldPair label="Account Number" subLabel="12345690232323" />
 	</div>
 </div>

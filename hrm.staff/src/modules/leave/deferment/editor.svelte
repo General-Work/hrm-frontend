@@ -80,6 +80,7 @@
 				name="reason"
 				placeholder="Enter reason for deferment"
 				required
+				rows={4}
 			/>
 			<slot />
 		</Form>

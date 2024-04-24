@@ -17,15 +17,15 @@ const allMenuItems: IRouteItems[] = [
 			{
 				label: 'Enquiries',
 				icon: 'fluent:chat-mail-20-regular',
-				path: '/support',
+				path: '/enquiries',
 				iconSize: 25
 			},
-			{
-				label: 'Settings',
-				icon: 'clarity:cog-line',
-				path: '/settings',
-				iconSize: 20
-			}
+			// {
+			// 	label: 'Settings',
+			// 	icon: 'clarity:cog-line',
+			// 	path: '/settings',
+			// 	iconSize: 20
+			// }
 		]
 	},
 	{
@@ -34,7 +34,7 @@ const allMenuItems: IRouteItems[] = [
 			{
 				label: 'Approvals',
 				icon: 'material-symbols:verified-outline',
-				path: '/admin/approvals',
+				path: '/approvals',
 				iconSize: 22,
 				count: 10
 			}
