@@ -96,6 +96,7 @@
 		<div class="  bg-[#f7f8fa] px-2 lg:px-6 pt-4 rounded-t-lg">
 			<!-- <Editor /> -->
 			<HorizontalStepper
+				fullHeight={true}
 				{steps}
 				nextButtonColor="darkBlue"
 				backButtonColor="gold"

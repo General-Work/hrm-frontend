@@ -8,7 +8,7 @@ export const POST = async ({ request, cookies }) => {
 	if (!ret) {
 		return json({ message: 'Bad Request', status: 400, success: false });
 	} else {
-		await new Promise((resolve) => setTimeout(resolve, 5000));
+		await new Promise((resolve) => setTimeout(resolve, 700));
 		const expiresIn = 60 * 60 * 24 * 5 * 1000;
 		const sessionCookie = 'sessionCookie';
 		const options = {

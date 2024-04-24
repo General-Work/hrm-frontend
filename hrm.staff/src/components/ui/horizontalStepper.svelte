@@ -25,6 +25,7 @@
 	export let disabledEvenly = false;
 	export let backButtonColor: ButtonColor = 'default';
 	export let nextButtonColor: ButtonColor = 'primary';
+	export let fullHeight = false;
 
 	export let nextText = 'Next';
 	let props: Record<string, any> = {};
@@ -73,7 +74,7 @@
 			{/if}
 		{/each}
 	</ol>
-	<ScrollArea otherClasses="w-full h-96 flex-grow mb-4 pr-3">
+	<ScrollArea otherClasses="w-full flex-grow mb-4 pr-3 {fullHeight ? 'h-full' : ' h-full lg:h-96'}">
 		<svelte:component
 			this={steps[isActiveStep].component}
 			active={true}
