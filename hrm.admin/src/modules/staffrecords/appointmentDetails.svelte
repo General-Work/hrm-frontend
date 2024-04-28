@@ -8,7 +8,7 @@
 	import TextField from '$cmps/forms/textField.svelte';
 	import Button from '$cmps/ui/button.svelte';
 	import Fieldset from '$cmps/ui/fieldset.svelte';
-	import { ACCOUNTTYPE, APPOINTMENTTYPELIST } from '$types/constants';
+	import { ACCOUNTTYPE, APPOINTMENTTYPELIST } from '$lib/constants';
 
 	import * as z from 'zod';
 

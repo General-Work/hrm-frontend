@@ -4,7 +4,7 @@
 	import SelectField from '$cmps/forms/selectField.svelte';
 	import TextField from '$cmps/forms/textField.svelte';
 	import Fieldset from '$cmps/ui/fieldset.svelte';
-	import { ACCOMODATIONSOURCE, ACCOMODATIONTYPE } from '$types/constants';
+	import { ACCOMODATIONSOURCE, ACCOMODATIONTYPE } from '$lib/constants';
 	import * as z from 'zod';
 
 	const schema = z.object({});

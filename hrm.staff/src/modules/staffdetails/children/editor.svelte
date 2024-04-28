@@ -3,7 +3,7 @@
 	import Form from '$cmps/forms/form.svelte';
 	import SelectField from '$cmps/forms/selectField.svelte';
 	import TextField from '$cmps/forms/textField.svelte';
-	import { GENDERLIST } from '$types/constants';
+	import { GENDERLIST } from '$lib/constants';
 	import * as z from 'zod';
 
 	const schema = z.object({});
