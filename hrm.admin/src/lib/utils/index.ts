@@ -10,7 +10,6 @@ import type { IPageInfo, ITableDataProps } from '../types';
 import { crossfade } from 'svelte/transition';
 import { quintOut } from 'svelte/easing';
 
-
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
 }
@@ -149,6 +148,17 @@ export function extractQueryParam(queryString: string, index: string = 'q'): str
 	const warehouse = urlParams.get(index);
 	return warehouse ?? '';
 }
+
+export function extractMultipleSearchParams(queryString: string) {
+	const searchParams = new URLSearchParams(queryString);
+	const paramsObject: { [key: string]: string } = {};
+
+	searchParams.forEach((value, key) => {
+		paramsObject[key] = value;
+	});
+	return paramsObject;
+}
+
 export function isPdf(path: string) {
 	return path.toLowerCase().includes('pdf');
 }
@@ -189,3 +199,30 @@ export function generateTableDataProps<T>(
 	};
 }
 
+export function generateDataTableProps<T>(data: {
+	totalCount: number;
+	totalPages: number;
+	currentPage: number;
+	pageSize: number;
+	nextPageUrl: string | null;
+	previousPageUrl: string | null;
+	links: string[];
+	path: string;
+	data: T[];
+}): ITableDataProps<T> {
+	return {
+		currentPage: data.currentPage,
+		pageSize: data.pageSize,
+		pageInfo: {
+			hasNextPage: data.nextPageUrl?.length ? true : false,
+			hasPreviousPage: data.previousPageUrl ? true : false,
+			nextPageUrl: data.nextPageUrl ?? '',
+			previousPageUrl: data.previousPageUrl ?? '',
+			links: data.links,
+			path: data.path
+		},
+		totalCount: data.totalCount,
+		totalPages: data.totalPages,
+		items: data.data
+	};
+}

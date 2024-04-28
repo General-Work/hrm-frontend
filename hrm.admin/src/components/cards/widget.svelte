@@ -1,6 +1,6 @@
 
 <script>
-	import { cn } from '$types/utils';
+	import { cn } from '$lib/utils';
 
 	export let bodyBg = '';
 	export let iconColor = '';

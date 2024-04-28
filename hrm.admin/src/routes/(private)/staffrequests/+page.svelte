@@ -4,7 +4,7 @@
 	import { page } from '$app/stores';
 	import { activePage } from '$data/appStore';
 	import RequestTable from '$modules/staffrequests/requestTable.svelte';
-	import { extractQueryParam } from '$types/utils';
+	import { extractQueryParam } from '$lib/utils';
 	export let data;
 
 	$: searchParam = extractQueryParam($page.url.search) ?? '';

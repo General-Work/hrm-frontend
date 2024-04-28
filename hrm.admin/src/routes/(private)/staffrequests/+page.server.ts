@@ -1,5 +1,5 @@
 import { readRequests } from '$svc/staffrequests';
-import { generateTableDataProps } from '$types/utils';
+import { generateTableDataProps } from '$lib/utils';
 import { error } from '@sveltejs/kit';
 
 const documentKinds = {

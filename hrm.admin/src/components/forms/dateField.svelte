@@ -5,7 +5,7 @@
 	import { nanoid } from 'nanoid';
 	import Flatpickr from 'svelte-flatpickr';
 	import 'flatpickr/dist/flatpickr.css';
-	import { cn } from '$types/utils';
+	import { cn } from '$lib/utils';
 
 	export let name = '';
 	export let label = '';

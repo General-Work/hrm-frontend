@@ -91,6 +91,13 @@ const dataPages: IMenuItem[] = [
 				iconBg: 'bg-sky-300',
 				icon: 'clarity:event-solid-badged',
 				path: '/applicationsetup/events'
+			},
+			{
+				title: 'Bank',
+				description: 'Manage all banks',
+				iconBg: 'bg-pink-300',
+				icon: 'clarity:bank-solid',
+				path: '/applicationsetup/banks'
 			}
 		]
 	},

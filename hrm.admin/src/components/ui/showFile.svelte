@@ -25,6 +25,7 @@
 				{src}
 				alt="pic"
 				class="w-fullx xh-64 bg-white transition duration-300 ease-in-out transform group-hover:scale-95"
+				loading="lazy"
 			/>
 			{#if isAvatar}
 				<div

@@ -2,7 +2,7 @@
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { loginStaff } from '$svc/auth';
-	import { extractRedirectToRoute, showError } from '$types/utils';
+	import { extractRedirectToRoute, showError } from '$lib/utils';
 	// import logo from '$assets/images/logo1.png';
 
 	const bgImageUrl = 'https://citinewsroom.com/wp-content/uploads/2018/06/Korle-Bu.jpg';

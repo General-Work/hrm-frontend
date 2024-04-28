@@ -4,7 +4,7 @@
 	import SelectField from '$cmps/forms/selectField.svelte';
 	import TextField from '$cmps/forms/textField.svelte';
 	import Fieldset from '$cmps/ui/fieldset.svelte';
-	import { generateEndDate } from '$types/utils';
+	import { generateEndDate } from '$lib/utils';
 	import dayjs from 'dayjs';
 	import * as z from 'zod';
 

@@ -1,5 +1,5 @@
 import { readUsers } from '$svc/usermanagement';
-import { generateTableDataProps } from '$types/utils';
+import { generateTableDataProps } from '$lib/utils';
 import { error } from '@sveltejs/kit';
 
 export async function load() {

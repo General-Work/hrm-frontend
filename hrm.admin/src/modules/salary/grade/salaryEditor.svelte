@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Button from '$cmps/ui/button.svelte';
-	import { showError, showInfo } from '$types/utils';
+	import { showError, showInfo } from '$lib/utils';
 	import { createEventDispatcher, onMount } from 'svelte';
 
 	export let values: any;

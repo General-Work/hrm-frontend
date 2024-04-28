@@ -3,7 +3,7 @@
 	import { goto, replaceState } from '$app/navigation';
 	import Button from '$cmps/ui/button.svelte';
 	import { loginNewStaff } from '$svc/auth';
-	import { showError } from '$types/utils';
+	import { showError } from '$lib/utils';
 	import SvelteOtp from '@k4ung/svelte-otp';
 	import { onMount } from 'svelte';
 

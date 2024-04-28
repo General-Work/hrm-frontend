@@ -12,7 +12,7 @@
 	import { fade } from 'svelte/transition';
 	import { Avatar } from 'flowbite-svelte';
 	import ScrollArea from '$cmps/ui/scrollArea.svelte';
-	import { showError } from '$types/utils';
+	import { showError } from '$lib/utils';
 	export let placeholder = 'Search with staff number...';
 	export let notFoundMessage = 'No member found';
 	export let showAvatar = false;

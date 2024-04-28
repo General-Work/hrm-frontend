@@ -4,7 +4,7 @@
 
 	// import Box from '$cmps/ui/box.svelte';
 	import { activePage, breadCrumb } from '$data/appStore';
-	import { extractQueryParam } from '$types/utils';
+	import { extractQueryParam } from '$lib/utils';
 	// import Specialty from '$modules/salary/specialty/index.svelte';
 
 	export let data;

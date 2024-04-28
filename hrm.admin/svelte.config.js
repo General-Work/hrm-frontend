@@ -14,12 +14,13 @@ const config = {
 		// See https://kit.svelte.dev/docs/adapters for more information about adapters.
 		adapter: adapter(),
 		alias: {
+		
 			// $houdini: path.resolve('.', '$houdini'),
 			$svc: path.resolve('.', 'src', 'services'),
 			$cmps: path.resolve('.', 'src', 'components'),
 			$modules: path.resolve('.', 'src', 'modules'),
 			$data: path.resolve('.', 'src', 'data'),
-			$types: path.resolve('.', 'src', 'lib'),
+			$lib: path.resolve('.', 'src', 'lib'),
 			$assets: path.resolve('.', 'src', 'assets'),
 			$routes: path.resolve('.', 'src', 'routes')
 		}

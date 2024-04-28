@@ -23,7 +23,7 @@
 	import Button from '$cmps/ui/button.svelte';
 	import logo from '$lib/images/newlogo.png';
 	import { loginUser } from '$svc/auth';
-	import { extractRedirectToRoute, showError } from '$types/utils';
+	import { extractRedirectToRoute, showError } from '$lib/utils';
 	import dayjs from 'dayjs';
 	import * as z from 'zod';
 

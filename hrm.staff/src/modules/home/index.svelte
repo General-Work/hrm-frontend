@@ -137,7 +137,7 @@
 	import Widget from '$cmps/cards/widget.svelte';
 	import Calendar from '$cmps/layout/calendar.svelte';
 	import Echart from '$cmps/layout/echart.svelte';
-	import { readHolidays } from '$types/utils';
+	import { readHolidays } from '$lib/utils';
 
 	let isLoading = false;
 

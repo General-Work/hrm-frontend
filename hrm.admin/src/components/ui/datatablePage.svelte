@@ -17,13 +17,14 @@
 	import DataTable, { type IActionList, type ISortInfo, type ITableColumn } from './table.svelte';
 	import { writable } from 'svelte/store';
 	import type { ITableDataProps } from '$lib/types';
+	import axios from 'axios';
+	import type { IOkResult } from '$svc/shared';
 
 	export let tableDataInfo: ITableDataProps<any> | undefined;
 	export let showEditorIn: 'modal' | 'side-modal' = 'side-modal';
 	export let hideSearchBox = false;
 	export let searchPlaceholder = 'Search...';
-	export let take = 10;
-	export let addNewHeading = 'Add New Record'
+	export let addNewHeading = 'Add New Record';
 	export let addButtonLabel = 'Add New';
 	export let updateHeading = 'Update';
 	export let newRecord: any = {};
@@ -47,27 +48,21 @@
 	export let showIndex = false;
 	export let selectAllChecked = false;
 	export let showCheckBox = false;
-	export let showViewDetails = true;
+	export let showViewDetails = false;
 	export let showEdit = false;
 	export let allowDispatchAfterAction = false;
 	export let allowLoadAfterCreate = true;
 	export let showAdd = true;
-	export let read = async (skip: number, take: number, defn?: TableFilter) => {
-		return <any>[];
-	};
-	export let createEntry = async (x: any) => {
-		showError('Not implemented');
-		return <any>null;
-	};
-	export let updateEntry = async (x: any) => {
-		showError('Not implemented');
-		return <any>null;
-	};
-
+	export let pageUrl = '';
+	export let take = 13;
+	// export let tableActions: IActionList[] = [
+	// 	{ icon: 'ri:edit-2-fil', name: 'Edit detail' }
+	// 	// { icon: 'ri:edit-2-fil', name: 'Edit detail' }
+	// ];
 	let showForm = false;
 	let query = '';
 	let pageInfo = new PageInfo();
-	// pageInfo.setPageSize(take);
+	pageInfo.setPageSize(take);
 	let editorHeading = '';
 	let activeEntry = <any>{};
 	let editing = false;
@@ -77,6 +72,7 @@
 	let tableData: any[] = [];
 	let updating = false;
 	let isLoading = false;
+	// let recordId = 0;
 
 	let allColumns = writable<any>([]);
 
@@ -86,10 +82,10 @@
 		try {
 			// busy = true;
 			startProgress();
-			const ret = await read(pageInfo.currentPage, pageInfo.pageSize, {
-				search: query
+			const ret = await axios.get(`${pageUrl}`, {
+				params: { pageNumber: pageInfo.currentPage, pageSize: pageInfo.pageSize }
 			});
-			// console.log(ret)
+			// console.log('here',ret);
 			if (ret?.data?.success) {
 				const xs = ret.data.data;
 				pageInfo.totalItems = xs.totalCount;
@@ -98,7 +94,7 @@
 				tableData = xs.items;
 				// filter(query, inlineFilter, true);
 			} else {
-				showError(ret?.message || 'Failed to load data');
+				showError(ret?.data.message || 'Failed to load data');
 			}
 		} catch (e: any) {
 			showError(e.message || e);
@@ -125,6 +121,7 @@
 
 	function closeSideModal() {
 		showForm = false;
+		activeEntry = null;
 	}
 
 	async function save(entry: any) {
@@ -132,9 +129,15 @@
 		try {
 			isLoading = true;
 			startProgress();
-			const ret = await createEntry(values);
+			const ret = editing
+				? await axios.patch(`${pageUrl}`, { ...values, id: activeEntry.id })
+				: await axios.post(pageUrl, values);
 			if (ret.data.success) {
-				showInfo(ret.data.message || 'Successfully added reacord');
+				showInfo(
+					ret.data.message || editing
+						? 'Successfully updated reacord'
+						: 'Successfully added reacord'
+				);
 				allowLoadAfterCreate && fetchData();
 				closeSideModal();
 				allowDispatchAfterAction && dispatch('afterAction', { type: 'create', values });
@@ -147,6 +150,14 @@
 			isLoading = false;
 			endProgress();
 		}
+	}
+
+	function handleEdit({ detail }: any) {
+		console.log(detail);
+		activeEntry = detail;
+		editorHeading = updateHeading;
+		editing = true;
+		showForm = true;
 	}
 
 	onMount(async () => {
@@ -190,7 +201,6 @@
 	<DataTable
 		{height}
 		{headerColor}
-		{actionLists}
 		data={tableData}
 		{bgWhite}
 		{headerTextColor}
@@ -206,12 +216,13 @@
 		{hideWhiteSpace}
 		{selectedRows}
 		{showIndex}
+		{actionLists}
 		bind:hiddenColumns
 		bind:allColumns
 		bind:sortedColumns
 		on:cancel
 		on:delete
-		on:edit
+		on:edit={handleEdit}
 		on:feed
 		on:handleCheckbox
 		on:view
@@ -230,7 +241,8 @@
 	<div>
 		<svelte:component
 			this={editorComponent}
-			recordId={activeEntry.recordId}
+			recordId={activeEntry.id}
+			data={activeEntry}
 			bind:this={editor}
 			bind:isValid
 			on:submit={(e) => save(e.detail)}
@@ -250,7 +262,8 @@
 >
 	<svelte:component
 		this={editorComponent}
-		recordId={activeEntry.recordId}
+		recordId={activeEntry.id}
+		data={activeEntry}
 		bind:this={editor}
 		bind:isValid
 		on:submit={(e) => save(e.detail)}

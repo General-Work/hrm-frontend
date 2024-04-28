@@ -25,7 +25,7 @@
 	import TextField from '$cmps/forms/textField.svelte';
 
 	import { CITIZENSHIPLIST, DISABILITYLIST, GENDERLIST, TITLELIST } from '$types/constants';
-	import { validateGhanaCard, validatePhoneNumber } from '$types/utils';
+	import { validateGhanaCard, validatePhoneNumber } from '$lib/utils';
 	import { createEventDispatcher, getContext, onMount } from 'svelte';
 	import type { Readable } from 'svelte/store';
 	import * as z from 'zod';

@@ -1,5 +1,5 @@
 import type { IRouteInfo, ISideMenu } from '$lib/types';
-import { createBreadCrumb } from '$types/utils';
+import { createBreadCrumb } from '$lib/utils';
 import { writable } from 'svelte/store';
 
 export let activePage = writable<IRouteInfo>({

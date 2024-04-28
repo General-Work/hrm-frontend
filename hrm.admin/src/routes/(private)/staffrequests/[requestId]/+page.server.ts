@@ -1,6 +1,6 @@
+import type { IRequestAction, DocumentType } from '$lib/types';
+import { extractQueryParam } from '$lib/utils';
 import { readRequest, readRequestFeeds } from '$svc/staffrequests';
-import { extractQueryParam } from '$types/utils/index.js';
-import type { DocumentType, IRequestAction } from '$types/types/index.js';
 import { error } from '@sveltejs/kit';
 
 function getComponet(type: DocumentType) {
@@ -71,7 +71,7 @@ function getActions(type: DocumentType, id: string, staffNumber?: string) {
 				}
 			];
 			break;
-		case "BANK UPDATE":
+		case 'BANK UPDATE':
 			buttons = [
 				{
 					kind: 'approve',

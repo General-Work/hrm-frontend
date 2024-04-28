@@ -1,5 +1,5 @@
 import { readCategories } from '$svc/salaries';
-import { generateTableDataProps } from '$types/utils';
+import { generateTableDataProps } from '$lib/utils';
 import { error } from '@sveltejs/kit';
 
 export async function load() {

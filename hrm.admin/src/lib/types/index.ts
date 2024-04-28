@@ -51,16 +51,19 @@ export interface ICampaignTemplate {
 }
 
 export interface IPageInfo {
-	hasNextPage: false;
-	hasPreviousPage: false;
+	hasNextPage: boolean;
+	hasPreviousPage: boolean;
 	nextPageUrl?: string;
 	previousPageUrl?: string;
+	links?: string[];
+	path?: string;
 }
 
 export interface ITableDataProps<T> {
 	currentPage: number;
 	pageSize: number;
 	pageInfo: IPageInfo;
+	totalPages?: number;
 	totalCount: number;
 	items: T[];
 }
@@ -105,4 +108,4 @@ export type DocumentKind =
 	| 'leave_plan'
 	| 'leave_request';
 
-export type DocumentType = 'NEW REGISTRATION' | "BANK UPDATE";
+export type DocumentType = 'NEW REGISTRATION' | 'BANK UPDATE';

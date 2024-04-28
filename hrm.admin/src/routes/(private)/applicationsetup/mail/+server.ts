@@ -1,5 +1,5 @@
 import { readMailTemplates } from '$svc/setup';
-import { generateTableDataProps } from '$types/utils';
+import { generateTableDataProps } from '$lib/utils';
 import { json } from '@sveltejs/kit';
 
 export const POST = async ({ request }) => {
