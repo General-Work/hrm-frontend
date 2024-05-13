@@ -1,11 +1,22 @@
-import type { IUserInfo } from '$lib/types';
+import type { IApplicantInfo, IUserInfo } from '$lib/types';
 import { writable } from 'svelte/store';
 import axios from 'axios';
+import { axiosError, callResult, queryResult } from './shared';
+import { axiosInstance } from '$routes/+layout.svelte';
+// import axiosInstance from '$lib/axios';
 
 export const userInfo = writable<IUserInfo | null>();
+export const applicantInfo = writable<IApplicantInfo | null>();
 export const isAuthenticated = writable(false);
+export const authToken = writable<string>('');
 
-export const LOGIN_KEY = 'logged_in';
+export const APPLICANT_LOGIN_KEY = 'applicant_login';
+export const STAFF_LOGIN_KEY = 'staff_login';
+
+function extractNumber(input: string): string {
+	const trimmed = input.replace(/^0+/, '');
+	return trimmed;
+}
 
 export const newStaffData: IUserInfo = {
 	id: 1,
@@ -21,8 +32,8 @@ export const newStaffData: IUserInfo = {
 	staffId: ''
 };
 
-export function initNewStaff() {
-	userInfo.set(newStaffData);
+export function initNewStaff(data: IApplicantInfo) {
+	applicantInfo.set(data);
 }
 
 export function clearNewStaffInit() {
@@ -50,8 +61,27 @@ export function clearInitStaff() {
 	userInfo.set(null);
 }
 
-export function loginNewStaff(data: { phoneNumber: string; otp: string }) {
-	return axios.post('/register', data);
+export async function loginNewStaff(data: { contact: string; otp: string }) {
+	try {
+		const ret = await axiosInstance.post(`/applicant/login`, {
+			...data,
+			contact: extractNumber(data.contact)
+		});
+		// console.log('here', ret);
+		return queryResult(ret, ret.data);
+	} catch (error) {
+		return axiosError(error);
+	}
+}
+
+export async function generateOtp(phoneNumber: string) {
+	try {
+		const d = extractNumber(phoneNumber);
+		const ret = await axiosInstance.get(`/applicant/generate-otp/${d}`);
+		return callResult(ret, ret.data);
+	} catch (error) {
+		return axiosError(error);
+	}
 }
 
 export function logoutNewStaff() {

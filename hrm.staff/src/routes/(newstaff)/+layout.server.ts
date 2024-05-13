@@ -1,15 +1,29 @@
-import { userInfo } from '$svc/auth.js';
-import { redirect } from '@sveltejs/kit';
+import type { IApplicantInfo } from '$lib/types';
+import { readLoginsDetails } from '$svc/applicant.js';
+import { APPLICANT_LOGIN_KEY } from '$svc/auth';
 
-export const load = async ({ locals, url }) => {
-	const { userId, isNewStaff } = locals;
-	if (userId && !isNewStaff) {
-		throw redirect(307, '/home');
+export const load = async ({ cookies }) => {
+	let user: IApplicantInfo | null = null;
+	const applicantCookie = cookies.get(APPLICANT_LOGIN_KEY);
+	if (applicantCookie) {
+		try {
+			const ret = await readLoginsDetails();
+			if (ret.success)
+				user = {
+					id: ret.data.id,
+					createdAt: ret.data.createdAt,
+					updatedAt: ret.data.updatedAt,
+					firsName: ret.data.firsName,
+					lastName: ret.data.lastName,
+					email: ret.data.email,
+					contact: ret.data.contact,
+					applicationStatus: ret.data.applicationStatus,
+					hasSubmittedApplication: ret.data.hasSubmittedApplication
+				};
+		} catch (e) {}
 	}
-	let user;
-	userInfo.subscribe((x) => (user = x));
 	return {
-		isAuthencticated: userId && isNewStaff ? true : false,
-		user: user ?? null
+		isAuthencticated: user && user.id ? true : false,
+		user: user
 	};
 };

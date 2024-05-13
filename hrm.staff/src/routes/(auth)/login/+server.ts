@@ -1,8 +1,10 @@
-import { LOGIN_KEY, clearInitStaff, initStaff } from '$svc/auth.js';
+import { STAFF_LOGIN_KEY, authToken, clearInitStaff, initStaff } from '$svc/auth';
 import { json } from '@sveltejs/kit';
 
 export const POST = async ({ request, cookies }) => {
 	const ret = await request.json();
+
+	console.log(ret);
 
 	if (!ret) {
 		return json({ message: 'Bad Request', status: 400, success: false });
@@ -13,10 +15,10 @@ export const POST = async ({ request, cookies }) => {
 		const options = {
 			maxAge: expiresIn,
 			httpOnly: true,
-			secure: true,
-			path: '/home'
+			secure: process.env.NODE_ENV === 'production',
+			path: '/'
 		};
-		cookies.set(LOGIN_KEY, sessionCookie, options);
+		cookies.set(STAFF_LOGIN_KEY, sessionCookie, options);
 
 		initStaff();
 		return json({ message: 'Created new record', status: 200, success: true });
@@ -24,7 +26,8 @@ export const POST = async ({ request, cookies }) => {
 };
 
 export async function DELETE({ cookies }) {
-	cookies.delete(LOGIN_KEY, { path: '/' });
+	cookies.delete(STAFF_LOGIN_KEY, { path: '/' });
 	clearInitStaff();
+	authToken.set('');
 	return json({ status: 'unAuthenticated' });
 }

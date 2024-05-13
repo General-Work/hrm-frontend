@@ -1,31 +1,39 @@
-import { LOGIN_KEY, clearNewStaffInit, initNewStaff } from '$svc/auth.js';
-import { json } from '@sveltejs/kit';
+import { APPLICANT_LOGIN_KEY, authToken, loginNewStaff } from '$svc/auth.js';
+import { json, redirect } from '@sveltejs/kit';
 
 export const POST = async ({ request, cookies }) => {
-	const ret = await request.json();
-	console.log(ret);
+	const body = await request.json();
 
-	if (!ret) {
+	if (!body) {
 		return json({ message: 'Bad Request', status: 400, success: false });
 	} else {
-		await new Promise((resolve) => setTimeout(resolve, 700));
+		const ret = await loginNewStaff(body);
+		if (!ret.success) {
+			return json({ message: 'Wrong OTP', status: 400, success: false });
+		}
+		const sessionCookie = ret.data.accessToken;
 		const expiresIn = 60 * 60 * 24 * 5 * 1000;
-		const sessionCookie = 'sessionCookie';
+		console;
 		const options = {
 			maxAge: expiresIn,
-			httpOnly: true,
-			secure: true,
-			path: '/register'
+			httpOnly: false,
+			secure: process.env.NODE_ENV === 'production',
+			path: '/'
 		};
-		cookies.set(LOGIN_KEY, sessionCookie, options);
+		cookies.set(APPLICANT_LOGIN_KEY, sessionCookie, options);
 
-		initNewStaff();
-		return json({ message: 'Created new record', status: 200, success: true });
+		// throw redirect(302, '/register');
+
+		return json({
+			message: `Welcome ${ret.data.firstName} ${ret.data.lastName}`,
+			status: 200,
+			success: true
+		});
 	}
 };
 
 export async function DELETE({ cookies }) {
-	cookies.delete(LOGIN_KEY, { path: '/' });
-	clearNewStaffInit();
+	cookies.delete(APPLICANT_LOGIN_KEY, { path: '/' });
+	authToken.set('');
 	return json({ status: 'unAuthenticated' });
 }

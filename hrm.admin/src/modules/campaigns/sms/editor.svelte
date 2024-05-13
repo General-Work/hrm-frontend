@@ -1,7 +1,6 @@
 <script lang="ts">
 	import Form from '$cmps/forms/form.svelte';
 	import SelectField from '$cmps/forms/selectField.svelte';
-	import TextEditor from '$cmps/forms/textEditor.svelte';
 	import TextField from '$cmps/forms/textField.svelte';
 	import FileUpload from '$cmps/forms/fileUpload.svelte';
 	import { scale } from 'svelte/transition';
@@ -9,14 +8,20 @@
 	import * as z from 'zod';
 	import TextAreaField from '$cmps/forms/textAreaField.svelte';
 	import AlertDialog from '$cmps/alerts/alertDialog.svelte';
-	import { onMount } from 'svelte';
-	import { showError } from '$lib/utils';
-	import { readSmsTemplates } from '$svc/setup';
+	import { createEventDispatcher, onMount } from 'svelte';
+	import { endProgress, showError, showInfo, startProgress } from '$lib/utils';
+	import Helper from '$cmps/alerts/helper.svelte';
+	import type { IOkResult } from '$svc/shared';
+	import Button from '$cmps/ui/button.svelte';
+	import { postSmsCampaign } from '$svc/campaigns';
+	// import Excel from '$lib/files/';
 
-	export let isValid = false;
+	// export let isValid = false;
 	export let recordId = 0;
+	export let optionalData: any;
 
 	let staff: any[] = [];
+	let busy = false;
 	let templates: any[] = [];
 	let renderId = 0;
 	let renderTemplate = 0;
@@ -24,30 +29,35 @@
 	let showAlert = false;
 	let frequency = ['Once', 'Weekly', 'Daily', 'Monthly', 'Yearly'];
 	let formData = {
-		department: [],
+		departmentId: [],
 		endDate: '',
-		file: null,
+		templateFile: null,
 		frequency: '',
-		directorate: [],
-		unit: [],
+		directorateId: [],
+		unitId: [],
 		message: '',
-		name: '',
+		campaingName: '',
 		notes: '',
-		staffNumbers: [],
+		staffIds: [],
 		startDate: '',
 		time: '',
-		template: null
+		smsTemplateId: ''
 		// subject: ''
 	};
 
+	const dispatch = createEventDispatcher();
 	$: isOnce = formData.frequency.toLowerCase() === 'once';
 	$: isWeekly = formData.frequency.toLowerCase() === 'weekly';
 	$: isDaily = formData.frequency.toLowerCase() === 'daily';
 	$: isMonthly = formData.frequency.toLowerCase() === 'monthly';
 	$: isYearly = formData.frequency.toLowerCase() === 'yearly';
-
+	$: activeTemplateName =
+		(formData.smsTemplateId && templates.find((x) => x.id === formData.smsTemplateId).name) || '';
 	const schema = z.object({
-		name: z.string().min(1, 'Campaign name is required').min(3, 'Enter a valid campaign name '),
+		campaingName: z
+			.string()
+			.min(1, 'Campaign name is required')
+			.min(3, 'Enter a valid campaign name '),
 		message: z.string().min(1, 'Message is required').min(3, 'Enter a valid campaign message '),
 		frequency: z.string().min(1, 'Frequency is required'),
 		// subject: z.string().min(1, 'Subject is required').min(3, 'Enter a valid subject message '),
@@ -79,16 +89,17 @@
 	function handleForm({ detail }: any) {
 		const { values, form } = detail;
 		formData = values;
-		form.isValid.subscribe((val: boolean) => {
-			isValid = val;
-		});
+		// form.isValid.subscribe((val: boolean) => {
+		// 	isValid = val;
+		// });
 	}
 
 	function setMessage() {
 		renderId++;
 
 		selectedMessage =
-			(formData.template && templates.find((x) => x.id === formData.template)?.message) || '';
+			(formData.smsTemplateId && templates.find((x) => x.id === formData.smsTemplateId)?.message) ||
+			'';
 		showAlert = false;
 	}
 
@@ -107,26 +118,44 @@
 		}
 	}
 
-	export const submit = () => {
-		form.submit();
-		return true;
-	};
-	let form: any;
-
 	onMount(async () => {
-		try {
-			const res = await readSmsTemplates();
-			if (res.success) {
-				const xs = res.data.items;
-				templates = xs;
-			} else {
-				showError(res.message);
+		if (optionalData.templates) {
+			try {
+				const ret: IOkResult<any> = await optionalData.templates;
+				if (!ret.success) {
+					showError(ret.message);
+					return;
+				}
+				templates = ret.data;
+			} catch (error: any) {
+				showError(error);
 			}
-		} catch (err: any) {
-			console.log(err);
-			showError(err?.message || err);
+			// if (data.id) {
+			// 	formData = { name: data.specialityName, category: data.categoryId };
+			// 	renderId++;
+			// }
 		}
 	});
+
+	async function handSubmit({ detail }: any) {
+		const { values } = detail;
+		try {
+			busy = true;
+			startProgress();
+			const ret = await postSmsCampaign(values);
+			if (!ret.success) {
+				showError(ret.message);
+				return;
+			}
+			showInfo(ret.message);
+			dispatch('done');
+		} catch (error: any) {
+			showError(error);
+		} finally {
+			busy = false;
+			endProgress();
+		}
+	}
 </script>
 
 <Form
@@ -134,15 +163,15 @@
 	class="px-5 py-2 flex flex-col gap-4"
 	on:change={handleForm}
 	{schema}
-	on:submit
-	bind:this={form}
+	on:submit={handSubmit}
+	let:isValid
 >
-	<TextField label="Name" name="name" required placeholder="Enter campaign name" />
+	<TextField label="Name" name="campaingName" required placeholder="Enter campaign name" />
 
 	{#key renderTemplate}
 		<SelectField
-			label="SMS Template"
-			name="template"
+			label="Template"
+			name="smsTemplateId"
 			clearable
 			options={templates}
 			placeholder="Select an initial message to use"
@@ -151,23 +180,49 @@
 	{/key}
 	<!-- <TextField label="Subject" name="subject" required placeholder="Enter campaign subject" /> -->
 	{#key renderId}
-		<TextAreaField rows={8} label="Message" name="message" required value={selectedMessage} />
+		<TextAreaField rows={7} label="Message" name="message" required value={selectedMessage} />
 	{/key}
 	<SelectField
 		label="Send to Individual Staff"
 		options={staff}
-		name="staffNumbers"
+		name="staffIds"
 		placeholder="Select as many staff"
 		createFilter={unknownParticipantFilter}
 		creatable
 		multiple
 	/>
-	<div class="grid grid-cols-3 gap-3">
-		<SelectField label="Directorate" name="directorate" placeholder="Select directorate" multiple />
-		<SelectField label="Department" name="department" placeholder="Select department" multiple />
-		<SelectField label="Unit" name="unit" placeholder="Select unit" multiple />
+	<div class="grid grid-col-1 md:grid-cols-2 gap-4">
+		<SelectField
+			label="Directorate"
+			name="directorateId"
+			placeholder="Select directorate"
+			multiple
+		/>
+		<SelectField label="Department" name="departmentId" placeholder="Select department" multiple />
+		<SelectField label="Unit" name="unitId" placeholder="Select unit" multiple />
+		<SelectField label="Profession" name="professionId" placeholder="Select profession" multiple />
 	</div>
-	<FileUpload label="Send using file" name="file" />
+	<div class="space-y-4" class:hidden={!(activeTemplateName === 'New Recruitment')}>
+		<Helper>
+			<div class="space-y-1">
+				<p>Click on the button below to download template for campaign</p>
+				<a
+					class="bg-blue-500 hover:bg-blue-600 text-white rounded-[5px] text-sm px-3 py-1.5"
+					href="/new_recruitment.xlsx"
+					download
+					target="_blank"
+				>
+					Download
+				</a>
+			</div>
+		</Helper>
+		<FileUpload
+			label="Send using file"
+			name="templateFile"
+			required
+			acceptedFileTypes={['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet']}
+		/>
+	</div>
 	<SelectField
 		label="Frequency"
 		placeholder="Select frequency"
@@ -195,8 +250,11 @@
 			placeholder="Select time"
 			required
 		/>
-	</div></Form
->
+	</div>
+	<div class="py-4 grid">
+		<Button label="Submit" type="submit" {busy} disabled={busy || !isValid} color="primary" />
+	</div>
+</Form>
 
 <AlertDialog
 	message="Are you sure want to replace the selected template's messge with the current message?."

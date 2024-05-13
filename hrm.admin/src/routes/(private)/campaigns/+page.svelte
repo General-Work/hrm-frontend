@@ -1,6 +1,7 @@
-<script lang="ts">
-	import SetupsView from '$cmps/layout/setupsView.svelte';
+<script>
+	import Box from '$cmps/ui/box.svelte';
 	import { activePage } from '$data/appStore';
+	import Campaign from '$modules/campaigns/sms/index.svelte';
 
 	export let data;
 
@@ -10,6 +11,6 @@
 	};
 </script>
 
-<div class="h-full w-full pt-4">
-	<SetupsView cards={data.pages} moreHeight />
-</div>
+<Box bgWhite otherClasses="p-4 mt-4" rounded>
+	<Campaign tableDataInfo={data.data} templates={data.optional.templates} />
+</Box>

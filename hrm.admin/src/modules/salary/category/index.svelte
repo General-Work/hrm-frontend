@@ -3,29 +3,28 @@
 
 	const columns: ITableColumn[] = [
 		{
-			header: '#',
-			accessor: 'id'
+			header: 'Name',
+			accessor: 'categoryName',
+			plugins: {
+				sort: { disable: true }
+			}
 		},
 		{
-			header: 'Name',
-			accessor: 'name'
+			header: 'Created At',
+			accessor: (row: ICategory) => dayjs(row.createdAt).format('ddd DD MMM, YYYY'),
+			plugins: {
+				sort: { disable: true }
+			}
 		}
 	];
-
-	export async function create(data: any) {
-		// return await axios.post('/usermanagement', data);
-	}
-
-	export async function read() {
-		// return await axios.get('/usermanagement');
-	}
 </script>
 
 <script lang="ts">
 	import DatatablePage from '$cmps/ui/datatablePage.svelte';
 	import Editor from './editor.svelte';
-	import axios from 'axios';
 	import type { ITableDataProps } from '$lib/types';
+	import dayjs from 'dayjs';
+	import type { ICategory } from '$svc/salaries';
 
 	export let tableDataInfo: ITableDataProps<any> | undefined;
 </script>
@@ -41,7 +40,8 @@
 		editorComponent={Editor}
 		sideModalSize="sm"
 		showModalButtons
-		createEntry={create}
-		{read}
+		pageUrl="/salarysetup/category"
+		showActions
+		showEdit
 	/>
 </div>

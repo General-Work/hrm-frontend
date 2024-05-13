@@ -6,9 +6,10 @@ import { twMerge } from 'tailwind-merge';
 import { toast, type ToastOptions } from 'svelte-french-toast';
 import { nanoid } from 'nanoid';
 import NProgress from 'nprogress';
-import type { IPageInfo, ITableDataProps } from '$types/types';
+import type { IPageInfo, ITableDataProps } from '$lib/types';
 import dayjs from 'dayjs';
 import Holidays from 'date-holidays';
+import * as z from 'zod';
 
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
@@ -86,7 +87,7 @@ export function getNewInitials(val?: string) {
 
 export const showError = (err: string, options?: ToastOptions) => {
 	let id = nanoid();
-	return toast.error(err, { id: `${id}-${err}`, duration: 8000, ...options });
+	return toast.error(err, { id: `${id}-${err}`, duration: 8500, ...options });
 };
 
 export const showInfo = (err: string, options?: ToastOptions) => {
@@ -199,3 +200,60 @@ export function readHolidays(year: number) {
 	}));
 	return holidayEvents;
 }
+
+export function updateOrAppendUrlQueryParam(
+	url: string,
+	key: string,
+	value: string | null
+): string {
+	const urlObject = new URL(url);
+	const queryParams = new URLSearchParams(urlObject.search);
+
+	if (value === null || value === '') {
+		if (queryParams.has(key)) {
+			queryParams.delete(key);
+		}
+	} else {
+		if (queryParams.has(key)) {
+			queryParams.set(key, value);
+		} else {
+			queryParams.append(key, value);
+		}
+	}
+
+	urlObject.search = queryParams.toString();
+
+	return urlObject.toString();
+}
+
+export function addQueryParamsAndValues(pageUrl: string, step: string, value: any) {
+	const urlObject = new URL(pageUrl);
+	const queryParams = new URLSearchParams(urlObject.search);
+	if (value === null || value === '') {
+		if (queryParams.has('q')) {
+			queryParams.delete('q');
+		}
+	} else {
+		if (queryParams.has('q')) {
+			queryParams.set('q', value);
+		} else {
+			queryParams.append('q', value);
+		}
+	}
+	urlObject.search = queryParams.toString();
+	// console.log(urlObject);
+	return `${urlObject.pathname}${urlObject.search}`;
+}
+
+export const fileOrStringValidation: any = (
+	existingFileUrls: Record<string, string>,
+	stringField: string
+) => {
+	return z.lazy(() => {
+		if (existingFileUrls[stringField]) {
+			return z.null();
+			// return z.union([z.optional(z.null()), fileOrString(stringField)]);
+		}
+		return z.instanceof(File);
+	});
+};

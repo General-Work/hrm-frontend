@@ -16,8 +16,13 @@
 	import TextField from '$cmps/forms/textField.svelte';
 	import SelectField from '$cmps/forms/selectField.svelte';
 	import * as z from 'zod';
+	import { onMount } from 'svelte';
+	import { showError } from '$lib/utils';
+	import type { IOkResult } from '$svc/shared';
+	import type { ICategory } from '$svc/salaries';
 
 	export let isValid = false;
+	export let optionalData: any;
 	export const submit = () => {
 		form.submit();
 		return true;
@@ -25,7 +30,7 @@
 	let form: any;
 
 	let formData = {
-		category: null,
+		categoryId: null,
 		grade: '',
 		scale: '',
 		level: null,
@@ -35,20 +40,55 @@
 		maximumStep: null
 	};
 	const schema = z.object({
-		grade: z.string().min(1, 'Name is required')
-		// category: z.number({
-		// 	invalid_type_error: 'Category is required',
-		// 	required_error: 'Category is required'
-		// })
+		grade: z.string().min(1, 'Name is required'),
+		scale: z.string().min(1, 'Scale is required'),
+		level: z.number({
+			invalid_type_error: 'Level is required',
+			required_error: 'Level is required'
+		}),
+		categoryId: z
+			.string({
+				invalid_type_error: 'Category is required',
+				required_error: 'Category is required'
+			})
+			.min(1, 'Category is required'),
+		high: z.string().min(1, 'This is required'),
+		marketPremium: z.number({
+			invalid_type_error: 'Market Premium is required',
+			required_error: 'Market Premium is required'
+		}),
+		minimumStep: z.number({
+			invalid_type_error: 'Minimum Step is required',
+			required_error: 'Minimum Step is required'
+		}),
+		maximumStep: z.number({
+			invalid_type_error: 'Maximum Step is required',
+			required_error: 'Maximum Step is required'
+		})
 	});
 	const high = ['H', 'L'];
-	const scale = ['SS PS'];
+	const scale = ['SSPS', 'HSSS'];
+	let category: any[] = [];
 	function handleChange({ detail }: any) {
 		const { form } = detail;
 		form.isValid.subscribe((val: boolean) => {
 			isValid = val;
 		});
 	}
+
+	onMount(async () => {
+		if (optionalData.category) {
+			try {
+				const ret: IOkResult<any> = await optionalData.category;
+				if (!ret.success) {
+					showError(ret.message || 'Failed to load Categories');
+				}
+				category = ret.data.map((x: ICategory) => ({ id: x.id, name: x.categoryName }));
+			} catch (e: any) {
+				showError(e);
+			}
+		}
+	});
 </script>
 
 <Form
@@ -59,7 +99,13 @@
 	on:change={handleChange}
 	bind:this={form}
 >
-	<SelectField name="category" label="Category" required placeholder="Select category" />
+	<SelectField
+		name="categoryId"
+		label="Category"
+		required
+		placeholder="Select category"
+		options={category}
+	/>
 	<TextField name="grade" label="Name of grade" required placeholder="Enter name of grade" />
 	<SelectField
 		name="scale"

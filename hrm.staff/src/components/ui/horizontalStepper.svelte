@@ -26,11 +26,11 @@
 	export let backButtonColor: ButtonColor = 'default';
 	export let nextButtonColor: ButtonColor = 'primary';
 	export let fullHeight = false;
+	export let busy = false;
 
 	export let nextText = 'Next';
 	let props: Record<string, any> = {};
 	let isValid = false;
-	let busy = false;
 
 	const dispatch = createEventDispatcher();
 	let onMessage = (step: IStepper, message: any) => {
@@ -87,9 +87,12 @@
 		>
 			<div class="pt-5 flex flex-col md:flex-row md:justify-end gap-3 pr-1">
 				<Button
-					on:click={() => isActiveStep--}
+					on:click={() => {
+						isActiveStep--;
+						dispatch('onBack');
+					}}
 					label="Back"
-					disabled={isActiveStep == 0}
+					disabled={isActiveStep == 0 || busy}
 					color={backButtonColor}
 				/>
 				<Button

@@ -1,10 +1,10 @@
 <script lang="ts">
 	export let placeholder = '';
 	export let value = '';
-	export let readonly = false
+	export let readonly = false;
 </script>
 
-<section class="bg-gray-50/70 rounded-md flex items-center  p-2  border border-gray-300">
+<section class="bg-gray-50/70 rounded-md flex items-center p-2 border border-gray-300">
 	<iconify-icon icon="eva:search-outline" class="text-xl text-gray-500" />
 	<input
 		bind:value
@@ -12,4 +12,7 @@
 		{placeholder}
 		{readonly}
 	/>
+	<button on:click={() => (value = '')} class="grid hover:text-red-500" class:hidden={!value.length}
+		><iconify-icon icon="iconamoon:close-thin" /></button
+	>
 </section>

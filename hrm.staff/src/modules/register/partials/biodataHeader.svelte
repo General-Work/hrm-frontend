@@ -1,11 +1,12 @@
 <script lang="ts">
 	import BG from '$lib/images/bg.jpg';
-	import type { IUserInfo } from '$types/types';
+	import type { IApplicantInfo } from '$lib/types';
+	import { getInitials } from '$lib/utils';
 	import { Avatar } from 'flowbite-svelte';
 	import { createEventDispatcher } from 'svelte';
 
 	const dispatch = createEventDispatcher();
-	export let user: IUserInfo | null;
+	export let user: IApplicantInfo | null;
 </script>
 
 <header
@@ -16,11 +17,13 @@
 		<div class="flex justify-between items-end">
 			<div class="flex items-center gap-3">
 				<Avatar class="bg-[#993306] text-white shadow-sm border shadow-white"
-					>{user?.initials}</Avatar
+					>{`${getInitials(user?.firsName)}${getInitials(user?.lastName)}`}</Avatar
 				>
 				<div class="hidden md:block text-white">
-					<div class="text-sm truncate w-36 font-medium">{user?.fullName}</div>
-					<div class="text-xs text-gray-200 font-light w-36">{user?.phoneNumber}</div>
+					<div class="text-sm truncate w-36 font-medium">
+						{`${user?.firsName} ${user?.lastName}`}
+					</div>
+					<div class="text-xs text-gray-200 font-light w-36">0{user?.contact}</div>
 				</div>
 			</div>
 			<button
@@ -32,9 +35,9 @@
 			>
 		</div>
 		<p
-			class="py-4 lg:py-0 text-white text-2xl lg:text-3xl flex justify-center font-semibold tracking-wide"
+			class="py-4 lg:py-0 text-white text-2xl lg:text-3xl flex justify-center font-semibold tracking-wide pb-2"
 		>
-			Employee's Bio Details
+			Applicant's Details
 		</p>
 	</div>
 </header>

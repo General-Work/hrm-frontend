@@ -19,5 +19,5 @@
 </script>
 
 <Box bgWhite otherClasses="p-4" rounded>
-	<Specialty tableDataInfo={data.data} /></Box
+	<Specialty tableDataInfo={data.data} category={data.optional.category} /></Box
 >

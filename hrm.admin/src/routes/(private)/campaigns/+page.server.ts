@@ -1,29 +1,16 @@
-import type { IMenuItem } from '$lib/types';
+import { generateDataTableProps } from '$lib/utils';
+import { readSmsCampaigns } from '$svc/campaigns';
+import { readSmsTemplates } from '$svc/setup';
+import { error } from '@sveltejs/kit';
 
-const dataPages: IMenuItem[] = [
-	{
-		title: 'General',
-		items: [
-			{
-				title: 'SMS',
-				description: 'Manage all SMS campaigns',
-				icon: 'fa-solid:sms',
-				path: '/campaigns/sms',
-				iconBg: 'bg-blue-300'
-			},
-			{
-				title: 'Mail',
-				description: 'Manage all mail campaigns',
-				iconBg: 'bg-yellow-300',
-				icon: 'uiw:mail',
-				path: '/campaigns/mail'
-			}
-		]
+export async function load({ cookies }) {
+	const res = await readSmsCampaigns({ pageNumber: 1, pageSize: 13, search: '' });
+	// console.log(res)
+	if (!res.success) {
+		error(res.status!, res.message ?? 'Failed to load data');
 	}
-];
-
-export async function load() {
 	return {
-		pages: dataPages
+		data: generateDataTableProps(res.data),
+		optional: { templates: readSmsTemplates() }
 	};
 }

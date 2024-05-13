@@ -40,15 +40,15 @@ export interface IRouteInfo {
 	currentDropdownOption?: IMenuItem;
 }
 
-export interface ICampaignTemplate {
-	id: number;
-	name: string;
-	notes: string;
-	message: string;
-	category: string;
-	isSystemTemplate: boolean;
-	subject?: string | null;
-}
+// export interface ICampaignTemplate {
+// 	id: number;
+// 	name: string;
+// 	notes: string;
+// 	message: string;
+// 	category: string;
+// 	isSystemTemplate: boolean;
+// 	subject?: string | null;
+// }
 
 export interface IPageInfo {
 	hasNextPage: boolean;
@@ -93,6 +93,12 @@ export interface IRequestAction {
 			};
 		};
 	};
+}
+
+export interface APIQueryParams {
+	pageNumber: number;
+	pageSize: number;
+	search: string;
 }
 
 export type DocumentKind =

@@ -173,7 +173,7 @@
 
 	{#if templates.length}
 		<Box
-			otherClasses="w-full h-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6 gap-6"
+			otherClasses="w-full h-full pl-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6 gap-6"
 		>
 			{#each templates as { name, category, isSystemTemplate, id }}
 				<TemplateCard

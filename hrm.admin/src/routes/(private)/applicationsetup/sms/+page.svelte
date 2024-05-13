@@ -5,13 +5,13 @@
 	export let data;
 
 	$activePage = {
-		title: 'SMS Template',
+		title: 'Campaigns Template',
 		showBreadCrumb: true
 	};
 	breadCrumb.addToFirstIndex(
 		[
 			{ title: 'Home', path: '/applicationsetup' },
-			{ title: 'SMS Templates', path: '/applicationsetup/sms' }
+			{ title: 'Campaigns Template', path: '/applicationsetup/sms' }
 		],
 		true
 	);

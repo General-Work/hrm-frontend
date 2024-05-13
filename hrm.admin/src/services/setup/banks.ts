@@ -1,4 +1,5 @@
 import axiosInstance from '$lib/axios';
+import type { APIQueryParams } from '$lib/types';
 import { axiosError, callResult, queryResult } from '$svc/shared';
 
 export interface IBank {
@@ -9,10 +10,10 @@ export interface IBank {
 	staffs?: any[] | null;
 }
 
-export async function readBanks(params?: { pageNumber: number; pageSize: number }) {
+export async function readBanks(params?: APIQueryParams) {
 	try {
 		const ret = params
-			? await axiosInstance.get('/bank/all', { params: { ...params, sort: 'createdAt_desc' } })
+			? await axiosInstance.get('/bank/all', { params: { ...params, sort: 'updatedAt_desc' } })
 			: await axiosInstance.get('/bank/all');
 		return queryResult(ret, ret.data);
 	} catch (error) {

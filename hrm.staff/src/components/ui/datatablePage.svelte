@@ -22,8 +22,8 @@
 	export let showEditorIn: 'modal' | 'side-modal' = 'side-modal';
 	export let hideSearchBox = false;
 	export let searchPlaceholder = 'Search...';
-	export let take = 10;
-	export let addNewHeading = 'Add New Record'
+	export let take = 13;
+	export let addNewHeading = 'Add New Record';
 	export let addButtonLabel = 'Add New';
 	export let updateHeading = 'Update';
 	export let newRecord: any = {};
@@ -67,7 +67,7 @@
 	let showForm = false;
 	let query = '';
 	let pageInfo = new PageInfo();
-	// pageInfo.setPageSize(take);
+	pageInfo.setPageSize(take);
 	let editorHeading = '';
 	let activeEntry = <any>{};
 	let editing = false;

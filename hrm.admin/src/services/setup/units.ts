@@ -1,45 +1,71 @@
-import type { ICampaignTemplate, IPageInfo } from '$lib/types';
+import axiosInstance from '$lib/axios';
+import type { APIQueryParams } from '$lib/types';
+import { axiosError, callResult, queryResult } from '$svc/shared';
 
-const x = [
-	{
-		id: 1,
-		name: 'Test Unit',
-		directorate: { name: 'Test Directorate' },
-		department: { name: 'Test Department' },
-		head: { name: 'Demo Unit Head' }
-	},
-	{
-		id: 2,
-		name: 'Test Unit',
-		directorate: { name: 'Test Directorate' },
-		department: { name: 'Test Department' },
-		head: { name: 'Demo Unit Head' }
+export interface UnitDto {
+	departmentId: string;
+	unitHeadId: string;
+	directorateId: string;
+	unitName: string;
+}
+
+export interface IUnit {
+	id: string;
+	departmentId: string;
+	unitHeadId: string | null;
+	directorateId: string | null;
+	createdAt: Date;
+	updatedAt: Date;
+	unitName: string;
+	department: null;
+	directorate: null;
+	unitHead: null;
+	users: null;
+}
+
+export async function readUnits(params?: APIQueryParams) {
+	try {
+		const ret = params
+			? await axiosInstance.get('/unit/all', {
+					params: { ...params, sort: 'updatedAt_desc' }
+				})
+			: await axiosInstance.get('/unit/all');
+		return queryResult(ret, ret.data);
+	} catch (error) {
+		return axiosError(error);
 	}
-];
+}
 
-export function readUnits(): Promise<{
-	success: boolean;
-	message: string;
-	status: number;
-	data: { totalCount: number; pageInfo: IPageInfo; items: any[] };
-}> {
-	return new Promise((resolve) => {
-		setTimeout(() => {
-			resolve({
-				success: true,
-				message: 'success',
-				status: 200,
-				data: {
-					totalCount: x.length,
-					pageInfo: {
-						hasNextPage: false,
-						hasPreviousPage: false,
-						nextPageUrl: '',
-						previousPageUrl: ''
-					},
-					items: x
-				}
-			});
-		}, 700);
-	});
+export async function postUnit(input: UnitDto) {
+	try {
+		// console.log(input)
+		const ret = await axiosInstance.post('/unit', {
+			...input,
+			unitHeadId: input.unitHeadId || null
+		});
+		return callResult(ret, ret.data);
+	} catch (error) {
+		return axiosError(error);
+	}
+}
+
+export async function updateUnit(id: string, data: UnitDto) {
+	try {
+		const ret = await axiosInstance.patch(`/unit/${id}`, {
+			...data,
+			unitHeadId: data.unitHeadId || null
+		});
+		return callResult(ret, ret.data);
+	} catch (error) {
+		return axiosError(error);
+	}
+}
+
+export async function deleteUnit(id: string) {
+	try {
+		const ret = await axiosInstance.delete(`/unit/${id}`);
+		return callResult(ret, ret.data);
+	} catch (error) {
+		return axiosError(error);
+	}
 }

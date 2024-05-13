@@ -1,18 +1,21 @@
 <script lang="ts">
 	import Form from '$cmps/forms/form.svelte';
 	import TextField from '$cmps/forms/textField.svelte';
+	import type { ICategory } from '$svc/salaries';
+	import { onMount } from 'svelte';
 	import * as z from 'zod';
 
 	export let isValid = false;
+	export let data: ICategory;
 	export const submit = () => {
 		form.submit();
 		return true;
 	};
 	let form: any;
-
-	let formData = { name: '' };
+	let renderId = 0;
+	let formData = { categoryName: '' };
 	const schema = z.object({
-		name: z.string().min(1, 'Name is required')
+		categoryName: z.string().min(1, 'Name is required')
 	});
 	function handleChange({ detail }: any) {
 		const { form } = detail;
@@ -20,15 +23,28 @@
 			isValid = val;
 		});
 	}
+	onMount(() => {
+		if (data.id) {
+			formData = { categoryName: data.categoryName };
+			renderId++;
+		}
+	});
 </script>
 
-<Form
-	{schema}
-	initialValues={formData}
-	class="p-4"
-	on:submit
-	on:change={handleChange}
-	bind:this={form}
->
-	<TextField name="name" label="Name of category" required placeholder="Enter name of category" />
-</Form>
+{#key renderId}
+	<Form
+		{schema}
+		initialValues={formData}
+		class="p-4"
+		on:submit
+		on:change={handleChange}
+		bind:this={form}
+	>
+		<TextField
+			name="categoryName"
+			label="Name of category"
+			required
+			placeholder="Enter name of category"
+		/>
+	</Form>
+{/key}

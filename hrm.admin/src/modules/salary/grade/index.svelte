@@ -3,33 +3,18 @@
 
 	const columns: ITableColumn[] = [
 		{
-			header: '#',
-			accessor: 'id'
-		},
-		{
 			header: 'Name',
-			accessor: 'name'
+			accessor: 'gradeName'
 		},
-		{ header: 'Category', accessor: (row) => row.category.name },
 		{
-			header: 'Band',
-			accessor: 'band'
+			header: 'Level',
+			accessor: 'level'
 		},
 		{
 			header: 'Scale',
 			accessor: 'scale'
 		}
 	];
-
-	export async function create(data: any) {
-		return {
-			data: { success: true }
-		};
-	}
-
-	export async function read() {
-		// return await axios.get('/usermanagement');
-	}
 </script>
 
 <script lang="ts">
@@ -41,6 +26,7 @@
 	import SalaryEditor from './salaryEditor.svelte';
 
 	export let tableDataInfo: ITableDataProps<any> | undefined;
+	export let category: any;
 
 	let showModal = false;
 	let formData: IGradeDto = {
@@ -50,13 +36,16 @@
 		level: '',
 		high: '',
 		marketPremium: 0,
-		minimumStep: 0,
-		maximumStep: 0
+		minimumStep: 1,
+		maximumStep: 4
 	};
-
+	let gradeId = '';
+	let reloadData = false;
 	function afterAction({ detail }: any) {
-		const { values } = detail;
+		const { values, data } = detail;
+		// console.log(data)
 		formData = values;
+		gradeId = data;
 		showModal = true;
 	}
 </script>
@@ -72,18 +61,21 @@
 		editorComponent={Editor}
 		sideModalSize="md"
 		showModalButtons
-		createEntry={create}
-		{read}
+		pageUrl="/salarysetup/grade"
 		allowDispatchAfterAction
 		allowLoadAfterCreate={false}
 		on:afterAction={afterAction}
+		optionalData={{ category }}
+		{reloadData}
 	/>
 </div>
-<Modal open={showModal} dismissable={false} size="md" title="Salaries for {formData.grade}">
+<Modal open={showModal} dismissable={false} size="lg" title="Salaries for {formData.grade}">
 	<SalaryEditor
 		values={formData}
+		{gradeId}
 		on:close={() => {
 			showModal = false;
+			reloadData = true;
 			formData = {
 				category: 0,
 				grade: '',
@@ -94,6 +86,7 @@
 				minimumStep: 0,
 				maximumStep: 0
 			};
+			gradeId = '';
 		}}
 	/>
 </Modal>

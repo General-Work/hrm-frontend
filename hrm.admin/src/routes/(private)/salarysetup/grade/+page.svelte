@@ -19,5 +19,5 @@
 </script>
 
 <Box bgWhite otherClasses="p-4" rounded>
-	<Grade tableDataInfo={data.data} />
+	<Grade tableDataInfo={data.data} category={data.optional.category} />
 </Box>

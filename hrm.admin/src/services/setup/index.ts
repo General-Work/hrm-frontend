@@ -1,6 +1,5 @@
 export * from './home';
 export * from './mail';
-export * from './sms';
 export * from './directorates';
 export * from './departments';
 export * from './units';
@@ -11,3 +10,4 @@ export * from './leavetype';
 export * from './professionalbodies';
 export * from './manpowerlevels';
 export * from './banks';
+export * from './campaigntemplates'

@@ -18,7 +18,7 @@ export interface IOkResult<T> {
 export function axiosError(response: any): IFailureResult {
 	if (response.status >= 200 && response.status < 300) {
 		// Successful response, return success: true
-		return { success: false, message: 'Success' };
+		return { success: false, message: 'Success', status: response.status };
 	} else {
 		// Handle error response
 		const errorMessage =
@@ -28,7 +28,7 @@ export function axiosError(response: any): IFailureResult {
 			response.message;
 		('Unknown error');
 
-		return { success: false, message: errorMessage };
+		return { success: false, message: errorMessage, status: response.status };
 	}
 }
 
@@ -66,5 +66,5 @@ export function callResult<R>(rawResponse: AxiosResponse<R>, result: any) {
 			message: 'No valid response was received'
 		};
 	}
-	return <IOk>{ success: true, message: '' };
+	return <IOk>{ success: true, message: result ?? '' };
 }

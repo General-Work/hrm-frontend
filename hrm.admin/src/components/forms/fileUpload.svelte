@@ -25,12 +25,17 @@
 	export let url = '';
 	export let name = 'file';
 	export let allowMultiple = false;
-	export let acceptedFileTypes = ["image/png", "image/jpeg", "application/pdf"];
+	export let acceptedFileTypes = [
+		'image/png',
+		'image/jpeg',
+		'application/pdf',
+		'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+	];
 	export let files: any[] = [];
-	export let label = ''
-	export let required = false
-	export let showError = false
-  export let imageOnly = false // when set, will restrict type to png and jpeg only
+	export let label = '';
+	export let required = false;
+	export let showError = false;
+	export let imageOnly = false; // when set, will restrict type to png and jpeg only
 
 	const dispatch = createEventDispatcher();
 	let loaded = false;
@@ -48,9 +53,9 @@
 		dispatch('change', { name, value: file });
 	}
 
-  $: if (imageOnly && acceptedFileTypes?.length ===3){
-    acceptedFileTypes = ["image/png", "image/jpeg"]
-  }
+	$: if (imageOnly && acceptedFileTypes?.length === 3) {
+		acceptedFileTypes = ['image/png', 'image/jpeg'];
+	}
 	$: hasError = $touched[name] && $errors[name]?.length;
 	$: error = $errors[name]?.join(', ');
 
@@ -166,6 +171,7 @@
 		onupdatefiles={checkFiles}
 		{files}
 		{acceptedFileTypes}
+		credits={false}
 	/>
 	{#if hasError && showError}
 		<label

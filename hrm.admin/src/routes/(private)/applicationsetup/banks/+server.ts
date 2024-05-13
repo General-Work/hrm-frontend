@@ -9,7 +9,9 @@ export const POST = async ({ request }) => {
 
 	try {
 		const res = await postBank(ret.bankName);
-		if (!res.success) return error(res.status!, res.message ?? 'Failed to load data');
+		if (!res.success) {
+			return json({ message: res.message, status: 400, success: res.success });
+		}
 
 		return json({ message: res.message, status: 200, success: res.success });
 	} catch (e: any) {
@@ -23,7 +25,9 @@ export const PATCH = async ({ request }) => {
 
 	try {
 		const res = await updateBank(body.id, body.bankName);
-		if (!res.success) return error(res.status!, res.message ?? 'Failed to load data');
+		if (!res.success) {
+			return json({ message: res.message, status: 400, success: res.success });
+		}
 
 		return json({ message: res.message, status: 200, success: res.success });
 	} catch (e: any) {
@@ -33,9 +37,13 @@ export const PATCH = async ({ request }) => {
 
 export const GET = async ({ url }) => {
 	const x = extractMultipleSearchParams(url.search);
-	const res = await readBanks({ pageNumber: +x.pageNumber, pageSize: +x.pageSize });
+	const res = await readBanks({
+		pageNumber: +x.pageNumber,
+		pageSize: +x.pageSize,
+		search: x.search
+	});
 	if (!res.success) {
-		return error(res.status!, res.message ?? 'Failed to load data');
+		return json({ message: res.message, status: 400, success: res.success });
 	}
 	return json({
 		// status: ,

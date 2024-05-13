@@ -15,7 +15,7 @@
 
 <div
 	class="relative {blue && 'bg-[#B79BFF]'} {green && 'bg-[#A6F7E2]'} {yellow &&
-		'bg-[#FFE5A5]'} {red && 'bg-[#ffa5c0]'} pl-6 pr-8 py-6 rounded-lg"
+		'bg-[#FFE5A5]'} {red && 'bg-[#ffa5c0]'} pl-6 pr-8 py-6 rounded-lg loginbox"
 >
 	<div class="flex items-center gap-4 justify-between">
 		<div class="flex flex-col gap-1">

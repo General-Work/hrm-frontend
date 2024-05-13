@@ -3,32 +3,22 @@
 
 	const columns: ITableColumn[] = [
 		{
-			header: '#',
-			accessor: 'id'
-		},
-		{
 			header: 'Name',
-			accessor: 'name'
+			accessor: 'specialityName'
 		},
-		{ header: 'Category', accessor: (row) => row.category.name }
+		// { header: 'Category', accessor: (row:ISpecialty) =>  row.}
 	];
-
-	export async function create(data: any) {
-		// return await axios.post('/usermanagement', data);
-	}
-
-	export async function read() {
-		// return await axios.get('/usermanagement');
-	}
 </script>
 
 <script lang="ts">
 	import DatatablePage from '$cmps/ui/datatablePage.svelte';
 	import Editor from './editor.svelte';
-	import axios from 'axios';
 	import type { ITableDataProps } from '$lib/types';
+	// import type { ISpecialty } from '$svc/salaries/specialty';
+	// import type { ICategory } from '$svc/salaries';
 
 	export let tableDataInfo: ITableDataProps<any> | undefined;
+	export let category: any;
 </script>
 
 <div>
@@ -42,7 +32,9 @@
 		editorComponent={Editor}
 		sideModalSize="sm"
 		showModalButtons
-		createEntry={create}
-		{read}
+		showActions
+		showEdit
+		pageUrl="/salarysetup/specialty"
+		optionalData={{ category }}
 	/>
 </div>

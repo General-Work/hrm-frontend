@@ -9,7 +9,8 @@
 	import SideModal from '$cmps/layout/sideModal.svelte';
 	import { endProgress, showError, showInfo, startProgress } from '$lib/utils';
 	import { PageInfo } from '$lib/paginate';
-	import { SvelteComponent, createEventDispatcher, onMount } from 'svelte';
+	import { createEventDispatcher, onMount } from 'svelte';
+	import debounce from 'lodash/debounce';
 	import Button from './button.svelte';
 	import Paginate from './paginate.svelte';
 	import TableSearchBox from './tableSearchBox.svelte';
@@ -18,8 +19,8 @@
 	import { writable } from 'svelte/store';
 	import type { ITableDataProps } from '$lib/types';
 	import axios from 'axios';
-	import type { IOkResult } from '$svc/shared';
 
+	export let optionalData: any = {};
 	export let tableDataInfo: ITableDataProps<any> | undefined;
 	export let showEditorIn: 'modal' | 'side-modal' = 'side-modal';
 	export let hideSearchBox = false;
@@ -55,12 +56,15 @@
 	export let showAdd = true;
 	export let pageUrl = '';
 	export let take = 13;
+	export let reloadData = false;
+	export let isFormData = false;
 	// export let tableActions: IActionList[] = [
 	// 	{ icon: 'ri:edit-2-fil', name: 'Edit detail' }
 	// 	// { icon: 'ri:edit-2-fil', name: 'Edit detail' }
 	// ];
 	let showForm = false;
 	let query = '';
+	let oldQuery = '';
 	let pageInfo = new PageInfo();
 	pageInfo.setPageSize(take);
 	let editorHeading = '';
@@ -68,22 +72,23 @@
 	let editing = false;
 	let editor: any;
 	let isValid = false;
-	let busy = false;
 	let tableData: any[] = [];
-	let updating = false;
 	let isLoading = false;
-	// let recordId = 0;
 
 	let allColumns = writable<any>([]);
 
 	const dispatch = createEventDispatcher();
 
-	async function fetchData() {
+	async function fetchData(query?: string) {
 		try {
 			// busy = true;
 			startProgress();
 			const ret = await axios.get(`${pageUrl}`, {
-				params: { pageNumber: pageInfo.currentPage, pageSize: pageInfo.pageSize }
+				params: {
+					pageNumber: pageInfo.currentPage,
+					pageSize: pageInfo.pageSize,
+					search: query ?? ''
+				}
 			});
 			// console.log('here',ret);
 			if (ret?.data?.success) {
@@ -106,10 +111,10 @@
 	}
 
 	async function getMore() {
-		if (pageInfo.gotoNext()) await fetchData();
+		if (pageInfo.gotoNext()) await fetchData(query);
 	}
 	async function getLess() {
-		if (pageInfo.gotoPrev()) await fetchData();
+		if (pageInfo.gotoPrev()) await fetchData(query);
 	}
 
 	function addNew() {
@@ -123,24 +128,37 @@
 		showForm = false;
 		activeEntry = null;
 	}
+	const config = {
+		headers: {
+			'Content-Type': 'multipart/form-data'
+		}
+	};
 
 	async function save(entry: any) {
 		const { values } = entry;
 		try {
 			isLoading = true;
 			startProgress();
-			const ret = editing
-				? await axios.patch(`${pageUrl}`, { ...values, id: activeEntry.id })
-				: await axios.post(pageUrl, values);
+			const ret =
+				editing && isFormData
+					? await axios.patch(`${pageUrl}`, { ...values, id: activeEntry.id }, config)
+					: editing && !isFormData
+						? await axios.patch(`${pageUrl}`, { ...values, id: activeEntry.id })
+						: !editing && isFormData
+							? await axios.post(pageUrl, values, config)
+							: await axios.post(pageUrl, values);
+			// console.log('dere', ret.data)
 			if (ret.data.success) {
-				showInfo(
-					ret.data.message || editing
-						? 'Successfully updated reacord'
-						: 'Successfully added reacord'
-				);
-				allowLoadAfterCreate && fetchData();
+				if (allowLoadAfterCreate)
+					showInfo(
+						ret.data.message || editing
+							? 'Successfully updated reacord'
+							: 'Successfully added reacord'
+					);
+				allowLoadAfterCreate && fetchData(query);
 				closeSideModal();
-				allowDispatchAfterAction && dispatch('afterAction', { type: 'create', values });
+				allowDispatchAfterAction &&
+					dispatch('afterAction', { type: 'create', values, data: ret.data.data });
 			} else {
 				showError(ret.data.message);
 			}
@@ -153,13 +171,31 @@
 	}
 
 	function handleEdit({ detail }: any) {
-		console.log(detail);
 		activeEntry = detail;
 		editorHeading = updateHeading;
 		editing = true;
 		showForm = true;
 	}
 
+	async function handleDone() {
+		closeSideModal();
+		await fetchData(query);
+	}
+
+	const debouncedSearch = debounce(fetchData, 300);
+
+	$: if (query) {
+		oldQuery = query;
+		debouncedSearch(query);
+	} else if (oldQuery && !query) {
+		debouncedSearch();
+		oldQuery = '';
+	}
+
+	$: if (reloadData) {
+		fetchData(query);
+		reloadData = false;
+	}
 	onMount(async () => {
 		if (tableDataInfo) {
 			pageInfo.setPageSize(tableDataInfo.pageSize);
@@ -177,7 +213,7 @@
 			<div class:hidden={hideSearchBox} class="flex-grow max-w-md">
 				<TableSearchBox placeholder={searchPlaceholder} bind:value={query} />
 			</div>
-			<div class="flex items-center gap-4">
+			<div class="flex flex-col sm:flex-row sm:items-center gap-4">
 				<div>
 					<Paginate
 						onNextPage={getMore}
@@ -186,12 +222,15 @@
 						totalPages={pageInfo.totalPages}
 						hasNextPage={pageInfo.hasNextPage}
 						hasPreviousPage={pageInfo.hasPrevPage}
-						refresh={fetchData}
+						refresh={() => {
+							query = '';
+							fetchData();
+						}}
 						tableColumns={$allColumns}
 						bind:hiddenColumns
 					/>
 				</div>
-				<div class:hidden={!showAdd}>
+				<div class:hidden={!showAdd} class="grid">
 					<Button label={addButtonLabel} color="primary" on:click={addNew} />
 				</div>
 			</div>
@@ -246,6 +285,8 @@
 			bind:this={editor}
 			bind:isValid
 			on:submit={(e) => save(e.detail)}
+			{optionalData}
+			on:done={handleDone}
 		/>
 	</div>
 </Modal>
@@ -267,5 +308,7 @@
 		bind:this={editor}
 		bind:isValid
 		on:submit={(e) => save(e.detail)}
+		{optionalData}
+		on:done={handleDone}
 	/>
 </SideModal>

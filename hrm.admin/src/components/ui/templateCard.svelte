@@ -29,7 +29,7 @@
 	const dispatch = createEventDispatcher();
 </script>
 
-<button
+<div
 	class="{kind[
 		color
 	]} rounded-md flex flex-col gap-3 items-center justify-center shadow-md border p-4 lg:aspect-square h-[14rem]"
@@ -42,9 +42,9 @@
 		<!-- {#if notes} -->
 		<p class:hidden={!notes} class="text-center text-gray-600 text-sm font-extralight">{notes}</p>
 		<!-- {/if} -->
-		<p class="text-center text-black text-sm font-extralight">
+		<!-- <p class="text-center text-black text-sm font-extralight">
 			System Template: {isSystemTemplate ? 'Yes' : 'No'}
-		</p>
+		</p> -->
 	</div>
 	<div class="flex gap-2">
 		<button
@@ -68,4 +68,4 @@
 		>
 		<Tooltip placement="bottom">Delete</Tooltip>
 	</div>
-</button>
+</div>

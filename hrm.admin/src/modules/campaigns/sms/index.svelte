@@ -1,10 +1,19 @@
 <script lang="ts" context="module">
 	import type { ITableColumn } from '$cmps/ui/table.svelte';
 
+	// id: string;
+	// createdAt: Date;
+	// updatedAt: Date;
+	// campaignName: string;
+	// smsTemplateId: string;
+	// message: string;
+	// receipients: number;
+	// smsTemplate: null | any;
+	// smsReceipients: null | any;
 	const columns: ITableColumn[] = [
 		{
 			header: 'Name',
-			accessor: 'name',
+			accessor: 'campaignName',
 			plugins: {
 				sort: { disable: true }
 			}
@@ -52,23 +61,15 @@
 			}
 		}
 	];
-
-	export async function create(data: any) {
-		// return await axios.post('/usermanagement', data);
-	}
-
-	export async function read() {
-		// return await axios.get('/usermanagement');
-	}
 </script>
 
 <script lang="ts">
 	import DatatablePage from '$cmps/ui/datatablePage.svelte';
 	import Editor from './editor.svelte';
-	import axios from 'axios';
 	import type { ITableDataProps } from '$lib/types';
 	import dayjs from 'dayjs';
 	export let tableDataInfo: ITableDataProps<any> | undefined;
+	export let templates: any;
 </script>
 
 <div>
@@ -80,9 +81,10 @@
 		addNewHeading="New Campaign"
 		updateHeading="Update Campaign"
 		editorComponent={Editor}
-		sideModalSize="xl"
-		showModalButtons
-		createEntry={create}
-		{read}
+		sideModalSize="lg"
+		pageUrl="/campaigns"
+		optionalData={{ templates }}
+		isFormData
+		showModalButtons={false}
 	/>
 </div>

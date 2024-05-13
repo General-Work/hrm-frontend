@@ -23,7 +23,7 @@ export const recentSearches = writable([
 		help: []
 	}
 ]);
-export const quickActions = writable([]);
+export const quickActions = writable<any[]>([]);
 export const searchResult = writable<any[]>([]);
 
 

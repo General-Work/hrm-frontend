@@ -3,7 +3,7 @@
 	import { activePage, breadCrumb } from '$data/appStore';
 	import Department from '$modules/setup/departments/index.svelte';
 
-  export let data
+	export let data;
 	$activePage = {
 		title: 'Departments',
 		showBreadCrumb: true
@@ -18,5 +18,5 @@
 </script>
 
 <Box bgWhite otherClasses="p-4 " rounded>
-	<Department tableDataInfo={data.data} />
+	<Department tableDataInfo={data.data} directorates={data.optional.direcorates}/>
 </Box>

@@ -28,6 +28,7 @@
 	import Box from '$cmps/ui/box.svelte';
 	import Divider from '$cmps/ui/divider.svelte';
 	import type { IModalSize } from '$cmps/ui/modal.svelte';
+	import { browser } from '$app/environment';
 
 	export let open = false;
 	export let placement: 'left' | 'right' | 'top' | 'bottom' = 'right';
@@ -55,6 +56,8 @@
 	onDestroy(() => {
 		buttonIndex = -1;
 	});
+
+	$: smallScreen = browser && window.innerWidth < 768 ? true : false;
 </script>
 
 <div class="fixed z-[3000]">
@@ -64,10 +67,10 @@
 		{transitionParams}
 		bind:hidden={closed}
 		{id}
-		divClass="overflow-y-hidden fixed z-[3000] pt-4  bg-white dark:bg-gray-800 w-80"
+		divClass="overflow-y-hidden fixed z-[3000] pt-4  bg-white dark:bg-gray-800 w-96"
 		{activateClickOutside}
 		bgOpacity="bg-opacity-30"
-		width={widthKind[size]}
+		width={!smallScreen ? widthKind[size] : ''}
 	>
 		<div class="flex flex-col h-full w-full">
 			<div class="flex justify-between px-3 pb-2">

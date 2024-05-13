@@ -2,49 +2,44 @@
 	const columns: ITableColumn[] = [
 		{
 			header: 'Unit Name',
-			accessor: 'name',
+			accessor: (row: IUnit) => row.unitName,
 			plugins: {
 				sort: { disable: true }
 			}
 		},
 		{
 			header: 'Directorate ',
-			accessor: (row) => row.directorate.name,
+			accessor: (row: IUnit) => '-',
 			plugins: {
 				sort: { disable: true }
 			}
 		},
 		{
 			header: 'Department ',
-			accessor: (row) => row.department.name,
+			accessor: (row: IUnit) => '-',
 			plugins: {
 				sort: { disable: true }
 			}
 		},
 		{
 			header: 'Unit Head',
-			accessor: (row) => (row.head ? row.head.name : '-'),
+			accessor: (row: IUnit) => '-',
 			plugins: {
 				sort: { disable: true }
 			}
 		}
 	];
-	export async function create(data: any) {
-		// return await axios.post('/usermanagement', data);
-	}
-
-	export async function read() {
-		// return await axios.get('/usermanagement');
-	}
 </script>
 
 <script lang="ts">
 	import DatatablePage from '$cmps/ui/datatablePage.svelte';
 	import type { ITableColumn } from '$cmps/ui/table.svelte';
-	import type { ITableDataProps } from '$types/types';
+	import type { ITableDataProps } from '$lib/types';
+	import type { IUnit } from '$svc/setup';
 	import Editor from './editor.svelte';
 
 	export let tableDataInfo: ITableDataProps<any> | undefined;
+	export let directorates: any;
 </script>
 
 <DatatablePage
@@ -57,6 +52,8 @@
 	updateHeading="Update Unit"
 	sideModalSize="sm"
 	showModalButtons
-	createEntry={create}
-	{read}
+	showActions
+	showEdit
+	pageUrl="/applicationsetup/units"
+	optionalData={{ directorates }}
 />

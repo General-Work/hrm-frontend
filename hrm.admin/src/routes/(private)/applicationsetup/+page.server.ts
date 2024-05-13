@@ -105,19 +105,19 @@ const dataPages: IMenuItem[] = [
 		title: 'Templates',
 		items: [
 			{
-				title: 'SMS',
-				description: 'Manage all SMS templates',
+				title: 'Campaigns',
+				description: 'Manage all campaigns templates',
 				icon: 'fa-solid:sms',
 				path: '/applicationsetup/sms',
 				iconBg: 'bg-blue-300'
-			},
-			{
-				title: 'Mail',
-				description: 'Manage all mail templates',
-				iconBg: 'bg-yellow-300',
-				icon: 'uiw:mail',
-				path: '/applicationsetup/mail'
 			}
+			// {
+			// 	title: 'Mail',
+			// 	description: 'Manage all mail templates',
+			// 	iconBg: 'bg-yellow-300',
+			// 	icon: 'uiw:mail',
+			// 	path: '/applicationsetup/mail'
+			// }
 		]
 	},
 	{

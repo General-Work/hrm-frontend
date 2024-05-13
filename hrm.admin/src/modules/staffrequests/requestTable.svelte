@@ -66,7 +66,7 @@
 	import type { ITableColumn } from '$cmps/ui/table.svelte';
 	import Table from '$cmps/ui/table.svelte';
 	import TableFilters from '$cmps/ui/tableFilters.svelte';
-	import type { ITableDataProps } from '$types/types';
+	import type { ITableDataProps } from '$lib/types';
 	import dayjs from 'dayjs';
 
 	export let tableDataInfo: ITableDataProps<any> | undefined;

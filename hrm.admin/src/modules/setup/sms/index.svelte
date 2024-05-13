@@ -3,65 +3,74 @@
 	import Box from '$cmps/ui/box.svelte';
 	import TemplateCard from '$cmps/ui/templateCard.svelte';
 	import { PageInfo } from '$lib/paginate';
-	import type { ICampaignTemplate, ITableDataProps } from '$lib/types';
+	import type { ITableDataProps } from '$lib/types';
 	import { onMount } from 'svelte';
 	import Editor from './editor.svelte';
-	import AlertDialog from '$cmps/alerts/alertDialog.svelte';
-	import { Tooltip } from 'flowbite-svelte';
 	import Paginate from '$cmps/ui/paginate.svelte';
 	import TableSearchBox from '$cmps/ui/tableSearchBox.svelte';
+	import type { ICampaignTemplate } from '$svc/setup';
+	import Button from '$cmps/ui/button.svelte';
+	import axios from 'axios';
+	import { endProgress, showError, showInfo, startProgress } from '$lib/utils';
+	import debounce from 'lodash/debounce';
+	import ActionDialog from '$cmps/alerts/actionDialog.svelte';
 
 	export let tableDataInfo: ITableDataProps<any> | undefined;
 	let templates: ICampaignTemplate[] = [];
 	let open = false;
 	let edit = false;
 	let add = false;
-	let recordId = 0;
+	let recordId = '';
 	let showAlert = false;
 	let editor: any;
 	let isValid = false;
 	let busy = false;
 	let query = '';
+	let oldQuery = '';
 	let pageInfo = new PageInfo();
+	let data: ICampaignTemplate | null;
 	pageInfo.setPageSize(12);
 
-	// async function fetchData(load = false) {
-	// 	try {
-	// 		// if (load) isLoading = true;
-	// 		$showPageLoader = true;
-	// 		const ret = await readSmsTemplates();
-	// 		if (ret.success) {
-	// 			const data = ret.data;
-	// 			templates = data.items;
-	// 			pageInfo.setHasNextPage(data.pageInfo.hasNextPage);
-	// 			pageInfo.setHasPrevPage(data.pageInfo.hasPreviousPage);
-	// 			pageInfo.setNextPageUrl(data.pageInfo.nextPageUrl);
-	// 			pageInfo.setPrevPageUrl(data.pageInfo.previousPageUrl);
-	// 			pageInfo.totalItems = data.totalCount;
-	// 		} else {
-	// 			showError(ret.message);
-	// 		}
-	// 	} catch (err: any) {
-	// 		console.log(err);
-	// 		showError(err?.message || err);
-	// 	} finally {
-	// 		// isLoading = false;
-	// 		$showPageLoader = false;
-	// 	}
-	// }
+	async function fetchData(query?: string) {
+		try {
+			const ret = await axios.get('/applicationsetup/sms', {
+				params: {
+					pageNumber: pageInfo.currentPage,
+					pageSize: pageInfo.pageSize,
+					search: query ?? ''
+				}
+			});
+			if (!ret.data.success) {
+				showError(ret.data.message);
+				return;
+			}
+			const xs = ret.data.data;
+			pageInfo.totalItems = xs.totalCount;
+			pageInfo.setHasNextPage(xs.pageInfo.hasNextPage);
+			pageInfo.setHasPrevPage(xs.pageInfo.hasPreviousPage);
+			templates = xs.items;
+		} catch (err: any) {
+			console.log(err);
+			showError(err?.message || err);
+		} finally {
+		}
+	}
 
-	function handleCardClicked(id: number, name: 'edit' | 'delete' | 'view') {
+	function handleCardClicked(row: ICampaignTemplate, name: 'edit' | 'delete' | 'view') {
+		const { id } = row;
 		switch (name) {
 			case 'view':
 				recordId = id;
 				if (edit) edit = false;
 				if (add) add = false;
+				data = row;
 				open = true;
 				break;
 			case 'edit':
 				recordId = id;
 				edit = true;
 				if (add) add = false;
+				data = row;
 				open = true;
 				break;
 			case 'delete':
@@ -78,59 +87,73 @@
 		open = false;
 		if (edit) edit = false;
 		if (add) add = false;
-		if (recordId) recordId = 0;
+		if (recordId) recordId = '';
+		if (data) data = null;
 	}
 
 	async function submitForm({ detail }: any) {
-		// try {
-		// 	busy = true;
-		// 	const { values } = detail;
-		// 	const res = edit
-		// 		? await updateSmsTemplates({ ...values, id: recordId })
-		// 		: await createSmsTemplates(values);
-		// 	if (res.success) {
-		// 		showInfo(res.message);
-		// 		closeModal();
-		// 		fetchData();
-		// 	} else {
-		// 		showError(res.message);
-		// 	}
-		// } catch (err: any) {
-		// 	console.log(err);
-		// 	showError(err?.message || err);
-		// } finally {
-		// 	busy = false;
-		// }
+		try {
+			busy = true;
+			startProgress();
+			const { values } = detail;
+			const res = edit
+				? await axios.patch('/applicationsetup/sms', { id: recordId, ...values })
+				: await axios.post('/applicationsetup/sms', values);
+			if (!res.data.success) {
+				showError(res.data.message);
+				return;
+			}
+			showInfo(
+				res.data.message ?? edit ? 'Successfully upated record' : 'Successfully created record'
+			);
+			closeModal();
+			fetchData();
+		} catch (err: any) {
+			console.log(err);
+			showError(err?.message || err);
+		} finally {
+			busy = false;
+			endProgress();
+		}
 	}
 
 	function closeAlert() {
 		showAlert = false;
-		recordId = 0;
+		recordId = '';
 	}
 
-	async function handleAlert(id: number) {
-		// try {
-		// 	busy = true;
-		// 	const res = await deleteSmsTemplates(id);
-		// 	if (res.success) {
-		// 		showInfo(res.message);
-		// 		closeAlert();
-		// 		fetchData();
-		// 	} else {
-		// 		showError(res.message);
-		// 	}
-		// } catch (err: any) {
-		// 	console.log(err);
-		// 	showError(err?.message || err);
-		// } finally {
-		// 	busy = false;
-		// }
+	async function handleAlert(id: string) {
+		try {
+			busy = true;
+			const res = await axios.delete(`/applicationsetup/sms?q=${id}`);
+			if (!res.data.success) {
+				showError(res.data.message);
+				return;
+			}
+			showInfo(res.data.message || 'Sucessfully deleted record');
+			closeAlert();
+			fetchData(query);
+		} catch (err: any) {
+			console.log(err);
+			showError(err?.message || err);
+		} finally {
+			busy = false;
+		}
 	}
 	async function getMore() {
-		// if (pageInfo.gotoNext()) await fetchData();
+		if (pageInfo.gotoNext()) await fetchData(query);
 	}
 	async function getLess() {
-		// if (pageInfo.gotoPrev()) await fetchData();
+		if (pageInfo.gotoPrev()) await fetchData(query);
+	}
+	const debouncedSearch = debounce(fetchData, 300);
+
+	$: if (query) {
+		oldQuery = query;
+		debouncedSearch(query);
+	} else if (oldQuery && !query) {
+		debouncedSearch();
+		oldQuery = '';
 	}
 	onMount(() => {
 		if (tableDataInfo) {
@@ -144,11 +167,11 @@
 </script>
 
 <div class="w-full h-full flex flex-col gap-4">
-	<div class="flex gap-2 items-center justify-between xl:pr-4">
+	<div class="flex gap-2 flex-col sm:flex-row sm:items-center sm:justify-between xl:pr-4">
 		<div class="w-full lg:w-[550px]">
 			<TableSearchBox placeholder="Search name..." bind:value={query} />
 		</div>
-		<div class="flex items-center gap-3">
+		<div class="flex flex-col sm:flex-row sm:items-center gap-3">
 			<Paginate
 				onNextPage={getMore}
 				onPreviousPage={getLess}
@@ -157,38 +180,35 @@
 				hasPreviousPage={pageInfo.hasPrevPage}
 				totalPages={pageInfo.totalPages}
 			/>
-			<button
+			<Button
+				color="primary"
 				on:click={() => {
 					edit = false;
 					add = true;
 					open = true;
-				}}
-				class="hover:bg-gray-300 grid p-1.5 rounded-full place-content-center"
-				><iconify-icon icon="icon-park-outline:add-one" style="font-size: 20px;" /></button
+				}}>New Template</Button
 			>
-			<Tooltip placement="left-end">New SMS Template</Tooltip>
 		</div>
 	</div>
 
 	{#if templates.length}
 		<Box
-			otherClasses="w-full h-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6 gap-6"
+			otherClasses="w-full h-full pr-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6 gap-6"
 		>
-			{#each templates as { name, category, isSystemTemplate, id }}
+			{#each templates as item}
 				<TemplateCard
-					{name}
-					notes={category}
-					{isSystemTemplate}
+					name={item.name}
+					notes={item.description}
+					isSystemTemplate={item.readOnly}
 					avatarIcon="fa6-solid:comment-sms"
-					color={isSystemTemplate ? 'red' : 'sky'}
-					showDelete={!isSystemTemplate}
-					on:view={() => handleCardClicked(id, 'view')}
-					on:edit={() => handleCardClicked(id, 'edit')}
-					on:delete={() => handleCardClicked(id, 'delete')}
+					color={item.readOnly ? 'red' : 'sky'}
+					showDelete={!item.readOnly}
+					on:view={() => handleCardClicked(item, 'view')}
+					on:edit={() => handleCardClicked(item, 'edit')}
+					on:delete={() => handleCardClicked(item, 'delete')}
 				/>
 			{/each}
 		</Box>
-		
 	{/if}
 </div>
 
@@ -196,7 +216,7 @@
 	{open}
 	size="md"
 	on:close={closeModal}
-	title={edit ? 'Update SMS Template' : add ? 'New SMS Template' : 'View SMS Template'}
+	title={edit ? 'Update Template' : add ? 'New Template' : 'View Template'}
 	showModalButtons={!add && !edit ? false : true}
 	{isValid}
 	{busy}
@@ -209,13 +229,15 @@
 		on:submit={submitForm}
 		readonly={!add && !edit ? true : false}
 		{recordId}
+		{data}
 	/>
 </SideModal>
 
-<AlertDialog
+<ActionDialog
 	bind:open={showAlert}
-	on:cancel={closeAlert}
-	on:yes={() => handleAlert(recordId)}
-	message="Are you sure you want to delete this template?"
+	on:close={closeAlert}
+	on:accept={() => handleAlert(recordId)}
+	title="Delete Template"
+	text="Are you sure you want to delete this template?"
 	{busy}
 />

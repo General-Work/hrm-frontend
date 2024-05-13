@@ -1,3 +1,9 @@
+export const formDataConfig = {
+	headers: {
+		'Content-Type': 'multipart/form-data'
+	}
+};
+
 export const CITIZENSHIPLIST = ['Ghanaian', 'Non-Ghanaian'].map((item) => item.toUpperCase());
 
 export const DISABILITYLIST = [
@@ -15,12 +21,10 @@ export const DISABILITYLIST = [
 	'Visual Imperment'
 ].map((item) => item.toUpperCase());
 
-export const TITLELIST = ['Mr', 'Mrs', 'Miss', 'Dr', 'Prof'].map((item) => item.toUpperCase());
+export const TITLELIST = ['MR', 'MRS', 'MISS', 'DR', 'PROF'];
 export const GENDERLIST = ['MALE', 'FEMALE'];
 
-export const ACCOMODATIONSOURCE = ['Official', 'Rented', 'Personal'].map((item) =>
-	item.toUpperCase()
-);
+export const ACCOMODATIONSOURCE = ['OFFICIAL', 'RENTED', 'PERSONAL'];
 
 export const ACCOMODATIONTYPE = [
 	'Flat',
@@ -31,4 +35,13 @@ export const ACCOMODATIONTYPE = [
 	'Out-house'
 ].map((item) => item.toUpperCase());
 
-export const DELIVERYTPES = ['CS', 'Normal'].map((item) => item.toUpperCase());
+export const DELIVERYTPES = ['CS', 'NORMAL'];
+
+export const CERTIFICATES = [
+	'PROFESSOR',
+	'PHD',
+	'MASTERS DEGREE',
+	'FIRST DEGREE',
+	'DIPLOMA',
+	'CERTIFICATE'
+];

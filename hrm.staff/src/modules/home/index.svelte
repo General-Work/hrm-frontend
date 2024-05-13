@@ -158,7 +158,7 @@
 			</div>
 			<div class="flex-auto w-full">
 				<div
-					class="flex flex-col bg-white rounded-lg shadow dark:bg-dark-card mb-8 overflow-hidden"
+					class="flex flex-col bg-white rounded-lg loginbox dark:bg-dark-card mb-8 overflow-hidden"
 				>
 					<div>
 						<div class="flex flex-wrap">

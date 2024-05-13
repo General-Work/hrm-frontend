@@ -1,3 +1,5 @@
+import type { ApplicantApplicationStatus } from '$svc/applicant';
+
 export type IMenuItems = {
 	icon?: string;
 	iconSize?: number;
@@ -34,6 +36,19 @@ export interface IUserInfo {
 	isNewStaff: boolean;
 	phoneNumber: string;
 	staffId: string;
+}
+
+export interface IApplicantInfo {
+	id: string;
+	createdAt: Date;
+	updatedAt: Date;
+	firsName: string;
+	lastName: string;
+	email: string | null;
+	contact: string;
+	hasSubmittedApplication: boolean;
+	accessToken?: string;
+	applicationStatus?: ApplicantApplicationStatus;
 }
 
 export interface IPageInfo {
