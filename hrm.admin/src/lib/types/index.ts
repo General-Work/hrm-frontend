@@ -99,19 +99,50 @@ export interface APIQueryParams {
 	pageNumber: number;
 	pageSize: number;
 	search: string;
+	startDate?: string;
+	endDate?: string;
+	requestType?: string;
 }
 
 export type DocumentKind =
 	| ''
 	| 'all'
-	| 'registration'
+	| 'new-registeration'
 	| 'biodata'
-	| 'bank'
-	| 'family'
-	| 'children'
-	| 'licence'
+	| 'bank-update'
+	| 'family-details'
+	| 'children-details'
+	| 'professional-license'
 	| 'accomodation'
 	| 'leave_plan'
 	| 'leave_request';
 
 export type DocumentType = 'NEW REGISTRATION' | 'BANK UPDATE';
+
+export interface IStaff {
+	id: string;
+	createdAt: string;
+	updatedAt: string;
+	lastSeen: string | null;
+	staffIdentificationNumber: string;
+	firstName: string;
+	lastName: string;
+	otherNames: string;
+	specialityId: string;
+	dateOfBirth: string;
+	phone: string;
+	gender: string;
+	snnitNumber: string;
+	email: string;
+	disability: string;
+	passportPicture: string;
+	isApproved: boolean;
+	user: any | null; // Replace 'any' with the actual type if known
+	unit: any | null; // Replace 'any' with the actual type if known
+	speciality: any | null; // Replace 'any' with the actual type if known
+	bankDetail: any | null; // Replace 'any' with the actual type if known
+	familyDetail: any | null; // Replace 'any' with the actual type if known
+	professionalLincense: any | null; // Replace 'any' with the actual type if known
+	staffChildren: any | null; // Replace 'any' with the actual type if known
+	staffAccomodation: any | null; // Replace 'any' with the actual type if known
+}

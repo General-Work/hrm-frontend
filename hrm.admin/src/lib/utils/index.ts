@@ -10,7 +10,6 @@ import type { IPageInfo, ITableDataProps } from '../types';
 import { crossfade } from 'svelte/transition';
 import { quintOut } from 'svelte/easing';
 
-
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
 }
@@ -228,3 +227,28 @@ export function generateDataTableProps<T>(data: {
 	};
 }
 
+interface QueryParams {
+	[key: string]: string;
+}
+
+export function parseQueryParams(url: string): { baseUrl: string; queryParams: QueryParams } {
+	const queryParams: QueryParams = {};
+	const queryStringStartIndex = url.indexOf('?');
+	let baseUrl = url;
+
+	if (queryStringStartIndex !== -1) {
+		baseUrl = url.substring(0, queryStringStartIndex);
+		const queryString = url.slice(queryStringStartIndex + 1);
+
+		const pairs = queryString.split('&');
+
+		pairs.forEach((pair) => {
+			const [key, value] = pair.split('=');
+			if (value !== undefined) {
+				queryParams[key] = decodeURIComponent(value);
+			}
+		});
+	}
+
+	return { baseUrl, queryParams };
+}

@@ -1,5 +1,5 @@
 import { readRequests } from '$svc/staffrequests';
-import { generateTableDataProps } from '$lib/utils';
+import { generateDataTableProps, generateTableDataProps } from '$lib/utils';
 import { error } from '@sveltejs/kit';
 
 const documentKinds = {
@@ -12,7 +12,7 @@ const documentKinds = {
 	registration: {
 		icon: 'game-icons:archive-register',
 		title: 'New Registration',
-		path: 'registration',
+		path: 'new-registeration',
 		iconBg: 'bg-orange-200'
 	},
 	biodata: {
@@ -24,25 +24,25 @@ const documentKinds = {
 	bank: {
 		icon: 'solar:money-bag-bold',
 		title: 'Bank Update',
-		path: 'bank',
+		path: 'bank-update',
 		iconBg: 'bg-blue-200'
 	},
 	family: {
 		icon: 'solar:money-bag-bold',
 		title: 'Family Details',
-		path: 'family',
+		path: 'family-details',
 		iconBg: 'bg-blue-200'
 	},
 	children: {
 		icon: 'solar:money-bag-bold',
 		title: 'Children Details',
-		path: 'children',
+		path: 'children-details',
 		iconBg: 'bg-blue-200'
 	},
 	licence: {
 		icon: 'solar:money-bag-bold',
 		title: 'Professional Licence',
-		path: 'licence',
+		path: 'professional-license',
 		iconBg: 'bg-blue-200'
 	},
 	accomodation: {
@@ -66,12 +66,13 @@ const documentKinds = {
 };
 
 export async function load() {
-	const res = await readRequests();
+	const res = await readRequests({ pageNumber: 1, pageSize: 15, search: '' });
+	// console.log(res);
 	if (!res.success) {
-		error(res.status, res.message ?? 'Failed to load data');
+		error(res.status!, res.message ?? 'Failed to load data');
 	}
 	return {
 		documentKinds,
-		data: generateTableDataProps(1, 10, res.data!)
+		data: generateDataTableProps(res.data)
 	};
 }

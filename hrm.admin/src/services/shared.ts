@@ -15,20 +15,22 @@ export interface IOkResult<T> {
 	data: T;
 }
 
-export function axiosError(response: any): IFailureResult {
-	if (response.status >= 200 && response.status < 300) {
-		// Successful response, return success: true
-		return { success: false, message: 'Success', status: response.status };
+export function axiosError(error: any): IFailureResult {
+	if (error.response.status >= 200 && error.response.status < 300) {
+		// Successful error, return success: true
+		return { success: false, message: 'Success' };
 	} else {
-		// Handle error response
+		// Handle error error
 		const errorMessage =
-			(response.data && response.data.message) ||
-			(response.statusText && response.statusText) ||
-			(response.data && response.detail && response.detail.map((x: any) => x.msg).join(' , ')) ||
-			response.message;
+			(error.response.data && error.response.data.message) ||
+			(error.response.statusText && error.response.statusText) ||
+			(error.response.data &&
+				error.response.detail &&
+				error.response.detail.map((x: any) => x.msg).join(' , ')) ||
+			error.response.message;
 		('Unknown error');
 
-		return { success: false, message: errorMessage, status: response.status };
+		return { success: false, message: errorMessage };
 	}
 }
 

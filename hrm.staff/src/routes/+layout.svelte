@@ -33,7 +33,13 @@
 	import { beforeNavigate, afterNavigate } from '$app/navigation';
 	import { endProgress, hideSpinner, startProgress } from '$lib/utils';
 	import { Toaster } from 'svelte-french-toast';
+	import dayjs from 'dayjs';
+	import relativeTime from 'dayjs/plugin/relativeTime';
+	import advancedFormat from 'dayjs/plugin/advancedFormat';
 	import { authToken } from '$svc/auth';
+
+	dayjs.extend(relativeTime);
+	dayjs.extend(advancedFormat);
 
 	beforeNavigate(() => {
 		startProgress();

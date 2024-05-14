@@ -4,6 +4,7 @@ import axios from 'axios';
 
 export const userInfo = writable<IUserInfo | null>();
 export const isAuthenticated = writable(false);
+export const authToken = writable<string>('');
 
 export const LOGIN_KEY = 'hrm_admin_log_in';
 

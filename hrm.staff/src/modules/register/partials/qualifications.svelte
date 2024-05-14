@@ -195,7 +195,7 @@
 			<DateField label="Year of Service" name="yearOfService" required />
 		</div>
 		<div>
-			<TextField label="Place of Service" name="placeOfService" placeholder="Tema" required />
+			<TextField label="Institution of Service" name="placeOfService" placeholder="Tema" required />
 		</div>
 
 		<slot {isValid} {busy} />

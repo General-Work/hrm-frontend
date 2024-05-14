@@ -9,7 +9,8 @@
 		rejectRequest: RejectRequestEditor,
 		acceptRequest: AcceptRequestEditor,
 		transferRequest: TransferEditor,
-		bankUpdate: BankUpdateEditor
+		bankUpdate: BankUpdateEditor,
+		biodata: BiodataEditor
 	};
 
 	function textToComponent(typeName: string): ConstructorOfATypedSvelteComponent {
@@ -38,6 +39,7 @@
 	import AcceptRequestEditor from './editors/acceptRequestEditor.svelte';
 	import TransferEditor from './editors/transferEditor.svelte';
 	import BankUpdateEditor from './editors/bankUpdateEditor.svelte';
+	import BiodataEditor from './editors/biodataEditor.svelte';
 
 	initMappers(); // set the component mappers
 

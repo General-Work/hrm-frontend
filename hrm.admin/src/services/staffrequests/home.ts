@@ -1,4 +1,6 @@
-import type { IActivity, ICampaignTemplate, IPageInfo } from '$lib/types';
+import type { APIQueryParams, DocumentKind, IActivity, IPageInfo, IStaff } from '$lib/types';
+import { axiosInstance } from '$routes/+layout.svelte';
+import { axiosError, queryResult } from '$svc/shared';
 
 const x = [
 	{
@@ -13,7 +15,7 @@ const x = [
 	},
 	{
 		id: 2,
-		type: "BANK UPDATE",
+		type: 'BANK UPDATE',
 		staffId: 'MS00012',
 		staffName: 'Paul Jackson',
 		requestDate: new Date(),
@@ -22,51 +24,45 @@ const x = [
 		updateOn: '-'
 	}
 ];
-export function readRequests(): Promise<{
-	success: boolean;
-	message: string;
-	status: number;
-	data: { totalCount: number; pageInfo: IPageInfo; items: any[] };
-}> {
-	return new Promise((resolve) => {
-		setTimeout(() => {
-			resolve({
-				success: true,
-				message: 'success',
-				status: 200,
-				data: {
-					totalCount: x.length,
-					pageInfo: {
-						hasNextPage: false,
-						hasPreviousPage: false,
-						nextPageUrl: '',
-						previousPageUrl: ''
-					},
-					items: x
-				}
-			});
-		}, 700);
-	});
+
+export interface IRequest {
+	id: string;
+	requestFromStaffId: string | null;
+	requestAssignedStaffId: string;
+	requestDetailPolymorphicId: string;
+	createdAt: Date;
+	updatedAt: Date;
+	requestType: string;
+	status: string;
+	requestFromStaff: IStaff | null; // Replace 'any' with the actual type if known
+	requestAssignedStaff: IStaff;
+}
+export async function readRequests(params?: APIQueryParams) {
+	try {
+		const ret = params
+			? await axiosInstance.get('/staff-request/all', {
+					params: {
+						search: params.search,
+						pageNumber: params.pageNumber,
+						pageSize: params.pageSize,
+						filter: params.requestType,
+						sort: 'updatedAt_desc'
+					}
+				})
+			: await axiosInstance.get('/staff-request/all');
+		return queryResult(ret, ret.data);
+	} catch (error) {
+		return axiosError(error);
+	}
 }
 
-export function readRequest(requestId: string): Promise<{
-	success: boolean;
-	message: string;
-	status: number;
-	data: any;
-}> {
-	return new Promise((resolve) => {
-		setTimeout(() => {
-			resolve({
-				success: true,
-				message: '',
-				status: 200,
-				data: {
-					name: 'Kofi'
-				}
-			});
-		}, 500);
-	});
+export async function readRequest(requestType: DocumentKind, requestPolymorphicId: string) {
+	try {
+		const ret = await axiosInstance.get(`/staff-request/${requestType}/${requestPolymorphicId}`);
+		return queryResult(ret, ret.data);
+	} catch (error) {
+		return axiosError(error);
+	}
 }
 
 export function readRequestFeeds(requestId: string): Promise<{

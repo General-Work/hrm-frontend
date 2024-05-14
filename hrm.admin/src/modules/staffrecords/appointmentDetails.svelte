@@ -8,7 +8,8 @@
 	import TextField from '$cmps/forms/textField.svelte';
 	import Button from '$cmps/ui/button.svelte';
 	import Fieldset from '$cmps/ui/fieldset.svelte';
-	import { ACCOUNTTYPE, APPOINTMENTTYPELIST } from '$lib/constants';
+	import Title from '$cmps/ui/title.svelte';
+	import { ACCOUNTTYPE, APPOINTMENTTYPELIST, STAFFPAYMENTTYPE } from '$lib/constants';
 
 	import * as z from 'zod';
 
@@ -31,14 +32,17 @@
 
 <Form {schema} class="flex flex-col gap-4" on:submit={handleSubmit}>
 	<Fieldset label="Appointments" kind="blue" icon="mingcute:pencil-3-fill">
-		<SelectField
-			label="Appointment Type"
-			name="appointmentType"
-			options={APPOINTMENTTYPELIST}
-			required
-		/>
+		<div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+			<SelectField
+				label="Appointment Type"
+				name="appointmentType"
+				options={APPOINTMENTTYPELIST}
+				required
+			/>
+			<SelectField label="Payment Source" name="fund" options={STAFFPAYMENTTYPE} required />
+		</div>
 		<div class="my-5">
-			<div class="border-b">Previous Appointment</div>
+			<Title label="First Appointment" />
 			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pt-2">
 				<DateField label="Notional Date" name="firstAppNotionalEffect" required />
 				<DateField label="Substantive Date" name="firstAppSubstantiveEffect" required />
@@ -46,7 +50,7 @@
 			</div>
 		</div>
 		<div class="my-5">
-			<div class="border-b">Current Appointment</div>
+			<Title label="Current Appointment" />
 			<div class="space-y-4">
 				<div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
 					<DateField label="Notional Date" name="notionalEffect" required />
@@ -67,7 +71,7 @@
 			<SelectField size="small" label="Step" name="step" required />
 			<TextField label="Salary" name="salary" required />
 		</div>
-		<div class="pt-4">
+		<!-- <div class="pt-4">
 			<div class="border-b">Bank Details</div>
 			<div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
 				<SelectField label="Name of bank" name="bank" required />
@@ -75,7 +79,7 @@
 				<SelectField label="Account Type" name="accountType" options={ACCOUNTTYPE} />
 				<TextField label="Account Number" name="accountNumber" required />
 			</div>
-		</div>
+		</div> -->
 	</Fieldset>
 	<div class="flex flex-col sm:flex-row sm:justify-end gap-3 pt-4">
 		<Button label="Reset" type="reset" />

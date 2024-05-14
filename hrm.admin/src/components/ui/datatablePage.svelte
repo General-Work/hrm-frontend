@@ -7,7 +7,7 @@
 
 <script lang="ts">
 	import SideModal from '$cmps/layout/sideModal.svelte';
-	import { endProgress, showError, showInfo, startProgress } from '$lib/utils';
+	import { endProgress, parseQueryParams, showError, showInfo, startProgress } from '$lib/utils';
 	import { PageInfo } from '$lib/paginate';
 	import { createEventDispatcher, onMount } from 'svelte';
 	import debounce from 'lodash/debounce';
@@ -21,7 +21,7 @@
 	import axios from 'axios';
 
 	export let optionalData: any = {};
-	export let tableDataInfo: ITableDataProps<any> | undefined;
+	export let tableDataInfo: ITableDataProps<any> | undefined | null;
 	export let showEditorIn: 'modal' | 'side-modal' = 'side-modal';
 	export let hideSearchBox = false;
 	export let searchPlaceholder = 'Search...';
@@ -83,21 +83,31 @@
 		try {
 			// busy = true;
 			startProgress();
-			const ret = await axios.get(`${pageUrl}`, {
-				params: {
-					pageNumber: pageInfo.currentPage,
-					pageSize: pageInfo.pageSize,
-					search: query ?? ''
-				}
-			});
-			// console.log('here',ret);
+
+			let baseUrl = pageUrl;
+			let params: any = {
+				pageNumber: pageInfo.currentPage,
+				pageSize: pageInfo.pageSize,
+				search: query ?? ''
+			};
+
+			const { baseUrl: parsedBaseUrl, queryParams } = parseQueryParams(pageUrl);
+			if (queryParams) {
+				baseUrl = parsedBaseUrl;
+				params = {
+					...queryParams,
+					...params
+				};
+			}
+
+			const ret = await axios.get(baseUrl, { params });
+
 			if (ret?.data?.success) {
 				const xs = ret.data.data;
 				pageInfo.totalItems = xs.totalCount;
 				pageInfo.setHasNextPage(xs.pageInfo.hasNextPage);
 				pageInfo.setHasPrevPage(xs.pageInfo.hasPreviousPage);
 				tableData = xs.items;
-				// filter(query, inlineFilter, true);
 			} else {
 				showError(ret?.data.message || 'Failed to load data');
 			}
@@ -128,42 +138,82 @@
 		showForm = false;
 		activeEntry = null;
 	}
-	const config = {
-		headers: {
-			'Content-Type': 'multipart/form-data'
-		}
-	};
+	// const config = {
+	// 	headers: {
+	// 		'Content-Type': 'multipart/form-data'
+	// 	}
+	// };
+
+	// async function save(entry: any) {
+	// 	const { values } = entry;
+	// 	try {
+	// 		isLoading = true;
+	// 		startProgress();
+	// 		const ret =
+	// 			editing && isFormData
+	// 				? await axios.patch(`${pageUrl}`, { ...values, id: activeEntry.id }, config)
+	// 				: editing && !isFormData
+	// 					? await axios.patch(`${pageUrl}`, { ...values, id: activeEntry.id })
+	// 					: !editing && isFormData
+	// 						? await axios.post(pageUrl, values, config)
+	// 						: await axios.post(pageUrl, values);
+	// 		// console.log('dere', ret.data)
+	// 		if (ret.data.success) {
+	// 			if (allowLoadAfterCreate)
+	// 				showInfo(
+	// 					ret.data.message || editing
+	// 						? 'Successfully updated reacord'
+	// 						: 'Successfully added reacord'
+	// 				);
+	// 			allowLoadAfterCreate && fetchData(query);
+	// 			closeSideModal();
+	// 			allowDispatchAfterAction &&
+	// 				dispatch('afterAction', { type: 'create', values, data: ret.data.data });
+	// 		} else {
+	// 			showError(ret.data.message);
+	// 		}
+	// 	} catch (e: any) {
+	// 		showError(e);
+	// 	} finally {
+	// 		isLoading = false;
+	// 		endProgress();
+	// 	}
+	// }
 
 	async function save(entry: any) {
 		const { values } = entry;
 		try {
 			isLoading = true;
 			startProgress();
-			const ret =
-				editing && isFormData
-					? await axios.patch(`${pageUrl}`, { ...values, id: activeEntry.id }, config)
-					: editing && !isFormData
-						? await axios.patch(`${pageUrl}`, { ...values, id: activeEntry.id })
-						: !editing && isFormData
-							? await axios.post(pageUrl, values, config)
-							: await axios.post(pageUrl, values);
-			// console.log('dere', ret.data)
+
+			let axiosConfig = {};
+			if (isFormData) {
+				axiosConfig = {
+					headers: {
+						'Content-Type': 'multipart/form-data'
+					}
+				};
+			}
+
+			const ret = editing
+				? await axios.patch(`${pageUrl}`, { ...values, id: activeEntry.id }, axiosConfig)
+				: await axios.post(pageUrl, values, axiosConfig);
+
 			if (ret.data.success) {
-				if (allowLoadAfterCreate)
-					showInfo(
-						ret.data.message || editing
-							? 'Successfully updated reacord'
-							: 'Successfully added reacord'
-					);
+				const successMessage = allowLoadAfterCreate
+					? editing
+						? 'Successfully updated record'
+						: 'Successfully added record'
+					: '';
+				showInfo(ret.data.message || successMessage);
 				allowLoadAfterCreate && fetchData(query);
-				closeSideModal();
 				allowDispatchAfterAction &&
 					dispatch('afterAction', { type: 'create', values, data: ret.data.data });
 			} else {
 				showError(ret.data.message);
 			}
 		} catch (e: any) {
-			showError(e);
+			showError(e.message || e);
 		} finally {
 			isLoading = false;
 			endProgress();

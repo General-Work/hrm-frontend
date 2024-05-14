@@ -1,13 +1,13 @@
 <script lang="ts" context="module">
 	const tableColumns: ITableColumn[] = [
-		{
-			header: 'ID',
-			id: 'id',
-			accessor: (row: any) => `00000${row.id}`.slice(-9)
-		},
+		// {
+		// 	header: 'ID',
+		// 	id: 'id',
+		// 	accessor: (row: any) => `00000${row.id}`.slice(-9)
+		// },
 		{
 			header: 'Request Type',
-			accessor: (row: any) => row.type ?? '',
+			accessor: (row: IRequest) => row.requestType.toLocaleUpperCase() ?? '',
 			plugins: {
 				sort: { disable: true }
 			}
@@ -15,20 +15,29 @@
 		{
 			header: 'Staff ID',
 			// id: 'member.staffNumber',
-			accessor: (row: any) => row.staffId ?? '-'
+			accessor: (row: IRequest) => row.requestFromStaffId ?? '-',
+			plugins: {
+				sort: { disable: true }
+			}
 		},
 		{
 			header: 'Staff Name',
 			// id: 'memberId',
-			accessor: (row: any) => row.staffName ?? '-',
+			accessor: (row: IRequest) =>
+				row.requestFromStaff
+					? `${row.requestFromStaff.firstName} ${row.requestFromStaff.otherNames ?? ''} ${row.requestFromStaff.lastName}`
+					: '-',
 			plugins: {
 				sort: { disable: true }
 			}
 		},
 		{
 			header: 'Request Date',
-			id: 'createdOn',
-			accessor: (row: any) => dayjs(row.requestDateTime).format('DD-MMM-YYYY') ?? '-'
+			// id: 'createdOn',
+			accessor: (row: IRequest) => dayjs(row.createdAt).format('DD-MMM-YYYY') ?? '-',
+			plugins: {
+				sort: { disable: true }
+			}
 		},
 		{
 			header: 'Status',
@@ -41,7 +50,10 @@
 		{
 			header: 'Assigned To',
 			// id: 'assignedToId',
-			accessor: 'assignedTo',
+			accessor: (row: IRequest) =>
+				row.requestAssignedStaff
+					? `${row.requestAssignedStaff.firstName} ${row.requestAssignedStaff.otherNames ?? ''} ${row.requestAssignedStaff.lastName}`
+					: '_',
 			plugins: {
 				sort: { disable: true }
 			}
@@ -52,7 +64,7 @@
 			plugins: {
 				sort: { disable: true }
 			},
-			accessor: (row: any) => dayjs(row.lastUpdatedAt).format('DD-MMM-YYYY') ?? 'N/A'
+			accessor: (row: IRequest) => dayjs(row.updatedAt).format('DD-MMM-YYYY') ?? '-'
 		}
 	];
 </script>
@@ -67,33 +79,78 @@
 	import Table from '$cmps/ui/table.svelte';
 	import TableFilters from '$cmps/ui/tableFilters.svelte';
 	import type { ITableDataProps } from '$lib/types';
+	import type { IRequest } from '$svc/staffrequests';
 	import dayjs from 'dayjs';
 
-	export let tableDataInfo: ITableDataProps<any> | undefined;
+	export let tableDataInfo: ITableDataProps<any> | undefined | null;
 	export let searchParam = '';
 	export let requestTypes: any[] = [];
 	export let currentRequest: any = {};
+
+	let reloadData = false;
+	let filters = {
+		startDate: '',
+		endDate: '',
+		requestType: '',
+		remember: false
+	};
+
+	function handleFilter({ detail }: any) {
+		const { values } = detail;
+		let startDate = '';
+		let endDate = '';
+		if (values.dateRange) {
+			var tokens =
+				values.dateRange && values.dateRange.includes('to') && values.dateRange.split(' to ');
+			if (tokens.length === 2) {
+				startDate = tokens[0];
+				endDate = tokens[1];
+			}
+		}
+		filters = {
+			startDate,
+			endDate,
+			remember: values.remember,
+			requestType: values.requestType
+		};
+		reloadData = true;
+	}
+
+	function resetForm() {
+		filters = {
+			startDate: '',
+			endDate: '',
+			requestType: '',
+			remember: false
+		};
+		reloadData = true;
+	}
 </script>
 
 <Box bgWhite otherClasses="p-4 mt-4" rounded>
 	<!-- <Table {tableColumns} data={[]} headerColor="sky" /> -->
 	<DatatablePage
+		showIndex
 		{tableColumns}
 		{tableDataInfo}
-		editorComponent
+		editorComponent={{}}
 		showAdd={false}
 		rowClickable
+		bind:reloadData
 		searchPlaceholder="Staff Number..."
+		pageUrl={`/staffrequests?requestType=${filters.requestType}&&startDate=${filters.startDate}&&endDate=${filters.endDate}`}
 		on:view={({ detail }) => {
 			if (searchParam) {
-				goto(`/staffrequests/${detail.id}?q=${searchParam}&&type=${detail.type}`);
+				goto(
+					`/staffrequests/${detail.requestDetailPolymorphicId}?q=${searchParam}&&type=${detail.requestType}`
+				);
 			} else {
-				goto(`/staffrequests/${detail.id}?type=${detail.type}`);
+				goto(`/staffrequests/${detail.requestDetailPolymorphicId}?type=${detail.requestType}`);
 			}
 		}}
 	>
 		<div slot="filters">
-			<TableFilters {requestTypes} {currentRequest} />
+			<TableFilters {requestTypes} {currentRequest} on:submit={handleFilter} on:click={resetForm} />
 		</div>
 	</DatatablePage>
 </Box>

@@ -1,10 +1,16 @@
 <script>
+	import { cn } from '$lib/utils';
+
 	export let label = '';
 	export let icon = '';
+	export let textColor = 'text-[#009484]';
 </script>
 
 <div
-	class="border-b form-section-inscription py-2 text-[#009484] font-medium flex items-center gap-2"
+	class={cn(
+		'border-b form-section-inscription py-2 font-medium flex items-center gap-2',
+		textColor
+	)}
 >
 	<iconify-icon {icon} class:hidden={!icon} />
 	{label}

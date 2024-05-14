@@ -6,6 +6,7 @@
 	export let passportPicture = '';
 	export let schoolCertificate = '';
 	export let birthCertificate = '';
+	export let nssCertificate = '';
 </script>
 
 <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 pt-4">
@@ -22,6 +23,11 @@
 	{#if birthCertificate}
 		<div>
 			<ShowFile src={birthCertificate} imageName="Birth Certificate" />
+		</div>
+	{/if}
+	{#if nssCertificate}
+		<div>
+			<ShowFile src={birthCertificate} imageName="NSS Certificate" />
 		</div>
 	{/if}
 	{#if generalSRC}
