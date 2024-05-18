@@ -68,9 +68,9 @@
 	<Fieldset label="Salary" icon="fluent:payment-32-filled">
 		<div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
 			<TextField label="Scale" name="scale" readOnly required />
-			<TextField label="Band" name="band" rreadOnly required />
+			<TextField label="Band" name="band" readOnly required />
 			<SelectField size="small" label="Step" name="step" required />
-			<TextField label="Salary" name="salary" required />
+			<TextField label="Salary" name="salary" required readOnly/>
 		</div>
 		<!-- <div class="pt-4">
 			<div class="border-b">Bank Details</div>

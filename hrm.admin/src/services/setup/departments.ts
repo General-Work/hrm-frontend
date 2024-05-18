@@ -79,9 +79,7 @@ export async function readUnitsInADepartment(departmentId: string, params?: APIQ
 			? await axiosInstance.get(`/department/${departmentId}/unit/all`, {
 					params: { ...params, sort: 'updatedAt_desc' }
 				})
-			: await axiosInstance.get(`/department/${departmentId}/unit/all`, {
-					params: { sort: 'unitName' }
-				});
+			: await axiosInstance.get(`/department/${departmentId}/unit/all`);
 		return queryResult(ret, ret.data);
 	} catch (error) {
 		return axiosError(error);

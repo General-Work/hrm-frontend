@@ -63,18 +63,32 @@ export const DELETE = async ({ url }) => {
 };
 
 export const GET = async ({ url }) => {
-	const x = extractMultipleSearchParams(url.search);
-	const res = await readDirectorates({
-		pageNumber: +x.pageNumber,
-		pageSize: +x.pageSize,
-		search: x.search
-	});
-	if (!res.success) {
-		return json({ message: res.message, status: 400, success: res.success });
+	try {
+		const searchParams = extractMultipleSearchParams(url.search);
+		let res;
+		if (searchParams && +searchParams.pageNumber) {
+			res = await readDirectorates({
+				pageNumber: +searchParams.pageNumber,
+				pageSize: +searchParams.pageSize,
+				search: searchParams.search
+			});
+		} else {
+			res = await readDirectorates();
+		}
+
+		if (!res.success) {
+			return json({ message: res.message, status: 400, success: res.success });
+		}
+
+		const responseData =
+			searchParams && +searchParams.pageNumber ? generateDataTableProps(res.data) : res.data;
+
+		return json({
+			success: res.success,
+			message: res.message,
+			data: responseData
+		});
+	} catch (error) {
+		return json({ message: 'An error occurred while fetching data', status: 500, success: false });
 	}
-	return json({
-		success: res.success,
-		message: res.message,
-		data: generateDataTableProps(res.data)
-	});
 };
