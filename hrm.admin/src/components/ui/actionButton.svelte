@@ -146,8 +146,8 @@
 
 <a
 	class=" rounded-[6px] border-gray-400/40 pl-4 py-2.5 cursor-pointer {!showBg &&
-		'hover:bg-blue-200/40'} flex items-center"
-	class:bg-white={showBg || active}
+		'hover:bg-blue-200/40'} flex items-center {active && 'bg-blue-200/40 lg:bg-white'}"
+	class:bg-white={showBg}
 	class:shadow={showBg}
 	class:hover:scale-95={showBg}
 	class:h-20={moreHeight}

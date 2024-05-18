@@ -5,7 +5,8 @@ const actionsButtons: IButtonConfig[] = [
 		label: 'Appointment Details',
 		kind: 'form',
 		subLabel: '',
-		path: '/appointmentdetails'
+		path: '/appointmentdetails',
+	
 	},
 	{
 		label: 'Postings',

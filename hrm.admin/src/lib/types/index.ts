@@ -12,6 +12,12 @@ export interface IMenuItem {
 	iconSize?: number;
 }
 
+export interface ISideMenu {
+	component: any;
+	props: any;
+	title: string;
+	show: boolean
+}
 export interface IRouteItem {
 	name: string;
 	items: IMenuItem[];

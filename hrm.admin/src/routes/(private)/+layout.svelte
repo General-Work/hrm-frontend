@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Navbar from '$cmps/layout/navbar.svelte';
 	import { menuItems } from '$data/userStore';
-	import { activePage, breadCrumb } from '$data/appStore';
+	import { activePage, breadCrumb, hideRightDrawer, sideQuickActions } from '$data/appStore';
 	import BreadCrumb from '$cmps/ui/breadCrumb.svelte';
 	import { goto } from '$app/navigation';
 	import { Toaster } from 'svelte-french-toast';
@@ -11,12 +11,21 @@
 	import Divider from '$cmps/ui/divider.svelte';
 	import { logoutUser } from '$svc/auth.js';
 	import Dialog from '$cmps/ui/dialog.svelte';
+	import { CloseButton, Drawer } from 'flowbite-svelte';
+	import { sineIn } from 'svelte/easing';
 
 	export let data;
 
 	let hideSidebar = false;
 	let showAlert = false;
+	$: rightDrawerOptions = $sideQuickActions;
 	$: activeBreadCrumb = $breadCrumb[$breadCrumb.length - 1].title;
+
+	const rightDrawerTransitionParams = {
+		x: 0,
+		duration: 200,
+		easing: sineIn
+	};
 
 	function optionClicked({ detail }: any) {
 		const { index } = detail;
@@ -61,7 +70,12 @@
 		<SidePanel routeItems={$menuItems} {hideSidebar} />
 	</aside>
 	<section id="content" class="w-full h-full overflow-hidden">
-		<Navbar user={data.user} bind:hideSidebar on:signout={() => (showAlert = true)} />
+		<Navbar
+			user={data.user}
+			bind:hideSidebar
+			on:signout={() => (showAlert = true)}
+			on:rightDrawer={(_) => ($hideRightDrawer = !$hideRightDrawer)}
+		/>
 		<section class="bg-[#f5e9eb78] w-full h-full flex-grow flex flex-col">
 			<div
 				class:hidden={!$activePage.showBreadCrumb}
@@ -72,12 +86,38 @@
 				</div>
 			</div>
 			<div class=" w-full h-full flex-grow overflow-hidden">
-				<div class="px-2 md:px-4 2xl:px-0 lg:container lg:mx-auto w-full h-full ">
+				<div class="px-2 md:px-4 2xl:px-0 lg:container lg:mx-auto w-full h-full">
 					<slot />
 				</div>
 			</div>
 		</section>
 	</section>
+</div>
+
+<div class="lg:hidden relative z-[1000]">
+	{#if rightDrawerOptions}
+		<Drawer
+			bind:hidden={$hideRightDrawer}
+			transitionType="fly"
+			transitionParams={rightDrawerTransitionParams}
+			placement="right"
+			title={rightDrawerOptions.title || 'Quick Actions'}
+			width={'w-96'}
+		>
+			<div class="h-full flex flex-col overflow-y-hidden ">
+				<div class="flex items-center">
+					<h5 class="text-base font-semibold text-gray-500">
+						{rightDrawerOptions.title || 'Quick Actions'}
+					</h5>
+					<CloseButton on:click={(_) => ($hideRightDrawer = true)} />
+				</div>
+				<Divider />
+				<div class="flex-grow overflow-y-auto pt-3">
+					<svelte:component this={rightDrawerOptions.component} {...rightDrawerOptions.props} />
+				</div>
+			</div>
+		</Drawer>
+	{/if}
 </div>
 
 <AlertDialog

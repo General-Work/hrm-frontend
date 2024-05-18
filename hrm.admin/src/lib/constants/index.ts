@@ -4,3 +4,4 @@ export const APPOINTMENTTYPELIST = ['Permanent', 'Temporal', 'Contract'].map((it
 export const ACCOUNTTYPE = ['SAVINGS', 'CURRENT'];
 
 export const STAFFPAYMENTTYPE = ['CAGD', 'IGF'];
+export const STAFFTYPE = ['MANAGEMENT', 'CLINICAL', 'ADMINISTRATIVE', 'TECHNICAL SUPPORT'];

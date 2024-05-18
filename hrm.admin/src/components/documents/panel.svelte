@@ -5,7 +5,8 @@
 	import ActionButton from '$cmps/ui/actionButton.svelte';
 	import Divider from '$cmps/ui/divider.svelte';
 	import Feeds from './feeds.svelte';
-	import type { IRequestAction } from '$types/types';
+	import type { IRequestAction } from '$lib/types';
+	import { browser } from '$app/environment';
 
 	export let documentId: string;
 	export let status = '';
@@ -16,6 +17,7 @@
 
 	const dispatch = createEventDispatcher();
 	let panelSize = '300px'; // todo: update this for chat
+	$: smallScreen = browser && window.innerWidth < 768 ? true : false;
 </script>
 
 <div class="overflow pl-2 flex-grow flex flex-col right-panel" style:width={panelSize}>
@@ -55,7 +57,13 @@
 			{/if}
 		</TabItem>
 
-		<TabItem title="Feed" on:click={(_) => (panelSize = '500px')} defaultClass="flex-grow grid ">
+		<TabItem
+			title="Feed"
+			on:click={(_) => {
+				if (!smallScreen) panelSize = '500px';
+			}}
+			defaultClass="flex-grow grid "
+		>
 			<div class="flex-grow flex flex-col px-2 pt-3">
 				<Feeds {feeds} />
 			</div>

@@ -29,6 +29,7 @@
 						iconColor={item.iconColor}
 						active={activePage === item.path}
 						href={item.path ?? ''}
+						iconSize={20}
 					/>
 				</li>
 			{/each}

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import IconButton from '$cmps/ui/iconButton.svelte';
-	import { activePage } from '$data/appStore';
+	import { activePage, sideQuickActions } from '$data/appStore';
 	import type { IUserInfo } from '$lib/types';
 	import { Avatar, Button, DropdownDivider } from 'flowbite-svelte';
 	import { createEventDispatcher } from 'svelte';
@@ -140,5 +140,13 @@
 				>
 			</Dropdown>
 		</div>
+		<button
+			class:hidden={!($sideQuickActions && $sideQuickActions.show)}
+			class="grid place-content-center pl-2 text-teal-600 lg:hidden hover:text-teal-900"
+			type="button"
+			on:click={(_) => dispatch('rightDrawer')}
+		>
+			<iconify-icon icon="heroicons-solid:menu-alt-3" class="text-2xl" />
+		</button>
 	</div>
 </nav>

@@ -17,7 +17,7 @@
 <div>
 	<div class="space-y-2">
 		<Title label="Basic Info" icon="fluent:person-32-filled" />
-		<div class="grid grid-cols-1 lg:grid-cols-2 gap-4 p-4">
+		<div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
 			<FieldPair label="Title" subLabel={data.bioData.title} isColumn={false} />
 			<FieldPair label="First Name" subLabel={data.bioData.firstName} isColumn={false} />
 			<FieldPair label="Surname" subLabel={data.bioData.surName} isColumn={false} />
@@ -63,7 +63,7 @@
 			<div class="">
 				{#each data.bioData.educationalBackground.reverse() as institution, index}
 					<Title label={`Institution ${index + 1}`} />
-					<div class="grid grid-cols-1 lg:grid-cols-2 gap-4 p-4">
+					<div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
 						<FieldPair
 							label="Institution Name"
 							subLabel={institution.institutionName}
@@ -84,7 +84,7 @@
 			</div>
 		{/if}
 		<Title label="NSS Details" />
-		<div class="grid grid-cols-1 lg:grid-cols-2 gap-4 p-4">
+		<div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
 			<FieldPair label="NSS Number" subLabel={data.bioData.nssNumber} isColumn={false} />
 			<FieldPair
 				label="Institution of service"

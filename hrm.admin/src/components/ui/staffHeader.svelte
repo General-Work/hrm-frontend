@@ -8,16 +8,16 @@
 		<div class="flex justify-center lg:justify-start">
 			<Avatar
 				src="https://t3.ftcdn.net/jpg/03/73/52/24/360_F_373522464_UzkM3IvqgqpS0qIy2kpkB5QiV7Bw7NyS.jpg"
-				class="w-24 h-24"
+				class="w-20 h-20"
 			/>
 		</div>
 		<div class="flex flex-col gap-2">
 			<div class="flex justify-center lg:justify-start items-center gap-5">
-				<p class="text-2xl uppercase">Yaw Marfo</p>
+				<p class="text-[20px] uppercase">Yaw Marfo</p>
 				<Badge border color="green">Active</Badge>
 			</div>
 
-			<div class="grid grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 text-[15px]">
+			<div class="grid grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 text-[14.5px]">
 				<div>
 					<p><b>Staff ID: </b> <span>MS000012</span></p>
 					<p><b>Directorate:</b> <span>Operations</span></p>

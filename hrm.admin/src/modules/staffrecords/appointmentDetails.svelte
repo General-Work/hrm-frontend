@@ -9,7 +9,7 @@
 	import Button from '$cmps/ui/button.svelte';
 	import Fieldset from '$cmps/ui/fieldset.svelte';
 	import Title from '$cmps/ui/title.svelte';
-	import { ACCOUNTTYPE, APPOINTMENTTYPELIST, STAFFPAYMENTTYPE } from '$lib/constants';
+	import { APPOINTMENTTYPELIST, STAFFPAYMENTTYPE, STAFFTYPE } from '$lib/constants';
 
 	import * as z from 'zod';
 
@@ -32,7 +32,8 @@
 
 <Form {schema} class="flex flex-col gap-4" on:submit={handleSubmit}>
 	<Fieldset label="Appointments" kind="blue" icon="mingcute:pencil-3-fill">
-		<div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+		<div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+			<SelectField label="Staff Type" name="type" options={STAFFTYPE} required />
 			<SelectField
 				label="Appointment Type"
 				name="appointmentType"
@@ -43,7 +44,7 @@
 		</div>
 		<div class="my-5">
 			<Title label="First Appointment" />
-			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pt-2">
+			<div class="grid grid-cols-1 lg:grid-cols-3 gap-4 pt-2">
 				<DateField label="Notional Date" name="firstAppNotionalEffect" required />
 				<DateField label="Substantive Date" name="firstAppSubstantiveEffect" required />
 				<SelectField label="First Appointment Grade" required name="firstAppointmentGrade" />
@@ -52,11 +53,11 @@
 		<div class="my-5">
 			<Title label="Current Appointment" />
 			<div class="space-y-4">
-				<div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+				<div class="grid grid-cols-1 lg:grid-cols-2 gap-4 pt-2">
 					<DateField label="Notional Date" name="notionalEffect" required />
 					<DateField label="Substantive Date" name="substantiveEffect" required />
 				</div>
-				<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+				<div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
 					<SelectField label="Current Grade" name="currentGrade" />
 					<TextField label="Profession" name="profession" required />
 					<SelectField label="Specialty" name="specialty" />
@@ -65,7 +66,7 @@
 		</div>
 	</Fieldset>
 	<Fieldset label="Salary" icon="fluent:payment-32-filled">
-		<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+		<div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
 			<TextField label="Scale" name="scale" readOnly required />
 			<TextField label="Band" name="band" rreadOnly required />
 			<SelectField size="small" label="Step" name="step" required />
@@ -73,7 +74,7 @@
 		</div>
 		<!-- <div class="pt-4">
 			<div class="border-b">Bank Details</div>
-			<div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+			<div class="grid grid-cols-1 gap-4 pt-2">
 				<SelectField label="Name of bank" name="bank" required />
 				<TextField label="Branch" name="branch" />
 				<SelectField label="Account Type" name="accountType" options={ACCOUNTTYPE} />

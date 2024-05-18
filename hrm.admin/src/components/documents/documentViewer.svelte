@@ -31,7 +31,7 @@
 	import { extractQueryParam, showError } from '$lib/utils';
 	import { browser } from '$app/environment';
 	import ScrollArea from '$cmps/ui/scrollArea.svelte';
-	import { modalConfig } from '$data/appStore';
+	import { hideRightDrawer, modalConfig, sideQuickActions } from '$data/appStore';
 	import { page } from '$app/stores';
 	import RegistrationEditor from './editors/registrationEditor.svelte';
 	import LeavePlanEditor from './editors/leavePlanEditor.svelte';
@@ -40,6 +40,7 @@
 	import TransferEditor from './editors/transferEditor.svelte';
 	import BankUpdateEditor from './editors/bankUpdateEditor.svelte';
 	import BiodataEditor from './editors/biodataEditor.svelte';
+	import type { ISideMenu } from '$lib/types';
 
 	initMappers(); // set the component mappers
 
@@ -214,6 +215,26 @@
 
 		scrollingDiv.scrollTop = scrollingDiv.scrollHeight;
 	}
+
+	$: $sideQuickActions = {
+		component: RightPanel,
+		props: {
+			showActions,
+				actions:meta.actions,
+				otherActions:document.otherActions,
+				status:meta.status,
+				feeds:meta.feeds,
+				// on:click:{onAction}
+				documentId,
+				click:onAction
+		 },
+		title: 'Actions',
+		show: true
+	};
+
+	onDestroy(() => {
+		$sideQuickActions = {} as ISideMenu;
+	});
 </script>
 
 <div class="h-full flex flex-col w-full">
@@ -230,7 +251,7 @@
 				on:toggleCollapse={toggleCollapse}
 			/>
 		</ScrollArea>
-		<div class="h-full flex-grow flex">
+		<div class="hidden h-full flex-grow" class:lg:block={$hideRightDrawer}>
 			<RightPanel
 				{showActions}
 				actions={meta.actions}
