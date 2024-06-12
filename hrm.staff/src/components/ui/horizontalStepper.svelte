@@ -85,7 +85,7 @@
 			bind:isValid
 			bind:busy
 		>
-			<div class="pt-5 flex flex-col md:flex-row md:justify-end gap-3 pr-1">
+			<div class="pt-5 flex flex-col md:flex-row md:justify-end gap-3 pr-1 pb-2">
 				<Button
 					on:click={() => {
 						isActiveStep--;

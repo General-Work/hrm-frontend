@@ -15,7 +15,8 @@
 		{
 			header: 'Staff ID',
 			// id: 'member.staffNumber',
-			accessor: (row: IRequest) => row.requestFromStaffId ?? '-',
+			accessor: (row: IRequest) =>
+				row.requestFromStaff ? `${row.requestFromStaff.staffIdentificationNumber}` : '-',
 			plugins: {
 				sort: { disable: true }
 			}
@@ -59,7 +60,7 @@
 			}
 		},
 		{
-			header: 'Last Updated At',
+			header: 'Last Updated',
 			// id: 'updatedOn',
 			plugins: {
 				sort: { disable: true }
@@ -82,7 +83,7 @@
 	import type { IRequest } from '$svc/staffrequests';
 	import dayjs from 'dayjs';
 
-	export let tableDataInfo: ITableDataProps<any> | undefined | null;
+	export let tableDataInfo: ITableDataProps<IRequest> | undefined | null;
 	export let searchParam = '';
 	export let requestTypes: any[] = [];
 	export let currentRequest: any = {};
@@ -138,14 +139,16 @@
 		rowClickable
 		bind:reloadData
 		searchPlaceholder="Staff Number..."
-		pageUrl={`/staffrequests?requestType=${filters.requestType}&&startDate=${filters.startDate}&&endDate=${filters.endDate}`}
+		pageUrl={`/staffrequests?requestType=${filters.requestType}&startDate=${filters.startDate}&endDate=${filters.endDate}`}
 		on:view={({ detail }) => {
 			if (searchParam) {
 				goto(
-					`/staffrequests/${detail.requestDetailPolymorphicId}?q=${searchParam}&&type=${detail.requestType}`
+					`/staffrequests/${detail.id}?q=${searchParam}&type=${detail.requestType}&status=${detail.status}`
 				);
 			} else {
-				goto(`/staffrequests/${detail.requestDetailPolymorphicId}?type=${detail.requestType}`);
+				goto(
+					`/staffrequests/${detail.id}?type=${detail.requestType}&status=${detail.status}`
+				);
 			}
 		}}
 	>

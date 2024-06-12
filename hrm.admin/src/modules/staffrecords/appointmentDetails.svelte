@@ -40,7 +40,7 @@
 				options={APPOINTMENTTYPELIST}
 				required
 			/>
-			<SelectField label="Payment Source" name="fund" options={STAFFPAYMENTTYPE} required />
+			<SelectField label="Salary Source" name="fund" options={STAFFPAYMENTTYPE} required />
 		</div>
 		<div class="my-5">
 			<Title label="First Appointment" />

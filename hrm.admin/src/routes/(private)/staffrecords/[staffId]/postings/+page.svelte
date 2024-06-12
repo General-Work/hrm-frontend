@@ -8,7 +8,7 @@
 		showBreadCrumb: true
 	};
 	$: id = $page.params.staffId;
-	$:breadCrumb.addToFirstIndex(
+	breadCrumb.addToFirstIndex(
 		[
 			{ title: 'Home', path: `/staffrecords` },
 			{ title: 'Staff Records', path: `/staffrecords/${id}` },

@@ -245,14 +245,17 @@ export function addQueryParamsAndValues(pageUrl: string, step: string, value: an
 	return `${urlObject.pathname}${urlObject.search}`;
 }
 
-export const fileOrStringValidation: any = (
+export const fileOrStringValidation = (
 	existingFileUrls: Record<string, string>,
-	stringField: string
+	stringField: string,
+	data: Record<string, any>,
+	field: string
 ) => {
 	return z.lazy(() => {
-		if (existingFileUrls[stringField]) {
+		console.log(existingFileUrls);
+		console.log({ stringField, data: existingFileUrls[stringField] });
+		if (existingFileUrls[stringField] && !data[field]) {
 			return z.null();
-			// return z.union([z.optional(z.null()), fileOrString(stringField)]);
 		}
 		return z.instanceof(File);
 	});

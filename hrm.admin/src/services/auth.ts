@@ -1,6 +1,8 @@
 import type { IUserInfo } from '$lib/types';
 import { writable } from 'svelte/store';
 import axios from 'axios';
+import { axiosError, queryResult } from './shared';
+import { axiosInstance } from '$routes/+layout.svelte';
 
 export const userInfo = writable<IUserInfo | null>();
 export const isAuthenticated = writable(false);
@@ -8,36 +10,35 @@ export const authToken = writable<string>('');
 
 export const LOGIN_KEY = 'hrm_admin_log_in';
 
-export const userData: IUserInfo = {
-	id: 1,
-	firstName: 'Theophilus',
-	surname: 'Adusei',
-	otherNames: '',
-	fullName: 'Theophilus Adusei',
-	profileImage:
-		'https://t3.ftcdn.net/jpg/03/73/52/24/360_F_373522464_UzkM3IvqgqpS0qIy2kpkB5QiV7Bw7NyS.jpg',
-	initials: 'TA',
-	email: 'tadusei@mail.com',
-	status: 'Active',
-	role: 'Developer',
-	roleId: 1,
 
-	permissions: ['*'],
-	tags: ['*']
-};
-
-export function userInit() {
-	userInfo.set(userData);
+export async function loginUser(data: { email: string; password: string }) {
+	try {
+		const ret = await axiosInstance.post('/auth/user/login', data);
+		return queryResult(ret, ret.data);
+	} catch (error) {
+		return axiosError(error);
+	}
 }
 
-export function clearUser() {
-	userInfo.set(null);
+export async function accountConfirmation(params: { email: string; otp: string }) {
+	try {
+		const ret = await axiosInstance.post('/auth/user/two-factor-confirmation', params);
+		return queryResult(ret, ret.data);
+	} catch (error) {
+		return axiosError(error);
+	}
 }
 
-export function loginUser(data: { staffId: string; password: string }) {
-	return axios.post('/login', data);
+export async function readAuthUser() {
+	try {
+		const ret = await axiosInstance.get('/auth/user');
+		return queryResult(ret, ret.data);
+	} catch (error) {
+		return axiosError(error);
+	}
 }
 
 export function logoutUser() {
 	return axios.delete('/login');
+	// if (browser) window.location.reload();
 }

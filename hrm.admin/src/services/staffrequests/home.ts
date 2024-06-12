@@ -1,6 +1,6 @@
 import type { APIQueryParams, DocumentKind, IActivity, IPageInfo, IStaff } from '$lib/types';
 import { axiosInstance } from '$routes/+layout.svelte';
-import { axiosError, queryResult } from '$svc/shared';
+import { axiosError, callResult, queryResult } from '$svc/shared';
 
 const x = [
 	{
@@ -56,10 +56,29 @@ export async function readRequests(params?: APIQueryParams) {
 	}
 }
 
-export async function readRequest(requestType: DocumentKind, requestPolymorphicId: string) {
+export async function readRequest(id: string) {
 	try {
-		const ret = await axiosInstance.get(`/staff-request/${requestType}/${requestPolymorphicId}`);
+		const ret = await axiosInstance.get(`/staff-request/${id}`);
 		return queryResult(ret, ret.data);
+	} catch (error) {
+		return axiosError(error);
+	}
+}
+
+export async function rejectRequest(id: string, description: string) {
+	try {
+		const ret = await axiosInstance.post(`/staff-request/reject`, { id, description });
+		return callResult(ret, ret.data);
+	} catch (error) {
+		console.log(error)
+		return axiosError(error);
+	}
+}
+
+export async function approveRequest(id: string) {
+	try {
+		const ret = await axiosInstance.post(`/staff-request/approve`, { id });
+		return callResult(ret, ret.data);
 	} catch (error) {
 		return axiosError(error);
 	}

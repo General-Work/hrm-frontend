@@ -7,7 +7,14 @@
 
 <script lang="ts">
 	import SideModal from '$cmps/layout/sideModal.svelte';
-	import { endProgress, parseQueryParams, showError, showInfo, startProgress } from '$lib/utils';
+	import {
+		endProgress,
+		extractQueryParam,
+		parseQueryParams,
+		showError,
+		showInfo,
+		startProgress
+	} from '$lib/utils';
 	import { PageInfo } from '$lib/paginate';
 	import { createEventDispatcher, onMount } from 'svelte';
 	import debounce from 'lodash/debounce';
@@ -19,6 +26,8 @@
 	import { writable } from 'svelte/store';
 	import type { ITableDataProps } from '$lib/types';
 	import axios from 'axios';
+	import { page } from '$app/stores';
+	import { goto } from '$app/navigation';
 
 	export let optionalData: any = {};
 	export let tableDataInfo: ITableDataProps<any> | undefined | null;
@@ -58,12 +67,13 @@
 	export let take = 13;
 	export let reloadData = false;
 	export let isFormData = false;
+	export let fillSpace = true;
+	export let showTopActionsBackground = true;
 	// export let tableActions: IActionList[] = [
 	// 	{ icon: 'ri:edit-2-fil', name: 'Edit detail' }
 	// 	// { icon: 'ri:edit-2-fil', name: 'Edit detail' }
 	// ];
 	let showForm = false;
-	let query = '';
 	let oldQuery = '';
 	let pageInfo = new PageInfo();
 	pageInfo.setPageSize(take);
@@ -75,20 +85,27 @@
 	let tableData: any[] = [];
 	let isLoading = false;
 
+	$: ({ searchParams, pathname, search } = $page.url);
+
+	$: filters = {
+		search: extractQueryParam(search, 'search') ?? '',
+		page: extractQueryParam(search, 'page') ?? ''
+	};
+
 	let allColumns = writable<any>([]);
 
 	const dispatch = createEventDispatcher();
 
-	async function fetchData(query?: string) {
+	async function fetchData(page: number, search: string) {
 		try {
 			// busy = true;
 			startProgress();
 
 			let baseUrl = pageUrl;
 			let params: any = {
-				pageNumber: pageInfo.currentPage,
+				pageNumber: page,
 				pageSize: pageInfo.pageSize,
-				search: query ?? ''
+				search: search
 			};
 
 			const { baseUrl: parsedBaseUrl, queryParams } = parseQueryParams(pageUrl);
@@ -113,7 +130,6 @@
 			}
 		} catch (e: any) {
 			showError(e.message || e);
-			console.log(e);
 		} finally {
 			// busy = false;
 			endProgress();
@@ -121,10 +137,39 @@
 	}
 
 	async function getMore() {
-		if (pageInfo.gotoNext()) await fetchData(query);
+		if (pageInfo.gotoNext()) {
+			const current = new URLSearchParams(Array.from(searchParams.entries()));
+			const value = pageInfo.currentPage;
+
+			if (!value) {
+				current.delete('page');
+			} else {
+				current.set('page', String(value));
+			}
+
+			const search = current.toString();
+			const page = search ? `?${search}` : '';
+			await goto(`${pathname}${page}`);
+			await fetchData(value, filters.search);
+		}
 	}
+
 	async function getLess() {
-		if (pageInfo.gotoPrev()) await fetchData(query);
+		if (pageInfo.gotoPrev()) {
+			const current = new URLSearchParams(Array.from(searchParams.entries()));
+			const value = pageInfo.currentPage;
+
+			if (!value) {
+				current.delete('page');
+			} else {
+				current.set('page', String(value));
+			}
+
+			const search = current.toString();
+			const page = search ? `?${search}` : '';
+			await goto(`${pathname}${page}`);
+			await fetchData(value, filters.search);
+		}
 	}
 
 	function addNew() {
@@ -138,47 +183,6 @@
 		showForm = false;
 		activeEntry = null;
 	}
-	// const config = {
-	// 	headers: {
-	// 		'Content-Type': 'multipart/form-data'
-	// 	}
-	// };
-
-	// async function save(entry: any) {
-	// 	const { values } = entry;
-	// 	try {
-	// 		isLoading = true;
-	// 		startProgress();
-	// 		const ret =
-	// 			editing && isFormData
-	// 				? await axios.patch(`${pageUrl}`, { ...values, id: activeEntry.id }, config)
-	// 				: editing && !isFormData
-	// 					? await axios.patch(`${pageUrl}`, { ...values, id: activeEntry.id })
-	// 					: !editing && isFormData
-	// 						? await axios.post(pageUrl, values, config)
-	// 						: await axios.post(pageUrl, values);
-	// 		// console.log('dere', ret.data)
-	// 		if (ret.data.success) {
-	// 			if (allowLoadAfterCreate)
-	// 				showInfo(
-	// 					ret.data.message || editing
-	// 						? 'Successfully updated reacord'
-	// 						: 'Successfully added reacord'
-	// 				);
-	// 			allowLoadAfterCreate && fetchData(query);
-	// 			closeSideModal();
-	// 			allowDispatchAfterAction &&
-	// 				dispatch('afterAction', { type: 'create', values, data: ret.data.data });
-	// 		} else {
-	// 			showError(ret.data.message);
-	// 		}
-	// 	} catch (e: any) {
-	// 		showError(e);
-	// 	} finally {
-	// 		isLoading = false;
-	// 		endProgress();
-	// 	}
-	// }
 
 	async function save(entry: any) {
 		const { values } = entry;
@@ -206,7 +210,8 @@
 						: 'Successfully added record'
 					: '';
 				showInfo(ret.data.message || successMessage);
-				allowLoadAfterCreate && fetchData(query);
+				allowLoadAfterCreate && (await fetchData(+filters.page, filters.search));
+
 				allowDispatchAfterAction &&
 					dispatch('afterAction', { type: 'create', values, data: ret.data.data });
 			} else {
@@ -229,24 +234,25 @@
 
 	async function handleDone() {
 		closeSideModal();
-		await fetchData(query);
+		await fetchData(+filters.page, filters.search);
 	}
 
 	const debouncedSearch = debounce(fetchData, 300);
 
-	$: if (query) {
-		oldQuery = query;
-		debouncedSearch(query);
-	} else if (oldQuery && !query) {
-		debouncedSearch();
+	$: if (filters.search) {
+		oldQuery = filters.search;
+		debouncedSearch(+filters.page, filters.search);
+	} else if (oldQuery && !filters.search) {
+		debouncedSearch(+filters.page, filters.search);
 		oldQuery = '';
 	}
 
 	$: if (reloadData) {
-		fetchData(query);
+		fetchData(+filters.page, filters.search);
 		reloadData = false;
 	}
-	onMount(async () => {
+	onMount( () => {
+		console.log(tableDataInfo)
 		if (tableDataInfo) {
 			pageInfo.setPageSize(tableDataInfo.pageSize);
 			pageInfo.totalItems = tableDataInfo.totalCount;
@@ -258,10 +264,15 @@
 </script>
 
 <div class="w-full h-full flex flex-col gap-2">
-	<div class="flex flex-col gap-2">
+	<div
+		class="flex flex-col gap-2"
+		class:custom-container={!fillSpace}
+		class:background={showTopActionsBackground}
+		class:py-2={!showTopActionsBackground}
+	>
 		<div class="flex flex-col sm:flex-row gap-2 sm:justify-between">
 			<div class:hidden={hideSearchBox} class="flex-grow max-w-md">
-				<TableSearchBox placeholder={searchPlaceholder} bind:value={query} />
+				<TableSearchBox placeholder={searchPlaceholder} value={filters.search} />
 			</div>
 			<div class="flex flex-col sm:flex-row sm:items-center gap-4">
 				<div>
@@ -273,8 +284,7 @@
 						hasNextPage={pageInfo.hasNextPage}
 						hasPreviousPage={pageInfo.hasPrevPage}
 						refresh={() => {
-							query = '';
-							fetchData();
+							fetchData(+filters.page, filters.search);
 						}}
 						tableColumns={$allColumns}
 						bind:hiddenColumns
@@ -286,37 +296,39 @@
 			</div>
 		</div>
 	</div>
-	<slot name="filters" />
-	<DataTable
-		{height}
-		{headerColor}
-		data={tableData}
-		{bgWhite}
-		{headerTextColor}
-		{tableColumns}
-		{initialSortKeys}
-		{showActions}
-		{showCheckBox}
-		{showViewDetails}
-		{showEdit}
-		{selectAllChecked}
-		{showMiniWidth}
-		{rowClickable}
-		{hideWhiteSpace}
-		{selectedRows}
-		{showIndex}
-		{actionLists}
-		bind:hiddenColumns
-		bind:allColumns
-		bind:sortedColumns
-		on:cancel
-		on:delete
-		on:edit={handleEdit}
-		on:feed
-		on:handleCheckbox
-		on:view
-		on:actionClicked
-	/>
+	<div class:custom-container={!fillSpace} class="w-full h-full flex flex-col gap-2">
+		<slot name="filters" />
+		<DataTable
+			{height}
+			{headerColor}
+			data={tableData}
+			{bgWhite}
+			{headerTextColor}
+			{tableColumns}
+			{initialSortKeys}
+			{showActions}
+			{showCheckBox}
+			{showViewDetails}
+			{showEdit}
+			{selectAllChecked}
+			{showMiniWidth}
+			{rowClickable}
+			{hideWhiteSpace}
+			{selectedRows}
+			{showIndex}
+			{actionLists}
+			bind:hiddenColumns
+			bind:allColumns
+			bind:sortedColumns
+			on:cancel
+			on:delete
+			on:edit={handleEdit}
+			on:feed
+			on:handleCheckbox
+			on:view
+			on:actionClicked
+		/>
+	</div>
 </div>
 
 <Modal
@@ -362,3 +374,9 @@
 		on:done={handleDone}
 	/>
 </SideModal>
+
+<style>
+	.background {
+		@apply bg-gradient-to-b from-indigo-100 via-teal-50 to-[#f7f6f2] py-2.5;
+	}
+</style>

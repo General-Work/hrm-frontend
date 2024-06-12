@@ -61,6 +61,7 @@ export function callResult<R>(rawResponse: AxiosResponse<R>, result: any) {
 	if (typeof result === 'string' && result === '') {
 		return <IOk>{ success: true, message: '' };
 	}
+	if (typeof result === 'string') return <IOk>{ success: true, message: result };
 	if (!result) {
 		return <IFailureResult>{
 			success: false,

@@ -108,7 +108,7 @@ export const showError = (err: string, options?: ToastOptions) => {
 
 export const showInfo = (err: string, options?: ToastOptions) => {
 	let id = nanoid();
-	return toast.success(err, { id: `${id}-${err}`, ...options });
+	return toast.success(err, { id: `${id}-${err}`, duration: 6000, ...options });
 };
 
 interface ToastPromiseOptions {

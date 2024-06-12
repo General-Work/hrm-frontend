@@ -51,7 +51,6 @@
 		gpsAddress: '',
 		controllerStaffNumber: ''
 	};
-	let isValid = false;
 	let busy = false;
 	let renderId = 0;
 
@@ -62,7 +61,7 @@
 				...$member.personalInfo,
 				title: $member.personalInfo.title.toUpperCase(),
 				gender: $member.personalInfo.gender.toUpperCase()
-			};
+			} as typeof data;
 			renderId++;
 		}
 	});
@@ -123,6 +122,7 @@
 		on:change={handleChange}
 		on:submit={handleSubmit}
 		{schema}
+		let:isValid
 	>
 		<Helper>
 			<p class="text-sm text-justify">

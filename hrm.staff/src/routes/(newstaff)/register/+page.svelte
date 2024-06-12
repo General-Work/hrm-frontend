@@ -23,9 +23,9 @@
 	backdropClass="fixed inset-0 z-40 bg-gray-900 bg-opacity-50 backdrop-blur-md dark:bg-opacity-80"
 	dismissable={false}
 >
-	<ApplicationStatus label="Application Under Review" avatarIcon="mage:preview-circle-fill">
+	<ApplicationStatus label="Submission Under Review" avatarIcon="mage:preview-circle-fill">
 		<p class="text-justify">
-			Hello <b>{data.user?.firsName} {data.user?.lastName}</b>, your application is currently under
+			Hello <b>{data.user?.firsName} {data.user?.lastName}</b>, your submission is currently under
 			review by the HR Department. You will receive an email notification on
 			<b>{data.user?.email ?? ''}</b> upon successful completion of the review process or in case of
 			rejection. If you have any inquiries or need assistance, please feel free to contact the HR Department.
@@ -43,13 +43,13 @@
 	dismissable={false}
 >
 	<ApplicationStatus
-		label="Application Approved"
+		label="Submission Approved"
 		avatarIcon="solar:verified-check-bold"
 		avatarIconTextColor="text-green-500"
 		avatarIconBorderColor="border-green-500"
 	>
 		<p class="text-justify">
-			Hello <b>{data.user?.firsName} {data.user?.lastName}</b>, your application has been approved.
+			Hello <b>{data.user?.firsName} {data.user?.lastName}</b>, your submission has been approved.
 			As a result, you are unable to make any modifications on this portal. Please utilize the staff
 			portal for any necessary modifications. If you have any inquiries or require assistance, do
 			not hesitate to contact the HR Department.

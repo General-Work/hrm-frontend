@@ -14,7 +14,6 @@
 		nssCertificate: null
 	};
 	let busy = false;
-	let isValid = false;
 	let renderId = 0;
 
 	let existingFileUrls: any = {
@@ -26,13 +25,33 @@
 
 	const dispatch = createEventDispatcher();
 	const schema = z.object({
-		passportPicture: fileOrStringValidation(existingFileUrls, 'passportPictureUrl'),
-		birthCertificate: fileOrStringValidation(existingFileUrls, 'birthCertificateUrl'),
-		highestQualificationCertificate: fileOrStringValidation(
-			existingFileUrls,
-			'highestQualificationCertificateUrl'
-		),
-		nssCertificate: fileOrStringValidation(existingFileUrls, 'nssCertificateUrl')
+		passportPicture: z.lazy(() => {
+			if (existingFileUrls['passportPictureUrl'] && !data['passportPicture']) {
+				return z.null();
+			}
+			return z.instanceof(File);
+		}),
+		birthCertificate: z.lazy(() => {
+			if (existingFileUrls['birthCertificateUrl'] && !data['birthCertificate']) {
+				return z.null();
+			}
+			return z.instanceof(File);
+		}),
+		highestQualificationCertificate: z.lazy(() => {
+			if (
+				existingFileUrls['highestQualificationCertificateUrl'] &&
+				!data['highestQualificationCertificate']
+			) {
+				return z.null();
+			}
+			return z.instanceof(File);
+		}),
+		nssCertificate: z.lazy(() => {
+			if (existingFileUrls['nssCertificateUrl'] && !data['nssCertificate']) {
+				return z.null();
+			}
+			return z.instanceof(File);
+		})
 	});
 	function handleSubmit({ detail }: any) {
 		const { values } = detail;
@@ -58,46 +77,65 @@
 			renderId++;
 		}
 	});
+
+	function handleChange({ detail }: any) {
+		// todo: properly dispose the subscriptions on destroy
+		const { values } = detail;
+		if (values) data = values;
+	}
 </script>
 
-<Form {schema} initialValues={data} on:submit={handleSubmit} class="pl-2 flex flex-col gap-4">
-	<Helper>
-		<p>
-			Upload all required attachments. <b>Upload should be of type .jpeg, .png, or .jpg</b>
-		</p>
-	</Helper>
-	<FileUpload
-		label="Passport Picture"
-		name="passportPicture"
-		required
-		acceptedFileTypes={['image/png', 'image/jpeg', 'image/jpg']}
-		bind:existingFileUrl={existingFileUrls.passportPictureUrl}
-		on:clearFileUrl={clearImageUrl('passportPictureUrl')}
-	/>
-	<FileUpload
-		label="Birth Certificate"
-		name="birthCertificate"
-		required
-		acceptedFileTypes={['image/png', 'image/jpeg', 'image/jpg']}
-		bind:existingFileUrl={existingFileUrls.birthCertificateUrl}
-		on:clearFileUrl={clearImageUrl('birthCertificateUrl')}
-	/>
-	<FileUpload
-		label="Highest Qualification Certificate"
-		name="highestQualificationCertificate"
-		required
-		acceptedFileTypes={['image/png', 'image/jpeg', 'image/jpg']}
-		bind:existingFileUrl={existingFileUrls.highestQualificationCertificateUrl}
-		on:clearFileUrl={clearImageUrl('highestQualificationCertificateUrl')}
-	/>
-	<FileUpload
-		label="NSS Certificate"
-		name="nssCertificate"
-		required
-		acceptedFileTypes={['image/png', 'image/jpeg', 'image/jpg']}
-		bind:existingFileUrl={existingFileUrls.nssCertificateUrl}
-		on:clearFileUrl={clearImageUrl('nssCertificateUrl')}
-	/>
+{#key renderId}
+	<Form
+		{schema}
+		initialValues={data}
+		on:submit={handleSubmit}
+		on:change={handleChange}
+		class="pl-2 flex flex-col gap-4"
+		let:isValid
+	>
+		<Helper>
+			<p>
+				Upload all required attachments. <b>Upload should be of type .jpeg, .png, or .jpg</b>
+			</p>
+		</Helper>
+		<FileUpload
+			label="Passport Picture"
+			name="passportPicture"
+			allowCrop
+			required
+			acceptedFileTypes={['image/png', 'image/jpeg', 'image/jpg']}
+			bind:existingFileUrl={existingFileUrls.passportPictureUrl}
+			on:clearFileUrl={clearImageUrl('passportPictureUrl')}
+		/>
+		<FileUpload
+			label="Birth Certificate"
+			name="birthCertificate"
+			required
+			allowCrop
+			acceptedFileTypes={['image/png', 'image/jpeg', 'image/jpg']}
+			bind:existingFileUrl={existingFileUrls.birthCertificateUrl}
+			on:clearFileUrl={clearImageUrl('birthCertificateUrl')}
+		/>
+		<FileUpload
+			label="Highest Qualification Certificate"
+			name="highestQualificationCertificate"
+			required
+			allowCrop
+			acceptedFileTypes={['image/png', 'image/jpeg', 'image/jpg']}
+			bind:existingFileUrl={existingFileUrls.highestQualificationCertificateUrl}
+			on:clearFileUrl={clearImageUrl('highestQualificationCertificateUrl')}
+		/>
+		<FileUpload
+			label="NSS Certificate"
+			name="nssCertificate"
+			required
+			allowCrop
+			acceptedFileTypes={['image/png', 'image/jpeg', 'image/jpg']}
+			bind:existingFileUrl={existingFileUrls.nssCertificateUrl}
+			on:clearFileUrl={clearImageUrl('nssCertificateUrl')}
+		/>
 
-	<slot {isValid} {busy} />
-</Form>
+		<slot {isValid} {busy} />
+	</Form>
+{/key}

@@ -10,11 +10,11 @@
 </script>
 
 <header
-	class=" h-40"
+	class=" h-20"
 	style="background-image: url('{BG}'); background-size: cover; background-position: center;"
 >
-	<div class="lg:container lg:mx-auto px-2 xl:px-40 pt-5">
-		<div class="flex justify-between items-end">
+	<div class="custom-container pt-5">
+		<div class="flex gap-4">
 			<div class="flex items-center gap-3">
 				<Avatar class="bg-[#993306] text-white shadow-sm border shadow-white"
 					>{`${getInitials(user?.firsName)}${getInitials(user?.lastName)}`}</Avatar
@@ -26,18 +26,20 @@
 					<div class="text-xs text-gray-200 font-light w-36">0{user?.contact}</div>
 				</div>
 			</div>
-			<button
-				class="bg-gray-50/40 px-3 py-1.5 rounded-[5px] items-center flex gap-1 text-white text-sm hover:bg-gray-50/50 font-light"
-				on:click={() => dispatch('logout')}
+			<p
+				class=" text-white text-2xl lg:text-3xl flex justify-center font-semibold tracking-tight uppercase flex-grow"
 			>
-				<iconify-icon icon="majesticons:logout" />
-				Logout</button
-			>
+				Applicant's Details
+			</p>
+			<div>
+				<button
+					class="bg-gray-50/40 px-3 py-1.5 rounded-[5px] items-center flex gap-1 text-white text-sm hover:bg-gray-50/50 font-light"
+					on:click={() => dispatch('logout')}
+				>
+					<iconify-icon icon="majesticons:logout" />
+					Logout</button
+				>
+			</div>
 		</div>
-		<p
-			class="py-4 lg:py-0 text-white text-2xl lg:text-3xl flex justify-center font-semibold tracking-wide pb-2"
-		>
-			Applicant's Details
-		</p>
 	</div>
 </header>

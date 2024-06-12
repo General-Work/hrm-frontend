@@ -39,7 +39,7 @@
 	disabled={disabled || busy}
 	{type}
 	class={cn(
-		`rounded-[5px] px-4 py-2 ${kind[color]} disabled:bg-gray-300 disabled:text-gray-400`,
+		`disabled:bg-gray-300 disabled:text-gray-400 rounded-[5px] px-4 py-2 ${kind[color]} `,
 		otherClasses
 	)}
 	on:click

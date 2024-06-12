@@ -1,15 +1,23 @@
-import { userInfo } from '$svc/auth';
-import { redirect } from '@sveltejs/kit';
+import type { IUserInfo } from '$lib/types';
+import { LOGIN_KEY, authToken, readAuthUser } from '$svc/auth';
 
-export function load({ cookies, url, locals }: any) {
-	const userId = locals.userId;
-	if (!userId) {
-		throw redirect(307, `/login?redirectTo=${url.pathname}`);
+export async function load({ cookies }: any) {
+	let user: IUserInfo | null = null;
+	const session = cookies.get(LOGIN_KEY);
+	if (session) {
+		try {
+			const ret = await readAuthUser();
+			//TODO: uncomment this even pushing to vercel
+			// if (!ret.success && ret.message === 'Unauthorized') {
+			// 	cookies.delete(LOGIN_KEY, { path: '/' });
+			// 	authToken.set('');
+			// 	return
+			// }
+			if (ret.success) user = ret.data;
+		} catch (e) {}
 	}
-	let user;
-	userInfo.subscribe((x) => (user = x));
+
 	return {
-		userId,
 		user: user
 	};
 }

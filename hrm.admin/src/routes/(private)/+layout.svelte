@@ -3,16 +3,15 @@
 	import { menuItems } from '$data/userStore';
 	import { activePage, breadCrumb, hideRightDrawer, sideQuickActions } from '$data/appStore';
 	import BreadCrumb from '$cmps/ui/breadCrumb.svelte';
-	import { goto } from '$app/navigation';
-	import { Toaster } from 'svelte-french-toast';
 	import AlertDialog from '$cmps/alerts/alertDialog.svelte';
 	import SidePanel from '$cmps/layout/sidePanel.svelte';
 	import logo from '$lib/images/logo_full.png';
 	import Divider from '$cmps/ui/divider.svelte';
-	import { logoutUser } from '$svc/auth.js';
 	import Dialog from '$cmps/ui/dialog.svelte';
 	import { CloseButton, Drawer } from 'flowbite-svelte';
 	import { sineIn } from 'svelte/easing';
+	import { browser } from '$app/environment';
+	import axios from 'axios';
 
 	export let data;
 
@@ -34,16 +33,10 @@
 	}
 
 	async function signOut() {
-		await logoutUser();
-		goto('/login');
+		await axios.delete('/login');
+		if (browser) window.location.reload();
 	}
 </script>
-
-<Toaster
-	toastOptions={{
-		style: 'background: #363636; color: #fff;'
-	}}
-/>
 
 <div class="w-screen h-screen overflow-hidden relative">
 	<aside id="sidebar" class="relative overflow-y-hidden flex flex-col" class:hide={hideSidebar}>
@@ -104,7 +97,7 @@
 			title={rightDrawerOptions.title || 'Quick Actions'}
 			width={'w-96'}
 		>
-			<div class="h-full flex flex-col overflow-y-hidden ">
+			<div class="h-full flex flex-col overflow-y-hidden">
 				<div class="flex items-center">
 					<h5 class="text-base font-semibold text-gray-500">
 						{rightDrawerOptions.title || 'Quick Actions'}

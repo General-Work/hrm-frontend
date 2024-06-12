@@ -87,6 +87,7 @@
 	} from '$svc/applicant';
 	import axios from 'axios';
 	import { formDataConfig } from '$lib/constants';
+	import Instructions from './partials/instructions.svelte';
 
 	export let user: IApplicantInfo | null;
 	export let formData: ApplicantDetails | null;
@@ -269,27 +270,31 @@
 	});
 </script>
 
-<div class="w-full h-full flex flex-col flex-grow bg-[#f7f8fa] overflow-y-auto">
-	<div class="">
-		<BiodataHeader on:logout={toggleModal} {user} />
+<div class="w-full h-full flex flex-grow overflow-y-auto">
+	<div class=" w-3/12 shrink-0 loginbox">
+		<Instructions />
 	</div>
-	<div class=" lg:container lg:mx-auto xl:px-40 flex-grow transform -translate-y-11">
-		<div class="  bg-[#f7f8fa] px-2 md:px-6 pt-4 rounded-t-lg">
-			<HorizontalStepper
-				fullHeight={true}
-				{steps}
-				bind:busy
-				nextButtonColor="darkBlue"
-				backButtonColor="gold"
-				on:message={onMessage}
-				on:onBack={handleBack}
-				bind:isActiveStep
-				nextText={isActiveStep === 2 ? 'Submit' : 'Save and Continue'}
-			/>
+	<div class="bg-[#f7f8fa] w-full h-full">
+		<div class="flex-grow h-full w-full">
+			<div class="flex flex-col h-full w-full">
+				<BiodataHeader on:logout={toggleModal} {user} />
+				<div
+					class="lg:container lg:mx-auto 2xl:px-40 bg-[#f7f8fa] px-2 md:px-6 pt-4 rounded-t-lg h-full flex-grow"
+				>
+					<HorizontalStepper
+						{steps}
+						bind:busy
+						nextButtonColor="darkBlue"
+						backButtonColor="gold"
+						on:message={onMessage}
+						on:onBack={handleBack}
+						bind:isActiveStep
+						nextText={isActiveStep === 2 ? 'Submit' : 'Save and Continue'}
+					/>
+				</div>
+				<!-- <Footer /> -->
+			</div>
 		</div>
-	</div>
-	<div>
-		<Footer />
 	</div>
 </div>
 

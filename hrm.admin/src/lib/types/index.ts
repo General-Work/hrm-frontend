@@ -16,7 +16,7 @@ export interface ISideMenu {
 	component: any;
 	props: any;
 	title: string;
-	show: boolean
+	show: boolean;
 }
 export interface IRouteItem {
 	name: string;
@@ -24,19 +24,22 @@ export interface IRouteItem {
 }
 
 export interface IUserInfo {
-	id: number;
+	id: string;
+	createdAt: Date;
+	updatedAt: Date;
+	emailVerifiedAt: null | Date;
+	lastSeen: Date;
+	isAccountActive: boolean;
+	hasResetPassword: boolean;
+	staffId: string;
+	roleId: string;
+	unitId: string;
+	departmentId: string;
 	email: string;
-	firstName: string;
-	surname: string;
-	otherNames: string;
-	fullName: string;
-	profileImage: string | null;
-	role: string;
-	roleId: number;
-	status: string;
-	initials: string;
-	permissions: string[];
-	tags: string[];
+	staff: IStaff;
+	role: null | any;
+	unit: null | any;
+	department: null | any;
 }
 
 export interface IRouteInfo {
@@ -125,16 +128,20 @@ export type DocumentKind =
 
 export type DocumentType = 'NEW REGISTRATION' | 'BANK UPDATE';
 
+export type DocumentStatus = 'PENDING' | 'APPROVED' | 'APPOINTED';
+
 export interface IStaff {
 	id: string;
-	createdAt: string;
-	updatedAt: string;
-	lastSeen: string | null;
+	createdAt: Date;
+	updatedAt: Date;
+	lastSeen: null | Date;
+	title: string;
+	gpsAddress: string;
 	staffIdentificationNumber: string;
 	firstName: string;
 	lastName: string;
 	otherNames: string;
-	specialityId: string;
+	specialityId: null | string;
 	dateOfBirth: string;
 	phone: string;
 	gender: string;
@@ -142,13 +149,17 @@ export interface IStaff {
 	email: string;
 	disability: string;
 	passportPicture: string;
+	ecowasCardNumber: string;
 	isApproved: boolean;
-	user: any | null; // Replace 'any' with the actual type if known
-	unit: any | null; // Replace 'any' with the actual type if known
-	speciality: any | null; // Replace 'any' with the actual type if known
-	bankDetail: any | null; // Replace 'any' with the actual type if known
-	familyDetail: any | null; // Replace 'any' with the actual type if known
-	professionalLincense: any | null; // Replace 'any' with the actual type if known
-	staffChildren: any | null; // Replace 'any' with the actual type if known
-	staffAccomodation: any | null; // Replace 'any' with the actual type if known
+	isAlterable: boolean;
+	user: null | any;
+	unit: null | any;
+	speciality: null | any;
+	bankDetail: null | any;
+	familyDetail: null | any;
+	professionalLincense: null | any;
+	staffChildren: null | any;
+	staffAccomodation: null | any;
+	currentAppointment: null | any;
+	appointmentHistory: null | any;
 }

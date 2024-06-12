@@ -1,14 +1,13 @@
 <script lang="ts">
-	import { createEventDispatcher } from "svelte";
+	import { createEventDispatcher } from 'svelte';
 
-    export let url: string
+	export let url: string;
 
-    const dispatch = createEventDispatcher()
+	const dispatch = createEventDispatcher();
 
-    function clearFileUrl() {
-        dispatch("clearFileUrl")
-    }
-    
+	function clearFileUrl() {
+		dispatch('clearFileUrl');
+	}
 </script>
 
 <div class="filepond--wrapper">
@@ -37,7 +36,7 @@
 								type="button"
 								data-align="left"
 								style="transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1); opacity: 1;"
-                                on:click={clearFileUrl}
+								on:click={clearFileUrl}
 								><svg width="26" height="26" viewBox="0 0 26 26" xmlns="http://www.w3.org/2000/svg"
 									><path
 										d="M11.586 13l-2.293 2.293a1 1 0 0 0 1.414 1.414L13 14.414l2.293 2.293a1 1 0 0 0 1.414-1.414L14.414 13l2.293-2.293a1 1 0 0 0-1.414-1.414L13 11.586l-2.293-2.293a1 1 0 0 0-1.414 1.414L11.586 13z"
@@ -45,7 +44,7 @@
 										fill-rule="nonzero"
 									/></svg
 								><span>Remove</span>
-                            </button>
+							</button>
 							<div class="filepond--file-info" style="transform: translate3d(35px, 0px, 0px);">
 								<span class="filepond--file-info-main" aria-hidden="true">&nbsp;</span><span
 									class="filepond--file-info-sub">&nbsp;</span
@@ -88,8 +87,11 @@
 											class="filepond--image-canvas-wrapper"
 											style="transform-origin: 256px 256px; transform: translate3d(-128px, -128px, 0px) scale3d(0.5, 0.5, 1) rotateZ(6.28319rad); opacity: 1; height: 512px; width: 512px;"
 										>
-											<div class="filepond--image-bitmap" style="transform: scale3d(1, 1, 1);">
-                                                <img src={url} alt="preview"/>
+											<div
+												class="filepond--image-bitmap h-full w-full"
+												style="transform: scale3d(1, 1, 1);"
+											>
+												<img src={url} alt="preview" class="w-full h-full" />
 											</div>
 										</div>
 									</div>

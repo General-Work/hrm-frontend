@@ -2,7 +2,8 @@
 	import Form from '$cmps/forms/form.svelte';
 	import TextAreaField from '$cmps/forms/textAreaField.svelte';
 	import Button from '$cmps/ui/button.svelte';
-	import { showError, showInfo } from '$lib/utils';
+	import { endProgress, showError, showInfo, startProgress } from '$lib/utils';
+	import axios from 'axios';
 	import { createEventDispatcher } from 'svelte';
 	// import { get } from 'svelte/store';
 	import * as z from 'zod';
@@ -19,7 +20,27 @@
 	});
 
 	const dispatch = createEventDispatcher();
-	async function submit(reason: string) {}
+	async function submit(reason: string) {
+		try {
+			busy = true;
+			startProgress();
+			const ret = await axios.post(`/staffrequests/${documentId}`, {
+				id: documentId,
+				description: reason
+			});
+			if (!ret.data.success) {
+				showError(ret.data.message);
+				return;
+			}
+			showInfo(ret.data.message);
+			dispatch('close', 'refresh');
+		} catch (error: any) {
+			showError(error.message || error);
+		} finally {
+			busy = false;
+			endProgress();
+		}
+	}
 </script>
 
 <Form class="flex flex-col gap-5" {initialValues} {schema} let:isValid let:values>

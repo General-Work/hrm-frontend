@@ -86,5 +86,7 @@
 		optionalData={{ templates }}
 		isFormData
 		showModalButtons={false}
+		take={17}
+		height={700}
 	/>
 </div>

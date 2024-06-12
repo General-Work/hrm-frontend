@@ -26,35 +26,37 @@
 		contentClass="flex-grow flex flex-col h-full overflow-y-auto scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch tab-content-fill-wrapper"
 	>
 		<TabItem title="Actions" open on:click={(_) => (panelSize = '300px')}>
-			<div class="my-3" class:hidden={!status}>
-				<div>
-					<span class="font-thin text-gray-600">Status:</span>
-					<span>{status}</span>
+			<div class="w-full h-full pb-2">
+				<div class="my-3 h-full" class:hidden={!status}>
+					<div>
+						<span class="font-thin text-gray-600">Status:</span>
+						<span>{status}</span>
+					</div>
 				</div>
+				{#if showActions && actions.length}
+					<div class="flex flex-col gap-3">
+						{#each actions as action}
+							<ActionButton {...action} on:click={(_) => dispatch('click', action)} />
+						{/each}
+					</div>
+				{/if}
+				{#if actions.length && otherActions.length}
+					<Divider />
+				{/if}
+				{#if otherActions?.length}
+					<div class="font-thin mt-3 mb-1 text-gray-400">Supporting Documents</div>
+					<div class="flex flex-col gap-1">
+						{#each otherActions as action}
+							<ActionButton
+								showBg={false}
+								showArrow
+								{...action}
+								on:click={(_) => dispatch('click', action)}
+							/>
+						{/each}
+					</div>
+				{/if}
 			</div>
-			{#if showActions && actions.length}
-				<div class="flex flex-col gap-3">
-					{#each actions as action}
-						<ActionButton {...action} on:click={(_) => dispatch('click', action)} />
-					{/each}
-				</div>
-			{/if}
-			{#if actions.length && otherActions.length}
-				<Divider />
-			{/if}
-			{#if otherActions?.length}
-				<div class="font-thin mt-3 mb-1 text-gray-400">Supporting Documents</div>
-				<div class="flex flex-col gap-1">
-					{#each otherActions as action}
-						<ActionButton
-							showBg={false}
-							showArrow
-							{...action}
-							on:click={(_) => dispatch('click', action)}
-						/>
-					{/each}
-				</div>
-			{/if}
 		</TabItem>
 
 		<TabItem

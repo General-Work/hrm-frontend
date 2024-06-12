@@ -10,3 +10,7 @@
 .loginbox {
 	box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
+
+.custom-container{
+	@apply px-2 md:px-4 lg:container lg:mx-auto
+}

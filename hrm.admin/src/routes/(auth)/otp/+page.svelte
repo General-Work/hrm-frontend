@@ -1,8 +1,9 @@
 <script>
-	import Editor from '$modules/auth/login/editor.svelte';
+	import OtpPage from '$modules/auth/otpPage.svelte';
+
 	import Login from '$modules/auth/login/index.svelte';
 </script>
 
 <Login>
-	<Editor />
+	<OtpPage />
 </Login>

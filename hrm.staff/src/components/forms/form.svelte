@@ -37,6 +37,8 @@
 		initialValues: initialValues
 	});
 
+	// $: formInfo.errors.subscribe((err) => console.log(err));
+
 	// Set the formInfo context
 	setContext(key, formInfo);
 

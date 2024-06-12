@@ -36,6 +36,7 @@
 	import relativeTime from 'dayjs/plugin/relativeTime';
 	import advancedFormat from 'dayjs/plugin/advancedFormat';
 	import { authToken } from '$svc/auth';
+	import { Toaster } from 'svelte-french-toast';
 
 	dayjs.extend(relativeTime);
 	dayjs.extend(advancedFormat);
@@ -46,10 +47,15 @@
 
 	afterNavigate(() => {
 		endProgress();
-	})
+	});
 
 	hideSpinner();
 	authToken.subscribe((val) => (token = val));
 </script>
 
+<Toaster
+	toastOptions={{
+		style: 'background: #363636; color: #fff;'
+	}}
+/>
 <slot />

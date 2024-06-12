@@ -36,7 +36,6 @@
 	};
 
 	let busy = false;
-	let isValid = false;
 	let renderId = 0;
 	const dispatch = createEventDispatcher();
 	const schema = z.object({
@@ -134,6 +133,7 @@
 		initialValues={data}
 		on:submit={handleSubmit}
 		class="pl-2 h-full w-full flex flex-col gap-4"
+		let:isValid
 	>
 		<Title label="Educational Background" />
 		<SelectField
