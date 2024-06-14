@@ -239,20 +239,35 @@
 
 	const debouncedSearch = debounce(fetchData, 300);
 
-	$: if (filters.search) {
-		oldQuery = filters.search;
-		debouncedSearch(+filters.page, filters.search);
-	} else if (oldQuery && !filters.search) {
-		debouncedSearch(+filters.page, filters.search);
-		oldQuery = '';
-	}
+	// $: if (filters.search) {
+	// 	oldQuery = filters.search;
+	// 	debouncedSearch(+filters.page, filters.search);
+	// } else if (oldQuery && !filters.search) {
+	// 	debouncedSearch(+filters.page, filters.search);
+	// 	oldQuery = '';
+	// }
 
 	$: if (reloadData) {
 		fetchData(+filters.page, filters.search);
 		reloadData = false;
 	}
-	onMount( () => {
-		console.log(tableDataInfo)
+
+	async function handleInputChange({ detail }: CustomEvent) {
+		const current = new URLSearchParams(Array.from(searchParams.entries()));
+		const value = detail ? detail : '';
+		if (!value) {
+			current.delete('search');
+		} else {
+			current.set('search', String(value));
+		}
+		const search = current.toString();
+		const page = search ? `?${search}` : '';
+		await goto(`${pathname}${page}`);
+		await fetchData(pageInfo.currentPage, value);
+	}
+
+	onMount(() => {
+		console.log(tableDataInfo);
 		if (tableDataInfo) {
 			pageInfo.setPageSize(tableDataInfo.pageSize);
 			pageInfo.totalItems = tableDataInfo.totalCount;
@@ -272,7 +287,11 @@
 	>
 		<div class="flex flex-col sm:flex-row gap-2 sm:justify-between">
 			<div class:hidden={hideSearchBox} class="flex-grow max-w-md">
-				<TableSearchBox placeholder={searchPlaceholder} value={filters.search} />
+				<TableSearchBox
+					placeholder={searchPlaceholder}
+					value={filters.search}
+					on:input={handleInputChange}
+				/>
 			</div>
 			<div class="flex flex-col sm:flex-row sm:items-center gap-4">
 				<div>

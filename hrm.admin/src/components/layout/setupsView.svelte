@@ -7,6 +7,7 @@
 
 	export let cards: IMenuItem[] = [];
 	export let moreHeight = true;
+	export let moreShadow = false;
 </script>
 
 <ScrollArea otherClasses="w-full h-full ">
@@ -16,7 +17,7 @@
 				{#each cards as card}
 					<div class="space-y-3">
 						<div class="border-b border-gray-300 text-teal-500 text-lg">{card.title}</div>
-						<div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
+						<div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6 px-1">
 							{#if card?.items && card.items.length}
 								{#each card?.items as item (item.title)}
 									<ActionButton
@@ -29,6 +30,7 @@
 										showIconHover={false}
 										{moreHeight}
 										iconSize={20}
+										{moreShadow}
 										href={item.path ?? ''}
 									/>
 								{/each}

@@ -1,32 +1,36 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
-	import { page } from '$app/stores';
+	// import { goto } from '$app/navigation';
+	// import { page } from '$app/stores';
+	import { createEventDispatcher } from 'svelte';
 	export let placeholder = '';
 	export let value = '';
 	export let readonly = false;
-	export let addParams = true;
+	export let addParams = false;
 
-	$: ({ searchParams, pathname } = $page.url);
+	// $: ({ searchParams, pathname } = $page.url);
 
-	const onSearchKeyChange = (event: Event) => {
-		if (!addParams) return;
-		const input = event.target as HTMLInputElement;
-		const current = new URLSearchParams(Array.from(searchParams.entries()));
-		const value = input.value.trim();
+	const dispatch = createEventDispatcher();
 
-		if (!value) {
-			current.delete('search');
-		} else {
-			current.set('search', value);
-		}
+	const onSearchKeyChange = (value: string) => {
+		// // if (!addParams) return;
+		// const input = event.target as HTMLInputElement;
+		// // const current = new URLSearchParams(Array.from(searchParams.entries()));
+		// // const value = input.value.trim();
 
-		const search = current.toString();
-		const query = search ? `?${search}` : '';
-		goto(`${pathname}${query}`);
+		// // if (!value) {
+		// // 	current.delete('query');
+		// // } else {
+		// // 	current.set('query', value);
+		// // }
+
+		// // const search = current.toString();
+		// // const query = search ? `?${search}` : '';
+		// // goto(`${pathname}${query}`);
+		dispatch('input', value);
 	};
 </script>
 
-<section class="bg-gray-50/70 rounded-md flex items-center p-2 border border-gray-300">
+<section class="bg-white rounded-md flex items-center p-2 border border-gray-300">
 	<iconify-icon icon="eva:search-outline" class="text-xl text-gray-500" />
 	<input
 		{value}
@@ -34,18 +38,15 @@
 		{placeholder}
 		{readonly}
 		on:change={(e) => {
-			onSearchKeyChange(e);
+			const input = e?.target?.value || '';
+			value = input;
+			onSearchKeyChange(input);
 		}}
 	/>
 	<button
 		on:click={() => {
 			value = '';
-			if (!addParams) return;
-			const current = new URLSearchParams(Array.from(searchParams.entries()));
-			current.delete('search');
-			const search = current.toString();
-			const query = search ? `?${search}` : '';
-			goto(`${pathname}${query}`);
+			onSearchKeyChange('');
 		}}
 		class="grid hover:text-red-500"
 		class:hidden={!value.length}><iconify-icon icon="iconamoon:close-thin" /></button

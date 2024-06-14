@@ -11,6 +11,8 @@
 	};
 </script>
 
-<Box bgWhite otherClasses="p-4 mt-4" rounded>
-	<Campaign tableDataInfo={data.data} templates={data.optional.templates} />
-</Box>
+<div class="w-full h-full custom-container pt-4">
+	<Box bgWhite shadow rounded>
+		<Campaign tableDataInfo={data.data} templates={data.optional.templates} />
+	</Box>
+</div>

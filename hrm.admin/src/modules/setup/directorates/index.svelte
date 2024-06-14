@@ -49,4 +49,5 @@
 	pageUrl="/applicationsetup/directorate"
 	showActions
 	showEdit
+	fillSpace={false}
 />

@@ -43,6 +43,5 @@
 	updateHeading="Update Professional Body"
 	sideModalSize="sm"
 	showModalButtons
-	createEntry={create}
-	{read}
+	fillSpace={false}
 />

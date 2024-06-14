@@ -260,3 +260,7 @@ left: 60px;
 .typed-cursor {
 	color: white;
 }
+
+.custom-container{
+	@apply px-2 md:px-4 lg:container lg:mx-auto
+}

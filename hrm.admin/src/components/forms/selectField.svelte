@@ -18,6 +18,7 @@
 	export let multiple = false;
 	export let searchable = true;
 	export let clearable = true;
+	export let isLoading = false;
 	export const updateSelection = onUpdateSelection;
 
 	let id = nanoid();
@@ -46,7 +47,7 @@
 	}
 </script>
 
-<fieldset class="flex flex-col gap-2">
+<fieldset class="flex flex-col gap-2 relative">
 	<label for={id} class=" text-gray-600 dark:text-white" class:hidden={!label}>
 		{label}
 		{#if required}
@@ -76,4 +77,7 @@
 			{error}
 		</div>
 	{/if}
+	<div class="absolute right-3 bottom-0 pb-1" class:hidden={!isLoading}>
+		<iconify-icon icon="svg-spinners:180-ring-with-bg" />
+	</div>
 </fieldset>

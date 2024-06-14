@@ -34,9 +34,9 @@
 					</div>
 				</div>
 				{#if showActions && actions.length}
-					<div class="flex flex-col gap-3">
+					<div class="flex flex-col gap-3 px-1">
 						{#each actions as action}
-							<ActionButton {...action} on:click={(_) => dispatch('click', action)} />
+							<ActionButton {...action} on:click={(_) => dispatch('click', action)} moreShadow />
 						{/each}
 					</div>
 				{/if}
@@ -49,6 +49,7 @@
 						{#each otherActions as action}
 							<ActionButton
 								showBg={false}
+								moreShadow
 								showArrow
 								{...action}
 								on:click={(_) => dispatch('click', action)}

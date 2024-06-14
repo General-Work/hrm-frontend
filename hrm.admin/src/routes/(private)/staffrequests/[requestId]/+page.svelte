@@ -26,6 +26,6 @@
 	);
 </script>
 
-<div class="w-full h-full">
+<div class="w-full h-full custom-container">
 	<DocumentViewer bind:title documentId={requestId} meta={data.meta} requestData={data.data} />
 </div>

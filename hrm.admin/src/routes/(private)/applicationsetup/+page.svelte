@@ -10,6 +10,6 @@
 	};
 </script>
 
-<div class="h-full w-full pt-4">
-	<SetupsView cards={data.pages} moreHeight={false} />
+<div class="h-full w-full pt-4 custom-container">
+	<SetupsView cards={data.pages} moreHeight={false} moreShadow />
 </div>

@@ -17,6 +17,6 @@
 	);
 </script>
 
-<div class="px-6 pb-6 w-full h-full">
+<div class="custom-container w-full h-full">
 	<SMS tableDataInfo={data.data} />
 </div>

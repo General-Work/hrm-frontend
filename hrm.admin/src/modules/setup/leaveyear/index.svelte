@@ -43,6 +43,5 @@
 	updateHeading="Update Leave Year"
 	sideModalSize="sm"
 	showModalButtons
-	createEntry={create}
-	{read}
+	fillSpace={false}
 />

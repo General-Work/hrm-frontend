@@ -43,6 +43,5 @@
 	updateHeading="Update Leave Type"
 	sideModalSize="sm"
 	showModalButtons
-	createEntry={create}
-	{read}
+	fillSpace={false}
 />

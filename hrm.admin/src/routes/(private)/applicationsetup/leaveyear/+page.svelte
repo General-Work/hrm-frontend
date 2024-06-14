@@ -3,7 +3,7 @@
 	import { activePage, breadCrumb } from '$data/appStore';
 	import LeaveYear from '$modules/setup/leaveyear/index.svelte';
 
-  export let data
+	export let data;
 	$activePage = {
 		title: 'Leave Year',
 		showBreadCrumb: true
@@ -17,6 +17,8 @@
 	);
 </script>
 
-<Box bgWhite otherClasses="p-4 " rounded>
-	<LeaveYear tableDataInfo={data.data} />
-</Box>
+<div class="w-full h-full custom-container">
+	<Box bgWhite shadow rounded>
+		<LeaveYear tableDataInfo={data.data} />
+	</Box>
+</div>

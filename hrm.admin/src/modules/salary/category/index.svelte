@@ -29,19 +29,18 @@
 	export let tableDataInfo: ITableDataProps<any> | undefined;
 </script>
 
-<div>
-	<DatatablePage
-		{tableDataInfo}
-		tableColumns={columns}
-		showEditorIn="side-modal"
-		addButtonLabel="New Category"
-		addNewHeading="New Category"
-		updateHeading="Update Category"
-		editorComponent={Editor}
-		sideModalSize="sm"
-		showModalButtons
-		pageUrl="/salarysetup/category"
-		showActions
-		showEdit
-	/>
-</div>
+<DatatablePage
+	{tableDataInfo}
+	tableColumns={columns}
+	showEditorIn="side-modal"
+	addButtonLabel="New Category"
+	addNewHeading="New Category"
+	updateHeading="Update Category"
+	editorComponent={Editor}
+	sideModalSize="sm"
+	showModalButtons
+	pageUrl="/salarysetup/category"
+	showActions
+	fillSpace={false}
+	showEdit
+/>

@@ -128,14 +128,16 @@
 	}
 </script>
 
-<Box bgWhite otherClasses="p-4 mt-4" rounded>
+<Box bgWhite shadow rounded>
 	<!-- <Table {tableColumns} data={[]} headerColor="sky" /> -->
 	<DatatablePage
 		showIndex
 		{tableColumns}
 		{tableDataInfo}
 		editorComponent={{}}
+		fillSpace={false}
 		showAdd={false}
+		showTopActionsBackground={false}
 		rowClickable
 		bind:reloadData
 		searchPlaceholder="Staff Number..."
@@ -146,9 +148,7 @@
 					`/staffrequests/${detail.id}?q=${searchParam}&type=${detail.requestType}&status=${detail.status}`
 				);
 			} else {
-				goto(
-					`/staffrequests/${detail.id}?type=${detail.requestType}&status=${detail.status}`
-				);
+				goto(`/staffrequests/${detail.id}?type=${detail.requestType}&status=${detail.status}`);
 			}
 		}}
 	>

@@ -56,4 +56,5 @@
 	optionalData={{ directorates }}
 	showActions
 	showEdit
+	fillSpace={false}
 />

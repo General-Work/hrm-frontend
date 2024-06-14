@@ -68,6 +68,5 @@
 	updateHeading="Update Record"
 	sideModalSize="sm"
 	showModalButtons
-	createEntry={create}
-	{read}
+	fillSpace={false}
 />

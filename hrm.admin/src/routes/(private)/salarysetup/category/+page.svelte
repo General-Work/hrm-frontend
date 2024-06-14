@@ -19,6 +19,8 @@
 </script>
 
 <!-- <div class="px-6 pb-6 w-full h-full"> -->
-<Box bgWhite otherClasses="p-4 " rounded>
-	<Category tableDataInfo={data.data} />
-</Box>
+<div class="w-full h-full custom-container">
+	<Box bgWhite otherClasses="" rounded shadow>
+		<Category tableDataInfo={data.data} />
+	</Box>
+</div>

@@ -50,25 +50,24 @@
 	}
 </script>
 
-<div>
-	<DatatablePage
-		{tableDataInfo}
-		tableColumns={columns}
-		showEditorIn="side-modal"
-		addButtonLabel="New Grade"
-		addNewHeading="New Grade"
-		updateHeading="Update Grade"
-		editorComponent={Editor}
-		sideModalSize="md"
-		showModalButtons
-		pageUrl="/salarysetup/grade"
-		allowDispatchAfterAction
-		allowLoadAfterCreate={false}
-		on:afterAction={afterAction}
-		optionalData={{ category }}
-		{reloadData}
-	/>
-</div>
+<DatatablePage
+	{tableDataInfo}
+	tableColumns={columns}
+	showEditorIn="side-modal"
+	addButtonLabel="New Grade"
+	addNewHeading="New Grade"
+	updateHeading="Update Grade"
+	editorComponent={Editor}
+	sideModalSize="md"
+	showModalButtons
+	pageUrl="/salarysetup/grade"
+	allowDispatchAfterAction
+	allowLoadAfterCreate={false}
+	on:afterAction={afterAction}
+	optionalData={{ category }}
+	{reloadData}
+	fillSpace={false}
+/>
 <Modal open={showModal} dismissable={false} size="lg" title="Salaries for {formData.grade}">
 	<SalaryEditor
 		values={formData}

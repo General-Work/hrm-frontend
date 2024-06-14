@@ -19,11 +19,13 @@
 	};
 </script>
 
-<RequestTable
-	tableDataInfo={data.data}
-	{searchParam}
-	requestTypes={Object.values(data.documentKinds)}
-	currentRequest={searchParam && data.documentKinds
-		? data.documentKinds[searchParam]
-		: data.documentKinds['all']}
-/>
+<div class="w-full h-full custom-container pt-4">
+	<RequestTable
+		tableDataInfo={data.data}
+		{searchParam}
+		requestTypes={Object.values(data.documentKinds)}
+		currentRequest={searchParam && data.documentKinds
+			? data.documentKinds[searchParam]
+			: data.documentKinds['all']}
+	/>
+</div>

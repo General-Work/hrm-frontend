@@ -23,10 +23,10 @@
 		{ title: 'Event 2', start: '2024-04-15' }
 	];
 
-  const year = new Date().getFullYear()
+	const year = new Date().getFullYear();
 </script>
 
-<div class=" h-full w-full flex flex-col gap-3">
+<div class=" h-full w-full flex flex-col gap-3 custom-container">
 	<Calendar
 		holidays={readHolidays(year)}
 		height={650}

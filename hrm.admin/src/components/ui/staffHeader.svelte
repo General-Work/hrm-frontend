@@ -3,7 +3,7 @@
 	import Box from './box.svelte';
 </script>
 
-<Box bgWhite rounded otherClasses="p-4">
+<Box bgWhite rounded shadow otherClasses="p-4">
 	<div class="flex flex-col lg:flex-row lg:items-center gap-4">
 		<div class="flex justify-center lg:justify-start">
 			<Avatar

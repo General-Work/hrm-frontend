@@ -59,7 +59,7 @@
 		try {
 			isLoading = true;
 
-			const ret = await axios.post('/login', { email, password });
+			const ret = await axios.patch('/login', { email, password });
 			if (!ret.data.success) {
 				showError(ret.data.message);
 				return;

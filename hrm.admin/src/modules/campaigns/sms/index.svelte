@@ -72,21 +72,20 @@
 	export let templates: any;
 </script>
 
-<div>
-	<DatatablePage
-		{tableDataInfo}
-		tableColumns={columns}
-		showEditorIn="side-modal"
-		addButtonLabel="New Campaign"
-		addNewHeading="New Campaign"
-		updateHeading="Update Campaign"
-		editorComponent={Editor}
-		sideModalSize="lg"
-		pageUrl="/campaigns"
-		optionalData={{ templates }}
-		isFormData
-		showModalButtons={false}
-		take={17}
-		height={700}
-	/>
-</div>
+<DatatablePage
+	{tableDataInfo}
+	tableColumns={columns}
+	showEditorIn="side-modal"
+	addButtonLabel="New Campaign"
+	addNewHeading="New Campaign"
+	updateHeading="Update Campaign"
+	editorComponent={Editor}
+	sideModalSize="lg"
+	pageUrl="/campaigns"
+	optionalData={{ templates }}
+	isFormData
+	showModalButtons={false}
+	take={17}
+	height={700}
+	fillSpace={false}
+/>

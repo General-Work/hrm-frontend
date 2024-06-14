@@ -16,6 +16,8 @@
 	);
 </script>
 
-<Box bgWhite otherClasses="p-4 " rounded>
-	<PlanYear tableDataInfo={data.data} />
-</Box>
+<div class="w-full h-full custom-container">
+	<Box bgWhite shadow rounded>
+		<PlanYear tableDataInfo={data.data} />
+	</Box>
+</div>

@@ -56,4 +56,5 @@
 	showEdit
 	pageUrl="/applicationsetup/units"
 	optionalData={{ directorates }}
+	fillSpace={false}
 />

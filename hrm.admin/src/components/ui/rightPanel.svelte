@@ -30,6 +30,7 @@
 						active={activePage === item.path}
 						href={item.path ?? ''}
 						iconSize={20}
+						moreShadow
 					/>
 				</li>
 			{/each}

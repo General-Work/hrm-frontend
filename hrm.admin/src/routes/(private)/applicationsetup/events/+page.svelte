@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Calendar from '$cmps/layout/calendar.svelte';
+	import Box from '$cmps/ui/box.svelte';
 	import { activePage, breadCrumb } from '$data/appStore';
 	import Editor from './editor.svelte';
 
@@ -21,6 +22,6 @@
 	];
 </script>
 
-<div class=" h-full w-full flex flex-col gap-3">
+<div class=" h-full w-full flex flex-col gap-3 custom-container">
 	<Calendar {events} height={650} showAdd addLabel="Add Event" editorComponent={Editor} />
 </div>

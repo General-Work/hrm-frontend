@@ -79,7 +79,7 @@
 				</div>
 			</div>
 			<div class=" w-full h-full flex-grow overflow-hidden">
-				<div class="px-2 md:px-4 2xl:px-0 lg:container lg:mx-auto w-full h-full">
+				<div class="w-full h-full">
 					<slot />
 				</div>
 			</div>

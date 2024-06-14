@@ -5,7 +5,7 @@
 		{
 			header: 'Name',
 			accessor: 'specialityName'
-		},
+		}
 		// { header: 'Category', accessor: (row:ISpecialty) =>  row.}
 	];
 </script>
@@ -21,20 +21,19 @@
 	export let category: any;
 </script>
 
-<div>
-	<DatatablePage
-		{tableDataInfo}
-		tableColumns={columns}
-		showEditorIn="side-modal"
-		addButtonLabel="New Specialty"
-		addNewHeading="New Specialty"
-		updateHeading="Update Specialty"
-		editorComponent={Editor}
-		sideModalSize="sm"
-		showModalButtons
-		showActions
-		showEdit
-		pageUrl="/salarysetup/specialty"
-		optionalData={{ category }}
-	/>
-</div>
+<DatatablePage
+	{tableDataInfo}
+	tableColumns={columns}
+	showEditorIn="side-modal"
+	addButtonLabel="New Specialty"
+	addNewHeading="New Specialty"
+	updateHeading="Update Specialty"
+	editorComponent={Editor}
+	sideModalSize="sm"
+	showModalButtons
+	showActions
+	showEdit
+	fillSpace={false}
+	pageUrl="/salarysetup/specialty"
+	optionalData={{ category }}
+/>

@@ -17,6 +17,8 @@
 	);
 </script>
 
-<Box bgWhite otherClasses="p-4 " rounded>
-	<Department tableDataInfo={data.data} directorates={data.optional.direcorates}/>
-</Box>
+<div class="w-full h-full custom-container">
+	<Box bgWhite shadow rounded>
+		<Department tableDataInfo={data.data} directorates={data.optional.direcorates} />
+	</Box>
+</div>

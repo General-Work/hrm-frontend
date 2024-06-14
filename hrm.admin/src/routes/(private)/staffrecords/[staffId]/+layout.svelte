@@ -19,14 +19,16 @@
 	});
 </script>
 
-<div class=" w-full h-full flex gap-4 overflow-hidden">
+<div class=" w-full h-full flex gap-4 overflow-hidden custom-container">
 	<section class=" flex-grow flex flex-col gap-3 h-full">
-		<div>
+		<div class="p-1 w-full">
 			<StaffHeader />
 		</div>
-		<Box otherClasses="p-4 " rounded bgWhite>
-			<slot />
-		</Box>
+		<div class=" px-1 w-full h-full overflow-y-hidden">
+			<Box otherClasses="p-4 w-full h-full" shadow rounded bgWhite>
+				<slot />
+			</Box>
+		</div>
 	</section>
 	<div class="h-full bg-gray-200 w-0.5 pb-10 hidden lg:block" />
 	<aside class="hidden w-[19rem] shrink-0" class:lg:block={$hideRightDrawer}>

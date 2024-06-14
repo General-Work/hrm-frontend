@@ -9,6 +9,8 @@
 	};
 </script>
 
-<!-- <Box bgWhite otherClasses="p-4 mt-4" rounded> -->
-	<UserManagement tableDataInfo={data.data} />
-<!-- </Box> -->
+<div class="w-full h-full pt-4 custom-container">
+	<Box bgWhite shadow rounded>
+		<UserManagement tableDataInfo={data.data} />
+	</Box>
+</div>

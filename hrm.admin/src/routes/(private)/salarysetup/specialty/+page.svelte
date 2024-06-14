@@ -18,6 +18,8 @@
 	);
 </script>
 
-<Box bgWhite otherClasses="p-4" rounded>
-	<Specialty tableDataInfo={data.data} category={data.optional.category} /></Box
->
+<div class="w-full h-full custom-container">
+	<Box bgWhite shadow rounded>
+		<Specialty tableDataInfo={data.data} category={data.optional.category} /></Box
+	>
+</div>

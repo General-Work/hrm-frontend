@@ -41,4 +41,5 @@
 	pageUrl="/applicationsetup/banks"
 	showActions
 	showEdit
+	fillSpace={false}
 />

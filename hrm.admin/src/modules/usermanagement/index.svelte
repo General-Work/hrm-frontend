@@ -72,18 +72,15 @@
 	export let tableDataInfo: ITableDataProps<any> | undefined;
 </script>
 
-<Box bgWhite otherClasses="p-4 mt-4" rounded>
-	<DatatablePage
-		{tableDataInfo}
-		tableColumns={columns}
-		showEditorIn="side-modal"
-		addButtonLabel="New User"
-		addNewHeading="New User"
-		updateHeading="Update User"
-		editorComponent={Editor}
-		sideModalSize="md"
-		showModalButtons
-		createEntry={create}
-		{read}
-	/>
-</Box>
+<DatatablePage
+	{tableDataInfo}
+	tableColumns={columns}
+	showEditorIn="side-modal"
+	addButtonLabel="New User"
+	addNewHeading="New User"
+	updateHeading="Update User"
+	editorComponent={Editor}
+	sideModalSize="md"
+	showModalButtons
+	fillSpace={false}
+/>

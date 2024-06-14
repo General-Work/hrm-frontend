@@ -7,4 +7,7 @@
 		showBreadCrumb: false
 	};
 </script>
-<Demo />
+
+<div class="w-full h-full custom-container">
+	<Demo />
+</div>

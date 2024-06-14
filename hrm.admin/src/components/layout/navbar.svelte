@@ -7,7 +7,7 @@
 	import Dropdown from '$cmps/ui/dropdown.svelte';
 	import DropdownItem from '$cmps/ui/dropdownItem.svelte';
 	import Divider from '$cmps/ui/divider.svelte';
-	import { getInitials } from '$lib/utils';
+	import { getInitials, getNewInitials } from '$lib/utils';
 
 	export let hideSidebar = false;
 	export let user: IUserInfo | null | undefined;
@@ -46,19 +46,19 @@
 							class="rounded-full w-full object-cover h-full"
 						/>
 					{:else}
-						{`${getInitials(user?.staff.firstName)}${getInitials(user?.staff.lastName)}`}
+						{`${user?.staff.firstName?.slice(0, 1) ?? ''}${user?.staff.lastName?.slice(0, 1) ?? ''}`}
 					{/if}
 				</Avatar>
 				<div class="hidden sm:block text-left text-xs sm:pr-2">
 					<div class="w-20 truncate">
-						<span class="font-semibold">{user?.staff.firstName}</span>
+						<span class="font-semibold">{user?.staff.firstName ?? ''}</span>
 					</div>
 					{#if user?.role}
 						<div class="text-gray-500 truncate w-20">
-							<span>{user.role}</span>
+							<span>{user.role ?? ''}</span>
 						</div>
 					{:else}
-						<p class="text-gray-500 truncate w-20">{user?.email}</p>
+						<p class="text-gray-500 truncate w-20">{user?.email ?? ''}</p>
 					{/if}
 				</div>
 			</Button>
@@ -70,11 +70,11 @@
 					>
 					<div class="block truncate text-sm">
 						<span class="font-light text-gray-500">Role:</span>
-						<span class="font-bold">{user?.role}</span>
+						<span class="font-bold">{user?.role ?? ''}</span>
 					</div>
 					<div class="block truncate text-sm">
 						<span class="font-light text-gray-500">Email:</span>
-						<span class="font-bold">{user?.email}</span>
+						<span class="font-bold">{user?.email ?? ''}</span>
 					</div>
 				</div>
 				<DropdownItem href="/profile">Profile</DropdownItem>

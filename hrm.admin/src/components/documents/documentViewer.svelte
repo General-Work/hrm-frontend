@@ -220,14 +220,14 @@
 		component: RightPanel,
 		props: {
 			showActions,
-				actions:meta.actions,
-				otherActions:document.otherActions,
-				status:meta.status,
-				feeds:meta.feeds,
-				// on:click:{onAction}
-				documentId,
-				click:onAction
-		 },
+			actions: meta.actions,
+			otherActions: document.otherActions,
+			status: meta.status,
+			feeds: meta.feeds,
+			// on:click:{onAction}
+			documentId,
+			click: onAction
+		},
 		title: 'Actions',
 		show: true
 	};
@@ -238,18 +238,17 @@
 </script>
 
 <div class="h-full flex flex-col w-full">
-	<div
-		class="flex-grow shadow-lgx flex bg-gray-100x xborder-1 w-full h-full"
-		style="box-shadowx: 0 2px 2px rgba(204,197,185,.5)"
-	>
+	<div class="flex-grow shadow-lgx flex bg-gray-100x xborder-1 w-full h-full">
 		<!-- add p-2 to the class -->
 		<ScrollArea otherClasses="flex-grow rounded-lg p-2  h-full w-full ">
-			<Canvas
-				bind:scrollingDiv
-				children={elements}
-				on:close={closeAComponent}
-				on:toggleCollapse={toggleCollapse}
-			/>
+			<div class="loginbox">
+				<Canvas
+					bind:scrollingDiv
+					children={elements}
+					on:close={closeAComponent}
+					on:toggleCollapse={toggleCollapse}
+				/>
+			</div>
 		</ScrollArea>
 		<div class="hidden h-full flex-grow" class:lg:block={$hideRightDrawer}>
 			<RightPanel
