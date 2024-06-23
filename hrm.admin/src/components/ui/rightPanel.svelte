@@ -5,11 +5,13 @@
 	import CardButton, { type IButtonConfig } from '$cmps/ui/cardButton.svelte';
 	import { createEventDispatcher } from 'svelte';
 	import ActionButton from './actionButton.svelte';
+	import { addQueryParams } from '$lib/utils';
 
 	export let showActionLabel = false;
 	export let buttons: IButtonConfig[] = [];
 	const dispatch = createEventDispatcher();
 	$: activePage = $page.url.pathname;
+	$: currentPage = addQueryParams(activePage, $page.url.searchParams);
 </script>
 
 <aside class="w-full h-full flex flex-col">
@@ -27,7 +29,7 @@
 						showBg
 						iconBgColor={item.iconBgColor}
 						iconColor={item.iconColor}
-						active={activePage === item.path}
+						active={currentPage === item.path}
 						href={item.path ?? ''}
 						iconSize={20}
 						moreShadow

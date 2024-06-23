@@ -5,13 +5,16 @@
 	import * as z from 'zod';
 	import Button from './button.svelte';
 	import ControlField from '$cmps/forms/controlField.svelte';
+	import { createEventDispatcher } from 'svelte';
 	export let requestTypes: any[] = [];
 	export let currentRequest: any = {};
 
+	const dispatch = createEventDispatcher();
 	const schema = z.object({});
 	let formData = {
 		requestType: '',
-		dateRange: '',
+		startDate: '',
+		endDate: '',
 		remember: ''
 	};
 
@@ -32,28 +35,39 @@
 			>Filters</legend
 		> -->
 		<div class="flex flex-col lg:flex-row gap-2">
-			<div class=" flex-grow max-w-4xl">
-				<div class="grid grid-col-1 lg:grid-cols-3 gap-3 items-center">
+			<div class=" flex-grow max-w-7xl">
+				<div class="grid grid-col-1 lg:grid-cols-4 gap-3 items-center">
 					<SelectField
 						options={requestTypes.map((x) => ({ path: x.path, title: x.title }))}
 						placeholder="Request Types"
 						name="requestType"
+						on:change={({ detail }) => dispatch('typeChange', detail.path)}
+						clearable={false}
 					/>
-					<DateField mode="range" name="dateRange" placeholder="Filter by date range" />
+					<DateField
+						name="startDate"
+						placeholder="Start Date"
+						on:change={({ detail }) => dispatch('startDate', detail.dateStr)}
+					/>
+					<DateField
+						name="endDate"
+						placeholder="End Date"
+						on:change={({ detail }) => dispatch('endDate', detail.dateStr)}
+					/>
 					<ControlField label="Remember this " name="remember" type="checkbox" />
 				</div>
 			</div>
-			<Button
+			<!-- <Button
 				leadingIcon="streamline:send-email-solid"
 				label="Submit"
 				otherClasses="py-1.5 lg:py-0 bg-blue-100 border-blue-300 hover:bg-blue-200 lg:ml-2"
 				type="submit"
-			/>
+			/> -->
 			<Button
 				on:click
-				label="Reset"
+				label="Reset Filters"
 				leadingIcon="lets-icons:close-round-fill"
-				otherClasses="py-1.5 lg:py-0 bg-red-100 border-red-300 hover:bg-red-200 lg:ml-2"
+				otherClasses="py-1.5 px-1.5 text-sm lg:py-0 bg-red-50 border-red-300 hover:bg-red-100"
 				type="reset"
 			/>
 		</div>

@@ -46,3 +46,4 @@ export async function updateSpecialty(id: string, data: SpecialtyDto) {
 		return axiosError(error);
 	}
 }
+

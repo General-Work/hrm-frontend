@@ -1,8 +1,15 @@
 <script lang="ts" context="module">
 	export interface IButtonConfig {
-		kind: string;
+		icon: string;
+		iconBgColor: string;
+		iconSize: number;
+		iconColor: string;
 		label: string;
 		subLabel: string;
+		showBg: boolean;
+		showArrow: boolean;
+		showIconHover: boolean;
+		moreHeight: boolean;
 	}
 	export type IButtonConfigKind =
 		| 'generic'

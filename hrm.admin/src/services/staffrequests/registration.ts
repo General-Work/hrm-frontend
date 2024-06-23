@@ -1,3 +1,6 @@
+import { axiosInstance } from '$routes/+layout.svelte';
+import { axiosError, callResult } from '$svc/shared';
+
 export interface INewRegistration {
 	id: string;
 	createdAt: Date;
@@ -47,4 +50,31 @@ export interface INewRegistration {
 			certificate: string;
 		}[];
 	};
+}
+
+export interface AppointmentDto {
+	polymorphicId: string;
+	gradeId: string;
+	appointmentType: string;
+	staffType: string;
+	paymentSource: string;
+	endDate: string | null;
+	notionalDate: string | null;
+	substantiveDate: string | null;
+	firstAppointmentNotionalDate: string | null;
+	firstAppointmentSubstantiveDate: string | null;
+	firstAppointmentGradeId: string | null;
+	step: string;
+	staffSpecialityId: string | null;
+}
+
+export async function addNewAppointmentDetails(data: AppointmentDto) {
+	try {
+		console.log(data);
+		const ret = await axiosInstance.post(`/staff-request/new-appointment`, { data });
+		return callResult(ret, ret.data);
+	} catch (error) {
+		// console.log(error);
+		return axiosError(error);
+	}
 }

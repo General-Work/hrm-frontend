@@ -63,3 +63,12 @@ export async function postGradeSalary(gradeId: string, data: IGradeSalaryDto[]) 
 		return axiosError(error);
 	}
 }
+
+export async function readCategoryAndSpecialtyByGradeId(id: string) {
+	try {
+		const ret = await axiosInstance.get(`/grade/category-from/${id}/all`);
+		return queryResult(ret, ret.data);
+	} catch (error) {
+		return axiosError(error);
+	}
+}

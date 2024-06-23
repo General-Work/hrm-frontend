@@ -14,7 +14,7 @@ export function getComponent(type: DocumentKind) {
 	}
 }
 
-function defaultActions(id: string, staffNumber?: string): IRequestAction[] {
+function defaultActions(id: string, polymorphicId: string, staffNumber?: string): IRequestAction[] {
 	return [
 		{
 			kind: 'approve',
@@ -26,6 +26,7 @@ function defaultActions(id: string, staffNumber?: string): IRequestAction[] {
 					title: 'Approve Request',
 					props: {
 						documentId: id,
+						polymorphicId,
 						staffNumber: staffNumber
 						// size?: IModalSize;
 					}
@@ -42,6 +43,7 @@ function defaultActions(id: string, staffNumber?: string): IRequestAction[] {
 					title: 'Reject Request',
 					props: {
 						documentId: id,
+						polymorphicId,
 						staffNumber: staffNumber
 						// size?: IModalSize;
 					}
@@ -58,6 +60,7 @@ function defaultActions(id: string, staffNumber?: string): IRequestAction[] {
 					title: 'Transfer Request',
 					props: {
 						documentId: id,
+						polymorphicId,
 						staffNumber: staffNumber
 						// size?: IModalSize;
 					}
@@ -70,20 +73,65 @@ function defaultActions(id: string, staffNumber?: string): IRequestAction[] {
 export function getActions(
 	type: DocumentKind,
 	id: string,
+	polymorphicId: string,
 	status: DocumentStatus,
 	staffNumber?: string
 ) {
-  // console.log(status,type)
+	// console.log(status,type)
 	let buttons: IRequestAction[] = [];
-	if (status !== 'PENDING') return buttons;
+	if (type !== 'new-registeration' && status !== 'PENDING') return buttons;
 	switch (type) {
 		case 'new-registeration':
-			buttons = defaultActions(id, staffNumber);
+			buttons =
+				status === 'PENDING'
+					? defaultActions(id, polymorphicId, staffNumber)
+					: status === 'APPROVED'
+						? [
+								{
+									kind: 'approve',
+									label: 'Appointment Details',
+									cmd: {
+										action: 'link',
+										args: {
+											path: `/staffrecords/${id}/appointmentdetails?applicant=true&polymorphicId=${polymorphicId}`,
+											type: 'acceptRequest',
+											title: 'Approve Request',
+											props: {
+												documentId: id,
+												polymorphicId,
+												staffNumber: staffNumber
+												// size?: IModalSize;
+											}
+										}
+									}
+								}
+							]
+						: status === 'APPOINTED'
+							? [
+									{
+										kind: 'approve',
+										label: 'Postings',
+										cmd: {
+											action: 'link',
+											args: {
+												type: 'acceptRequest',
+												title: 'Approve Request',
+												path: `/staffrecords/${id}/postings?applicant=true&polymorphicId=${polymorphicId}`,
+												props: {
+													documentId: id,
+													polymorphicId,
+													staffNumber: staffNumber
+												}
+											}
+										}
+									}
+								]
+							: [];
 			break;
 		case 'bank-update':
-			buttons = defaultActions(id, staffNumber);
+			buttons = defaultActions(id, polymorphicId, staffNumber);
 		case 'biodata':
-			buttons = defaultActions(id, staffNumber);
+			buttons = defaultActions(id, polymorphicId, staffNumber);
 		default:
 			// console.log('not found', type);
 			break;

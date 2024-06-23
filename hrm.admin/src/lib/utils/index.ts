@@ -171,6 +171,28 @@ export function validateGhanaCard(value: string) {
 	return reqex.test(value);
 }
 
+export function addQueryParams(
+	pathname: string,
+	searchParams: URLSearchParams,
+	data?: Record<string, any>
+): string {
+	const current = new URLSearchParams(Array.from(searchParams.entries()));
+
+	if (data) {
+		Object.entries(data).forEach(([key, value]) => {
+			if (value !== undefined && value !== null && value) {
+				current.set(key, String(value));
+			} else {
+				current.delete(key);
+			}
+		});
+	}
+
+	const params = current.toString();
+	const query = params ? `?${params}` : '';
+	return `${pathname}${query}`;
+}
+
 export function startProgress() {
 	NProgress.start();
 }

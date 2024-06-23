@@ -41,6 +41,7 @@
 	import BankUpdateEditor from './editors/bankUpdateEditor.svelte';
 	import BiodataEditor from './editors/biodataEditor.svelte';
 	import type { ISideMenu } from '$lib/types';
+	import { goto } from '$app/navigation';
 
 	initMappers(); // set the component mappers
 
@@ -115,7 +116,7 @@
 				collapsible: false,
 				closable: false,
 				title: '',
-				props: { requestId: documentId, data: requestData }
+				props: { documentId: documentId, data: requestData }
 			},
 			true
 		);
@@ -181,6 +182,13 @@
 						}
 					};
 				});
+				break;
+			case 'link':
+				if (!cmd.args) {
+					showError('No arguments provided for inlineViewer. No action will be taken');
+					return;
+				}
+				goto(cmd.args.path || '');
 				break;
 			default:
 				showError(`No handler defiined for command ${cmd.action}`);

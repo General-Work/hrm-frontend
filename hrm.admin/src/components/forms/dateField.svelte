@@ -45,7 +45,7 @@
 
 	function handleChange(event: any) {
 		const [selectedDates, dateStr] = event.detail;
-		// console.log({ selectedDates, dateStr });
+		dispatch('change', { selectedDates, dateStr });
 	}
 
 	$: hasError = $touched[name] && $errors[name]?.length;

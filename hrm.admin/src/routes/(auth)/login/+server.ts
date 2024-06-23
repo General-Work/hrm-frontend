@@ -28,6 +28,7 @@ export const POST = async ({ request, cookies }) => {
 		return json({ message: 'Bad Request', status: 400, success: false });
 	} else {
 		const ret = await accountConfirmation(body);
+		// console.log(ret)
 		if (!ret.success) {
 			return json({ message: ret.message, status: 400, success: false });
 		}

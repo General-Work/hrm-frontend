@@ -1,11 +1,17 @@
 <script>
 	import { page } from '$app/stores';
 	import { activePage, breadCrumb } from '$data/appStore';
+	import { extractQueryParam } from '$lib/utils';
 	import Details from '$modules/staffrecords/appointmentDetails.svelte';
 
-	$activePage = {
+	export let data;
+
+	$: isApplicant = extractQueryParam($page.url.search, 'applicant');
+	$: polymorphicId = extractQueryParam($page.url.search, 'polymorphicId');
+
+	$: $activePage = {
 		title: 'Appointment Details',
-		showBreadCrumb: true
+		showBreadCrumb: isApplicant === 'true' ? false : true
 	};
 	$: id = $page.params.staffId;
 	$: breadCrumb.addToFirstIndex(
@@ -18,4 +24,4 @@
 	);
 </script>
 
-<Details />
+<Details grade={data.grades} isApplicant={isApplicant === 'true' ? true : false} {polymorphicId} />

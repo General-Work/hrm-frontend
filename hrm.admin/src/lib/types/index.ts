@@ -84,7 +84,7 @@ export interface IActivity {
 	type?: string;
 }
 
-type ViewerKind = 'inlineViewer' | 'modalViewer';
+type ViewerKind = 'inlineViewer' | 'modalViewer' | 'link';
 
 export interface IRequestAction {
 	kind: IButtonConfigKind;
@@ -95,7 +95,9 @@ export interface IRequestAction {
 		args: {
 			type: string;
 			title: string;
+			path?: string;
 			props: {
+				polymorphicId: string;
 				documentId: string;
 				staffNumber?: string;
 				size?: IModalSize;
@@ -162,4 +164,16 @@ export interface IStaff {
 	staffAccomodation: null | any;
 	currentAppointment: null | any;
 	appointmentHistory: null | any;
+}
+
+export interface IStaffHeader {
+	passportPicture: string;
+	fullName: string;
+	status: 'ACTIVE' | 'APPLICANT';
+	staffId: string;
+	directorate: string;
+	department: string;
+	unit: string;
+	email: string;
+	phone: string;
 }

@@ -1,11 +1,13 @@
 <script>
 	import { page } from '$app/stores';
 	import { activePage, breadCrumb } from '$data/appStore';
+	import { extractQueryParam } from '$lib/utils';
 	import Details from '$modules/staffrecords/postings.svelte';
+	$: isApplicant = extractQueryParam($page.url.search, 'applicant');
 
-	$activePage = {
+	$: $activePage = {
 		title: 'Postings',
-		showBreadCrumb: true
+		showBreadCrumb: isApplicant === 'true' ? false : false
 	};
 	$: id = $page.params.staffId;
 	breadCrumb.addToFirstIndex(
@@ -18,4 +20,4 @@
 	);
 </script>
 
-<Details />
+<Details isApplicant={isApplicant === 'true' ? true : false} />

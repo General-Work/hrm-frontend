@@ -30,7 +30,7 @@
 
 <div class="w-full bg-cover hidden lg:block relative max-w-md lg:max-w-2xl lg:w-7/12 mx-2 px-2">
   <div class='bg-pink-100/40 mx-auto h-8 w-fit max-w-3xl rounded-md px-4 mb-8'>
-    <span bind:this={el} class='text-white/70 w-max my-auto text-center font-thin font-mono tracking-2 uppercase text-2xl break-words'></span>
+    <span bind:this={el} class='text-white/70 w-max my-auto text-center font-thin font-mono antialiased tracking-tight uppercase text-2xl break-words'></span>
     <nav>
 
     </nav>

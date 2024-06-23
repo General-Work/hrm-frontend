@@ -1,34 +1,49 @@
-<script>
+<script lang="ts">
 	import { Avatar, Badge } from 'flowbite-svelte';
 	import Box from './box.svelte';
+	import type { IStaffHeader } from '$lib/types';
+
+	export let data = {} as IStaffHeader;
 </script>
 
 <Box bgWhite rounded shadow otherClasses="p-4">
 	<div class="flex flex-col lg:flex-row lg:items-center gap-4">
-		<div class="flex justify-center lg:justify-start">
-			<Avatar
-				src="https://t3.ftcdn.net/jpg/03/73/52/24/360_F_373522464_UzkM3IvqgqpS0qIy2kpkB5QiV7Bw7NyS.jpg"
-				class="w-20 h-20"
-			/>
+		<div class="flex justify-center lg:justify-start shrink-0">
+			<Avatar src={data.passportPicture || ''} class="w-20 h-20 shrink-0" alt="pic" />
 		</div>
 		<div class="flex flex-col gap-2">
 			<div class="flex justify-center lg:justify-start items-center gap-5">
-				<p class="text-[20px] uppercase">Yaw Marfo</p>
-				<Badge border color="green">Active</Badge>
+				<p class="text-[20px] uppercase">{data.fullName || '-'}</p>
+				<Badge border color="green">{data.status || '-'}</Badge>
 			</div>
 
-			<div class="grid grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 text-[14.5px]">
+			<div class="grid grid-cols-2 xl:grid-cols-3 gap-4 text-[14.5px]">
 				<div>
-					<p><b>Staff ID: </b> <span>MS000012</span></p>
-					<p><b>Directorate:</b> <span>Operations</span></p>
+					<p class="flex gap-1">
+						<b>Staff ID: </b>
+						<span class="truncate" title={data.staffId}>{data.staffId || '-'}</span>
+					</p>
+					<p class="flex gap-1">
+						<b>Directorate:</b>
+						<span class="truncate" title={data.directorate}>{data.directorate || '-'}</span>
+					</p>
 				</div>
 				<div>
-					<p><b>Department:</b> <span>IT</span></p>
-					<p><b>Unit:</b> <span>Networking and Security</span></p>
+					<p class="flex gap-1">
+						<b>Department:</b>
+						<span class="truncate" title={data.department}>{data.department || '-'}</span>
+					</p>
+					<p class="flex gap-1">
+						<b>Unit:</b> <span class="truncate" title={data.unit}>{data.unit || '-'}</span>
+					</p>
 				</div>
 				<div>
-					<p><b>Phone:</b> <span>0123456789</span></p>
-					<p><b>Email:</b> <span>ymarfo@outlook.com</span></p>
+					<p class="flex gap-1">
+						<b>Phone:</b> <span class="truncate" title={data.phone}>{data.phone || '-'}</span>
+					</p>
+					<p class="flex gap-1">
+						<b>Email:</b> <span class="truncate" title={data.email}>{data.email || '-'}</span>
+					</p>
 				</div>
 			</div>
 		</div>

@@ -248,7 +248,7 @@
 	// }
 
 	$: if (reloadData) {
-		fetchData(+filters.page, filters.search);
+		fetchData(+filters.page || pageInfo.currentPage, filters.search);
 		reloadData = false;
 	}
 
@@ -267,7 +267,7 @@
 	}
 
 	onMount(() => {
-		console.log(tableDataInfo);
+		// console.log(tableDataInfo);
 		if (tableDataInfo) {
 			pageInfo.setPageSize(tableDataInfo.pageSize);
 			pageInfo.totalItems = tableDataInfo.totalCount;

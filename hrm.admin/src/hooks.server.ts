@@ -5,6 +5,8 @@ import { redirect, type Handle } from '@sveltejs/kit';
 export const handle = (async ({ event, resolve }) => {
 	const sessionCookie = event.cookies.get(LOGIN_KEY);
 
+	// console.log(event)
+
 	if (
 		sessionCookie &&
 		!(event.route.id?.split('/')[1] === '(private)') &&

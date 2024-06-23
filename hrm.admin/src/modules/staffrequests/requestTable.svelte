@@ -98,6 +98,7 @@
 
 	function handleFilter({ detail }: any) {
 		const { values } = detail;
+		console.log(values);
 		let startDate = '';
 		let endDate = '';
 		if (values.dateRange) {
@@ -115,6 +116,35 @@
 			requestType: values.requestType
 		};
 		reloadData = true;
+	}
+
+	function handleTypeChange({ detail }: CustomEvent) {
+		if (detail) {
+			filters = { ...filters, requestType: detail };
+			reloadData = true;
+		}
+	}
+
+	function handleStartDate({ detail }: CustomEvent) {
+		if (detail) {
+			filters = {
+				...filters,
+				startDate: dayjs(detail).format('YYYY-MM-DD'),
+				endDate: dayjs(dayjs(detail).add(1, 'day').toDate()).format('YYYY-MM-DD')
+			};
+			reloadData = true;
+		}
+	}
+
+	function handleEndDate({ detail }: CustomEvent) {
+		if (detail) {
+			filters = {
+				...filters,
+				startDate: dayjs(filters.startDate).format('YYYY-MM-DD'),
+				endDate: dayjs(dayjs(detail).add(1, 'day').toDate()).format('YYYY-MM-DD')
+			};
+			reloadData = true;
+		}
 	}
 
 	function resetForm() {
@@ -145,15 +175,24 @@
 		on:view={({ detail }) => {
 			if (searchParam) {
 				goto(
-					`/staffrequests/${detail.id}?q=${searchParam}&type=${detail.requestType}&status=${detail.status}`
+					`/staffrequests/${detail.id}?q=${searchParam}&type=${detail.requestType}&status=${detail.status}&polymorphicId=${detail.requestDetailPolymorphicId}`
 				);
 			} else {
-				goto(`/staffrequests/${detail.id}?type=${detail.requestType}&status=${detail.status}`);
+				goto(
+					`/staffrequests/${detail.id}?type=${detail.requestType}&status=${detail.status}&polymorphicId=${detail.requestDetailPolymorphicId}`
+				);
 			}
 		}}
 	>
 		<div slot="filters">
-			<TableFilters {requestTypes} {currentRequest} on:submit={handleFilter} on:click={resetForm} />
+			<TableFilters
+				{requestTypes}
+				{currentRequest}
+				on:click={resetForm}
+				on:typeChange={handleTypeChange}
+				on:startDate={handleStartDate}
+				on:endDate={handleEndDate}
+			/>
 		</div>
 	</DatatablePage>
 </Box>

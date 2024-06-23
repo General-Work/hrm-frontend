@@ -83,7 +83,7 @@
 		<iconify-icon icon="solar:danger-circle-bold-duotone" class="text-red-600" />
 		Enter the digits that were sent to your email
 	</p>
-	<div class="flex justify-center">
+	<div class="flex justify-center w-full">
 		<div class="flex flex-col gap-3">
 			<SvelteOtp
 				numberOnly

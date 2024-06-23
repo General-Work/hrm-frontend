@@ -3,15 +3,14 @@
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import AlertDialog from '$cmps/alerts/alertDialog.svelte';
-	import Form from '$cmps/forms/form.svelte';
-	import TextAreaField from '$cmps/forms/textAreaField.svelte';
 	import Button from '$cmps/ui/button.svelte';
-	import { modalConfig } from '$data/appStore';
-	import { extractQueryParam, showError, showInfo } from '$lib/utils';
+	import { endProgress, extractQueryParam, showError, startProgress } from '$lib/utils';
+	import axios from 'axios';
 	import { createEventDispatcher } from 'svelte';
 	import * as z from 'zod';
 
 	export let documentId: string;
+	export let polymorphicId: string;
 	export let staffNumber: string;
 	let busy = false;
 	let openAlert = false;
@@ -22,34 +21,25 @@
 	});
 
 	async function submit() {
-		// busy = true;
-		// try {
-		// 	const ret = await acceptDocument(documentId, comment || "");
-		// 	if (!ret.success) {
-		// 		showError(ret.message);
-		// 		return;
-		// 	}
-		// 	showInfo(ret.message || 'Document reviewed successfully');
-		// 	dispatch('close', 'refresh');
-		// } catch (e: any) {
-		// 	showError(e?.message || e);
-		// } finally {
-		// 	busy = false;
-		// }
-		// goto('')
-		// dispatch('close', 'refresh');
-		const type = extractQueryParam($page.url.search, 'type');
-		if (type === 'NEW REGISTRATION') {
-			openAlert = true;
-			// $modalConfig = {
-			// 	show: false,
-			// 	title: '',
-			// 	size: 'xs',
-			// 	componentConfig: null,
-			// 	onDone: (refresh: boolean) => {}
-			// };
-		} else {
-			dispatch('close', 'refresh');
+		try {
+			startProgress();
+			busy = true;
+			const ret = await axios.patch(`/staffrequests/${documentId}`, { id: documentId });
+			if (!ret.data.success) {
+				showError(ret.data.message || 'Failed to approve request');
+				return;
+			}
+			const type = extractQueryParam($page.url.search, 'type');
+			if (type === 'new-registeration') {
+				openAlert = true;
+			} else {
+				dispatch('close', 'refresh');
+			}
+		} catch (error: any) {
+			showError(error.message || error);
+		} finally {
+			endProgress();
+			busy = false;
 		}
 	}
 
@@ -60,7 +50,9 @@
 	}
 	function handleYes() {
 		// const id = $page.params.
-		goto(`/staffrecords/MS0001/appointmentdetails`);
+		goto(
+			`/staffrecords/${documentId}/appointmentdetails?applicant=true&polymorphicId=${polymorphicId}`
+		);
 		openAlert = false;
 		dispatch('close');
 	}
