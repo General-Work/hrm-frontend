@@ -39,7 +39,7 @@
 	editorComponent={Editor}
 	sideModalSize="sm"
 	showModalButtons
-	pageUrl="/salarysetup/category"
+	pageUrl="/applicationsetup/category"
 	showActions
 	fillSpace={false}
 	showEdit

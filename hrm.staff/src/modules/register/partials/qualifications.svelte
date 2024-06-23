@@ -178,11 +178,9 @@
 						required
 					/>
 					<div class="col-span-2">
-						<SelectField
+						<TextField
 							label="Certificate awarded"
-							options={CERTIFICATES}
 							name={`educationalBackground.${index}.certificate`}
-							labelAsValue
 							required
 						/>
 					</div>

@@ -6,7 +6,7 @@ import { twMerge } from 'tailwind-merge';
 import { toast, type ToastOptions } from 'svelte-french-toast';
 import { nanoid } from 'nanoid';
 import NProgress from 'nprogress';
-import type { IPageInfo, ITableDataProps } from '../types';
+import type { DecodedSession, IPageInfo, ITableDataProps, StaffNumberPrefix } from '../types';
 import { crossfade } from 'svelte/transition';
 import { quintOut } from 'svelte/easing';
 
@@ -207,6 +207,11 @@ export function hideSpinner() {
 	});
 }
 
+export function isStaffNumber(val: string) {
+	const prefixes: StaffNumberPrefix[] = ['MS', 'CS', 'AS', 'TS'];
+	return prefixes.some((prefix) => val.startsWith(prefix));
+}
+
 export function generateTableDataProps<T>(
 	currentPage: number,
 	pageSize: number,
@@ -273,4 +278,16 @@ export function parseQueryParams(url: string): { baseUrl: string; queryParams: Q
 	}
 
 	return { baseUrl, queryParams };
+}
+
+export function isSessionExpired(session: DecodedSession): boolean {
+	console.log(session.exp);
+	console.log(new Date(session.exp));
+	console.log(new Date(1719185536317))
+	return new Date(session.exp * 1000) < new Date();
+}
+
+export function convertIsoToTimestamp(isoDateString: string): number {
+	const date = new Date(isoDateString);
+	return date.getTime();
 }

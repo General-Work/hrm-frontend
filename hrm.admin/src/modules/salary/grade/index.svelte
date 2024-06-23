@@ -60,7 +60,7 @@
 	editorComponent={Editor}
 	sideModalSize="md"
 	showModalButtons
-	pageUrl="/salarysetup/grade"
+	pageUrl="/applicationsetup/grade"
 	allowDispatchAfterAction
 	allowLoadAfterCreate={false}
 	on:afterAction={afterAction}

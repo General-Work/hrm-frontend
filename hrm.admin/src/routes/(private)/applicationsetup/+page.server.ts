@@ -28,6 +28,32 @@ const dataPages: IMenuItem[] = [
 		]
 	},
 	{
+		title: 'Salary',
+		items: [
+			{
+				title: 'Category',
+				description: 'Manage all categories',
+				icon: 'tabler:category-2',
+				path: '/applicationsetup/category',
+				iconBg: 'bg-blue-300'
+			},
+			{
+				title: 'Specialty',
+				description: 'Manage all specialties',
+				iconBg: 'bg-yellow-300',
+				icon: 'tabler:category-2',
+				path: '/applicationsetup/specialty'
+			},
+			{
+				title: 'Grade',
+				description: 'Manage all grades',
+				iconBg: 'bg-pink-300',
+				icon: 'tabler:category-2',
+				path: '/applicationsetup/grade'
+			}
+		]
+	},
+	{
 		title: 'Leave',
 		items: [
 			// {

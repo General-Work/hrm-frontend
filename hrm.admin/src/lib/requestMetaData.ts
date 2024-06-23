@@ -77,7 +77,7 @@ export function getActions(
 	status: DocumentStatus,
 	staffNumber?: string
 ) {
-	// console.log(status,type)
+	// console.log(staffNumber, status);
 	let buttons: IRequestAction[] = [];
 	if (type !== 'new-registeration' && status !== 'PENDING') return buttons;
 	switch (type) {
@@ -93,7 +93,7 @@ export function getActions(
 									cmd: {
 										action: 'link',
 										args: {
-											path: `/staffrecords/${id}/appointmentdetails?applicant=true&polymorphicId=${polymorphicId}`,
+											path: `/staffrecords/${id}/appointmentdetails?applicant=true&polymorphicId=${polymorphicId}&status=${status}`,
 											type: 'acceptRequest',
 											title: 'Approve Request',
 											props: {
@@ -116,7 +116,7 @@ export function getActions(
 											args: {
 												type: 'acceptRequest',
 												title: 'Approve Request',
-												path: `/staffrecords/${id}/postings?applicant=true&polymorphicId=${polymorphicId}`,
+												path: `/staffrecords/${staffNumber}/postings?applicant=true&polymorphicId=${polymorphicId}&status=${status}`,
 												props: {
 													documentId: id,
 													polymorphicId,

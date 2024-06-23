@@ -9,24 +9,31 @@ export async function load({ url, params }) {
 	const type = extractQueryParam(url.search, 'type') as DocumentKind;
 	const status = extractQueryParam(url.search, 'status');
 	const polymorphicId = extractQueryParam(url.search, 'polymorphicId');
+	const staffId = extractQueryParam(url.search, 'staffId');
 	const res = await readRequest(id);
 	if (!res.success) {
 		error(res.status!, res.message ?? 'Failed to load data');
 	}
 	const component = getComponent(type as DocumentKind);
+	const currentStatatus =
+		type === 'new-registeration' &&
+		res.data.applicationStatus !== 'PENDING' &&
+		res.data.applicationStatus !== 'APPROVED'
+			? res.data.applicationStatus
+			: status;
 	const actions = getActions(
 		type as DocumentKind,
 		id,
 		polymorphicId,
-		res.data.applicationStatus || status,
-		res.data?.staff?.staffIdentificationNumber ?? ''
+		currentStatatus,
+		res.data?.staff?.staffIdentificationNumber || staffId
 	);
 	return {
 		data: res.data,
 		meta: {
 			component,
 			actions,
-			status: type === 'new-registeration' ? res.data.applicationStatus : status,
+			status: currentStatatus,
 			feeds: readRequestFeeds(id)
 		}
 	};

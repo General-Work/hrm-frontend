@@ -41,11 +41,11 @@ const routesItems: IRouteItem[] = [
 				icon: 'clarity:administrator-solid',
 				path: '/usermanagement'
 			},
-			{
-				title: 'Salary Setup',
-				icon: 'solar:wallet-money-bold',
-				path: '/salarysetup'
-			},
+			// {
+			// 	title: 'Salary Setup',
+			// 	icon: 'solar:wallet-money-bold',
+			// 	path: '/salarysetup'
+			// },
 			{
 				title: 'Application Setup',
 				icon: 'mdi:database-cog-outline',

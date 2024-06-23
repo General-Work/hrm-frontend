@@ -7,8 +7,8 @@
 	};
 	breadCrumb.addToFirstIndex(
 		[
-			{ title: 'Home', path: `/staffrecords` },
-			{ title: 'Record', path: '' }
+			{ title: 'Staff Records', path: `/staffrecords` },
+			{ title: 'Overview', path: '' }
 		],
 		true
 	);

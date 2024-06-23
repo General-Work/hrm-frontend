@@ -1,11 +1,13 @@
-import { extractQueryParam } from '$lib/utils';
+import type { DecodedSession } from '$lib/types';
+import { extractQueryParam, isSessionExpired } from '$lib/utils';
 import { LOGIN_KEY, authToken } from '$svc/auth.js';
 import { redirect, type Handle } from '@sveltejs/kit';
+import jwt from 'jsonwebtoken';
 
 export const handle = (async ({ event, resolve }) => {
 	const sessionCookie = event.cookies.get(LOGIN_KEY);
 
-	// console.log(event)
+	// console.log(sessionCookie && isSessionExpired(jwt.verify(sessionCookie) as DecodedSession));
 
 	if (
 		sessionCookie &&

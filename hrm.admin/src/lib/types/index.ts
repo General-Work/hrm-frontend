@@ -107,8 +107,8 @@ export interface IRequestAction {
 }
 
 export interface APIQueryParams {
-	pageNumber: number;
-	pageSize: number;
+	pageNumber?: number;
+	pageSize?: number;
 	search: string;
 	startDate?: string;
 	endDate?: string;
@@ -176,4 +176,11 @@ export interface IStaffHeader {
 	unit: string;
 	email: string;
 	phone: string;
+}
+
+export type StaffNumberPrefix = 'MS' | 'CS' | 'AS' | 'TS';
+
+export interface DecodedSession {
+	exp: number;
+	// Add other properties as needed
 }

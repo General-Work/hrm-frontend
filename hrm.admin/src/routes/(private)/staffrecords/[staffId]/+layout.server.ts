@@ -1,8 +1,9 @@
 import type { IButtonConfig } from '$cmps/ui/cardButton.svelte';
 import { getRecordsActions } from '$lib/recordsActions.js';
-import type { DocumentStatus, IStaffHeader } from '$lib/types';
-import { extractQueryParam } from '$lib/utils/index.js';
-import { readRequest } from '$svc/staffrequests/home.js';
+import type { DocumentStatus, IStaff, IStaffHeader } from '$lib/types';
+import { extractQueryParam, isStaffNumber } from '$lib/utils';
+import { readStaffById, readStaffs } from '$svc/staff/index.js';
+import { readRequest } from '$svc/staffrequests/home';
 
 const actionsButtons: IButtonConfig[] = [
 	{
@@ -33,6 +34,8 @@ export async function load({ url, params }) {
 	const { search } = url;
 	const isApplicant = extractQueryParam(search, 'applicant');
 	const polymorphicId = extractQueryParam(search, 'polymorphicId');
+	const status = extractQueryParam(url.search, 'status') as DocumentStatus;
+	const { staffId } = params;
 	const k = actionsButtons.map((x) => {
 		if (x.path) {
 			const paths = url.pathname.split('/');
@@ -40,21 +43,25 @@ export async function load({ url, params }) {
 			const y = r === 4 ? `/${paths[1]}/${paths[2]}${x.path}` : `${url.pathname}${x.path}`;
 			return {
 				...x,
-				path: isApplicant ? `${y}?applicant=${isApplicant}&polymorphicId=${polymorphicId}` : y
+				path: isApplicant
+					? `${y}?applicant=${isApplicant}&polymorphicId=${polymorphicId}&status=${status}`
+					: y
 			};
 		} else {
 			return x;
 		}
 	});
-	const { staffId } = params;
 	let staffHeaderData = {} as IStaffHeader;
 	let documentStaus: DocumentStatus = 'PENDING';
-	if (isApplicant && isApplicant === 'true') {
+	if (isApplicant === 'true' && !isStaffNumber(staffId)) {
 		const ret = await readRequest(staffId);
 		// console.log(ret);
 		if (ret.success) {
 			const data = ret.data;
-			documentStaus = data.applicationStatus;
+			documentStaus =
+				data.applicationStatus !== 'PENDING' && data.applicationStatus !== 'APPROVED'
+					? data.applicationStatus
+					: status;
 			staffHeaderData = {
 				passportPicture: data.bioData.passportPicture,
 				fullName: `${data.bioData.title} ${data.bioData.firstName} ${data.bioData.surName} ${data.bioData.otherNames ?? ''}`,
@@ -65,6 +72,23 @@ export async function load({ url, params }) {
 				unit: '-',
 				email: data.email,
 				phone: `0${data.contact}`
+			};
+		}
+	} else {
+		documentStaus = status;
+		const ret = await readStaffById(staffId);
+		if (ret.success) {
+			const data = ret.data as IStaff;
+			staffHeaderData = {
+				passportPicture: data.passportPicture || '',
+				fullName: `${data.title} ${data.firstName} ${data.lastName} ${data.otherNames ?? ''}`,
+				status: 'ACTIVE',
+				staffId: data.staffIdentificationNumber,
+				directorate: '-',
+				department: '-',
+				unit: '-',
+				email: data.phone,
+				phone: data.phone
 			};
 		}
 	}

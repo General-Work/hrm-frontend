@@ -11,8 +11,8 @@
 	};
 	breadCrumb.addToFirstIndex(
 		[
-			{ title: 'Home', path: '/salarysetup' },
-			{ title: 'Grade', path: '/salarysetup/grade' }
+			{ title: 'Application Setup', path: '/applicationsetup' },
+			{ title: 'Grade', path: '' }
 		],
 		true
 	);

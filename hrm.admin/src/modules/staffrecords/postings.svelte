@@ -1,16 +1,21 @@
 <script lang="ts">
+	import { browser } from '$app/environment';
 	import { goto } from '$app/navigation';
+	import { page } from '$app/stores';
 	import DateField from '$cmps/forms/dateField.svelte';
 	import Form from '$cmps/forms/form.svelte';
 	import SelectField from '$cmps/forms/selectField.svelte';
 	import Button from '$cmps/ui/button.svelte';
-	import { showError } from '$lib/utils';
+	import { endProgress, showError, showInfo, startProgress } from '$lib/utils';
 	import type { IDirectorate } from '$svc/setup';
+	import type { PostingsDto } from '$svc/staffrequests';
 	import axios from 'axios';
+	import dayjs from 'dayjs';
 	import { onMount } from 'svelte';
 	import * as z from 'zod';
 
-	export let isApplicant: boolean;
+	export let polymorphicId: string;
+	export let isRequest: boolean;
 	const schema = z.object({
 		directorateId: z
 			.string({ invalid_type_error: 'Directorate is required' })
@@ -23,6 +28,7 @@
 			.string({ invalid_type_error: 'Posting Date is required' })
 			.min(1, 'Posting date is required')
 	});
+	const id = $page.params.staffId;
 	let directorates: any[] = [];
 	let departments: any[] = [];
 	let loadDirectorate = true;
@@ -81,10 +87,32 @@
 		formData = values;
 	}
 
-	function handleSubmit({ detail }: CustomEvent) {
+	async function handleSubmit({ detail }: CustomEvent) {
 		const { values } = detail;
-		if (isApplicant) {
-			goto('/staffrequests');
+		try {
+			startProgress();
+			busy = true;
+			const d: PostingsDto = {
+				polymorphicId: polymorphicId,
+				directorateId: values.directorateId,
+				departmentId: values.departmentId,
+				unitId: values.unitId,
+				postingDate: dayjs(values.postingDate).format('YYYY-MM-DD')
+			};
+			const ret = await axios.post(`/staffrecords/${id}/postings`, d);
+			if (!ret.data.success) {
+				showError(ret.data.message);
+				return;
+			}
+			showInfo("Staff has been successfully posted");
+			if (isRequest) {
+				goto('/staffrequests');
+			}
+		} catch (error: any) {
+			showError(error.message || error);
+		} finally {
+			endProgress();
+			busy = false;
 		}
 	}
 

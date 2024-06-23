@@ -55,6 +55,8 @@
 				return;
 			}
 			showInfo('OTP Sent');
+			seconds = 20
+			startCountdown();
 		} catch (e: any) {
 			showError(e);
 		} finally {

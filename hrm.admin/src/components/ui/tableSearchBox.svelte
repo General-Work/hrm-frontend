@@ -26,7 +26,9 @@
 		// // const search = current.toString();
 		// // const query = search ? `?${search}` : '';
 		// // goto(`${pathname}${query}`);
+		// console.log(value)
 		dispatch('input', value);
+	
 	};
 </script>
 
@@ -37,7 +39,7 @@
 		class="outline-none px-2 border-none bg-transparent placeholder:text-sm text-sm w-full"
 		{placeholder}
 		{readonly}
-		on:change={(e) => {
+		on:input={(e) => {
 			const input = e?.target?.value || '';
 			value = input;
 			onSearchKeyChange(input);

@@ -1,3 +1,4 @@
+import { convertIsoToTimestamp } from '$lib/utils/index.js';
 import { LOGIN_KEY, accountConfirmation, authToken, loginUser } from '$svc/auth.js';
 import { json, redirect } from '@sveltejs/kit';
 
@@ -28,13 +29,11 @@ export const POST = async ({ request, cookies }) => {
 		return json({ message: 'Bad Request', status: 400, success: false });
 	} else {
 		const ret = await accountConfirmation(body);
-		// console.log(ret)
 		if (!ret.success) {
 			return json({ message: ret.message, status: 400, success: false });
 		}
 		const sessionCookie = ret.data.accessToken;
-		const expiresIn = 60 * 60 * 24 * 5 * 1000;
-		console;
+		const expiresIn = convertIsoToTimestamp(ret.data.expiry);
 		const options = {
 			maxAge: expiresIn,
 			httpOnly: false,

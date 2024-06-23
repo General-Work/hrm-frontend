@@ -28,6 +28,7 @@
 	import axios from 'axios';
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
+	import { browser } from '$app/environment';
 
 	export let optionalData: any = {};
 	export let tableDataInfo: ITableDataProps<any> | undefined | null;
@@ -262,8 +263,8 @@
 		}
 		const search = current.toString();
 		const page = search ? `?${search}` : '';
-		await goto(`${pathname}${page}`);
-		await fetchData(pageInfo.currentPage, value);
+		debouncedSearch(pageInfo.currentPage, value);
+		// goto(`${pathname}${page}`);
 	}
 
 	onMount(() => {
@@ -303,7 +304,7 @@
 						hasNextPage={pageInfo.hasNextPage}
 						hasPreviousPage={pageInfo.hasPrevPage}
 						refresh={() => {
-							fetchData(+filters.page, filters.search);
+							fetchData(+filters.page || pageInfo.currentPage, filters.search || '');
 						}}
 						tableColumns={$allColumns}
 						bind:hiddenColumns

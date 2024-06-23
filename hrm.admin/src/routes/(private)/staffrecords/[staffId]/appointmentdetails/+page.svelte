@@ -16,8 +16,8 @@
 	$: id = $page.params.staffId;
 	$: breadCrumb.addToFirstIndex(
 		[
-			{ title: 'Home', path: `/staffrecords` },
-			{ title: 'Staff Records', path: `/staffrecords/${id}` },
+			{ title: 'Staff Records', path: `/staffrecords` },
+			{ title: 'Overview', path: `/staffrecords/${id}` },
 			{ title: 'Appointment Details', path: '' }
 		],
 		true

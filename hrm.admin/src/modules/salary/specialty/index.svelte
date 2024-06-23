@@ -34,6 +34,6 @@
 	showActions
 	showEdit
 	fillSpace={false}
-	pageUrl="/salarysetup/specialty"
+	pageUrl="/applicationsetup/specialty"
 	optionalData={{ category }}
 />

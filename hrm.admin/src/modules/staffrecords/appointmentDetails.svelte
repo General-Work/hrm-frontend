@@ -21,7 +21,7 @@
 
 	export let grade: any[] = [];
 	export let isApplicant: boolean;
-	export let polymorphicId:string
+	export let polymorphicId: string;
 	let formData = {
 		staffType: '',
 		appointmentType: '',
@@ -114,7 +114,7 @@
 				showError(ret.data.message);
 				return;
 			}
-			showInfo(ret.data.message || 'Appointment details added');
+			showInfo('Appointment details added');
 			openAlert = true;
 		} catch (error: any) {
 			showError(error.message || error);
@@ -126,7 +126,7 @@
 
 	function handleCancel() {
 		openAlert = false;
-		if (isApplicant && browser) window.history.back();
+		if (isApplicant) goto('/staffrequest');
 	}
 	function handleYes() {
 		goto(`/staffrecords/${id}/postings?applicant=${isApplicant}`);
@@ -152,7 +152,9 @@
 		}
 		try {
 			load = true;
-			const ret = await axios.get('/salarysetup/grade/category-specialties', { params: { id } });
+			const ret = await axios.get('/applicationsetup/grade/category-specialties', {
+				params: { id }
+			});
 			if (!ret.data.success) {
 				showError(ret.data.message);
 				return;

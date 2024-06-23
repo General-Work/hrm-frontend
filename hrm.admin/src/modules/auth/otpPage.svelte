@@ -65,6 +65,8 @@
 				return;
 			}
 			showInfo(ret.data.message);
+			seconds = 20
+			startCountdown();
 		} catch (e: any) {
 			showError(e);
 		} finally {
