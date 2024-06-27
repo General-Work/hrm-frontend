@@ -23,7 +23,7 @@ export const PATCH = async ({ request }) => {
 	}
 };
 
-export const POST = async ({ request, cookies }) => {
+export const POST = async ({ request, cookies, locals }) => {
 	const body = await request.json();
 	if (!body) {
 		return json({ message: 'Bad Request', status: 400, success: false });

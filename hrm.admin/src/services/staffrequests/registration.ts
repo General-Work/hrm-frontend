@@ -81,7 +81,7 @@ export async function addNewAppointmentDetails(data: AppointmentDto) {
 		const ret = await axiosInstance.post('/staff-request/new-appointment', data);
 		return callResult(ret, ret.data);
 	} catch (error) {
-		// console.log(error);
+		console.log(error);
 		return axiosError(error);
 	}
 }

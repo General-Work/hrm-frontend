@@ -1,3 +1,25 @@
+<script lang="ts" context="module">
+	export interface IAppointmentFormDto {
+		staffType: string;
+		appointmentType: string;
+		salarySource: string;
+		firstAppointmentNotionalDate: string | null;
+		firstAppointmentSubstantiveDate: string | null;
+		firstAppointmentGrade: string;
+		currentAppointmentNotionalDate: string | null;
+		currentAppointmentSubstantiveDate: string | null;
+		currentAppointmentGrade: string;
+		professionId: string;
+		profession: string;
+		specialty: string;
+		scale: string;
+		step: string;
+		band: string;
+		salary: string;
+		endDate: null | string;
+	}
+</script>
+
 <script lang="ts">
 	import { browser } from '$app/environment';
 	import { goto } from '$app/navigation';
@@ -16,13 +38,15 @@
 	import type { AppointmentDto } from '$svc/staffrequests';
 	import axios from 'axios';
 	import dayjs from 'dayjs';
+	import { onMount } from 'svelte';
 
 	import * as z from 'zod';
 
 	export let grade: any[] = [];
 	export let isApplicant: boolean;
 	export let polymorphicId: string;
-	let formData = {
+	export let readOnly = false;
+	export let formData: IAppointmentFormDto = {
 		staffType: '',
 		appointmentType: '',
 		salarySource: '',
@@ -68,7 +92,7 @@
 		step: z.string().min(1, 'Required'),
 		salary: z.string().min(1, 'Required'),
 		endDate: z.lazy(() =>
-			isApplicant
+			formData.appointmentType === 'CONTRACT'
 				? z.string({ invalid_type_error: 'Required' }).min(1, 'Required')
 				: z.string().nullable()
 		)
@@ -199,8 +223,19 @@
 	function handleChange({ detail }: CustomEvent) {
 		const { values } = detail;
 		// console.log(values);
-		formData = values;
+		if (!readOnly) formData = values;
 	}
+
+	onMount(async () => {
+		if (formData.currentAppointmentGrade) {
+			await loadCategoryAndSpecialty({
+				detail: { id: formData.currentAppointmentGrade }
+			} as CustomEvent);
+		}
+		if (formData.step) {
+			handleSteps({ detail: { id: formData.step } } as CustomEvent);
+		}
+	});
 </script>
 
 {#key renderId}
@@ -219,6 +254,7 @@
 					options={STAFFTYPE}
 					required
 					labelAsValue
+					readonly={readOnly}
 				/>
 				<SelectField
 					label="Appointment Type"
@@ -226,6 +262,7 @@
 					options={APPOINTMENTTYPELIST}
 					labelAsValue
 					required
+					readonly={readOnly}
 				/>
 				<SelectField
 					label="Salary Source"
@@ -233,18 +270,30 @@
 					options={STAFFPAYMENTTYPE}
 					labelAsValue
 					required
+					readonly={readOnly}
 				/>
 			</div>
 			<div class="my-5" class:hidden={isApplicant}>
 				<Title label="First Appointment" />
 				<div class="grid grid-cols-1 lg:grid-cols-3 gap-4 pt-2">
-					<DateField label="Notional Date" name="firstAppointmentNotionalDate" required />
-					<DateField label="Substantive Date" name="firstAppointmentSubstantiveDate" required />
+					<DateField
+						label="Notional Date"
+						name="firstAppointmentNotionalDate"
+						required
+						readonly={readOnly}
+					/>
+					<DateField
+						label="Substantive Date"
+						name="firstAppointmentSubstantiveDate"
+						required
+						readonly={readOnly}
+					/>
 					<SelectField
 						label="First Appointment Grade"
 						required
 						name="firstAppointmentGrade"
 						options={grade}
+						readonly={readOnly}
 					/>
 				</div>
 			</div>
@@ -256,10 +305,20 @@
 							? 'lg:grid-cols-3'
 							: 'lg:grid-cols-2'}"
 					>
-						<DateField label="Notional Date" name="currentAppointmentNotionalDate" required />
-						<DateField label="Substantive Date" name="currentAppointmentSubstantiveDate" required />
+						<DateField
+							label="Notional Date"
+							name="currentAppointmentNotionalDate"
+							required
+							readonly={readOnly}
+						/>
+						<DateField
+							label="Substantive Date"
+							name="currentAppointmentSubstantiveDate"
+							required
+							readonly={readOnly}
+						/>
 						<div class:hidden={!(formData.appointmentType === 'CONTRACT')}>
-							<DateField label="Appointment End Date" name="endDate" required />
+							<DateField label="Appointment End Date" name="endDate" required readonly={readOnly} />
 						</div>
 					</div>
 					<div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
@@ -270,18 +329,25 @@
 							options={grade}
 							clearable={false}
 							on:change={loadCategoryAndSpecialty}
+							readonly={readOnly}
 						/>
 						<TextField label="Profession" name="profession" readOnly required />
 
-						<SelectField label="Specialty" name="specialty" options={specialty} isLoading={load} />
+						<SelectField
+							label="Specialty"
+							name="specialty"
+							options={specialty}
+							isLoading={load}
+							readonly={readOnly}
+						/>
 					</div>
 				</div>
 			</div>
 		</Fieldset>
 		<Fieldset label="Salary" icon="fluent:payment-32-filled">
 			<div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-				<TextField label="Scale" name="scale" readOnly required />
-				<TextField label="Band" name="band" readOnly required />
+				<TextField label="Scale" name="scale" readOnly required readonly={readOnly} />
+				<TextField label="Band" name="band" readOnly required readonly={readOnly} />
 				<SelectField
 					size="small"
 					label="Step"
@@ -290,8 +356,16 @@
 					options={steps}
 					on:change={handleSteps}
 					clearable={false}
+					readonly={readOnly}
 				/>
-				<TextField label="Salary" name="salary" required readOnly type="number" />
+				<TextField
+					label="Salary"
+					name="salary"
+					required
+					readOnly
+					type="number"
+					readonly={readOnly}
+				/>
 			</div>
 			<!-- <div class="pt-4">
 			<div class="border-b">Bank Details</div>
@@ -303,7 +377,7 @@
 			</div>
 		</div> -->
 		</Fieldset>
-		<div class="flex flex-col sm:flex-row sm:justify-end gap-3 pt-4">
+		<div class="flex flex-col sm:flex-row sm:justify-end gap-3 pt-4" class:hidden={readOnly}>
 			<Button label="Reset" type="reset" />
 			<Button label="Submit" type="submit" color="success" {busy} />
 		</div>

@@ -1,5 +1,13 @@
+<script lang="ts" context="module">
+	export interface IPostingFormDto {
+		directorateId: string;
+		departmentId: string;
+		unitId: string;
+		postingDate: null | string;
+	}
+</script>
+
 <script lang="ts">
-	import { browser } from '$app/environment';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import DateField from '$cmps/forms/dateField.svelte';
@@ -7,7 +15,6 @@
 	import SelectField from '$cmps/forms/selectField.svelte';
 	import Button from '$cmps/ui/button.svelte';
 	import { endProgress, showError, showInfo, startProgress } from '$lib/utils';
-	import type { IDirectorate } from '$svc/setup';
 	import type { PostingsDto } from '$svc/staffrequests';
 	import axios from 'axios';
 	import dayjs from 'dayjs';
@@ -16,6 +23,14 @@
 
 	export let polymorphicId: string;
 	export let isRequest: boolean;
+	export let readOnly = false;
+	export let directorates: any[] = [];
+	export let formData: IPostingFormDto = {
+		directorateId: '',
+		departmentId: '',
+		unitId: '',
+		postingDate: null
+	};
 	const schema = z.object({
 		directorateId: z
 			.string({ invalid_type_error: 'Directorate is required' })
@@ -29,7 +44,6 @@
 			.min(1, 'Posting date is required')
 	});
 	const id = $page.params.staffId;
-	let directorates: any[] = [];
 	let departments: any[] = [];
 	let loadDirectorate = true;
 	let loadDepartment = false;
@@ -37,13 +51,8 @@
 	let renderId = 0;
 	let renderUnit = 0;
 	let busy = false;
+	let renderForm = 0;
 	let units: any[] = [];
-	let formData = {
-		directorateId: '',
-		departmentId: '',
-		unitId: '',
-		postingDate: null
-	};
 
 	async function readDeparments({ detail }: CustomEvent) {
 		const { id } = detail;
@@ -84,7 +93,7 @@
 
 	function handleChange({ detail }: any) {
 		const { values } = detail;
-		formData = values;
+		if (!readOnly) formData = values;
 	}
 
 	async function handleSubmit({ detail }: CustomEvent) {
@@ -104,7 +113,7 @@
 				showError(ret.data.message);
 				return;
 			}
-			showInfo("Staff has been successfully posted");
+			showInfo('Staff has been successfully posted');
 			if (isRequest) {
 				goto('/staffrequests');
 			}
@@ -117,68 +126,64 @@
 	}
 
 	onMount(async () => {
-		try {
-			const ret = await axios.get('/applicationsetup/directorate');
-			if (!ret.data.success) {
-				showError('Failed to read directorates');
-				return;
-			}
-
-			directorates = ret.data.data.map((x: IDirectorate) => ({
-				id: x.id,
-				directorateName: x.directorateName
-			}));
-		} catch (error: any) {
-			showError(error.message || error);
-		} finally {
-			loadDirectorate = false;
+		if (formData.directorateId) {
+			await readDeparments({ detail: { id: formData.directorateId } } as CustomEvent);
+			renderForm++;
+		}
+		if (formData.departmentId) {
+			await readUnits({ detail: { id: formData.departmentId } } as CustomEvent);
+			renderForm++;
 		}
 	});
 </script>
 
-<Form
-	{schema}
-	initialValues={formData}
-	class="space-y-6"
-	on:change={handleChange}
-	on:submit={handleSubmit}
->
-	<SelectField
-		label="Directorate"
-		name="directorateId"
-		required
-		options={directorates}
-		clearable={false}
-		isLoading={loadDirectorate}
-		on:change={readDeparments}
-	/>
-	{#key renderId}
+{#key renderForm}
+	<Form
+		{schema}
+		initialValues={formData}
+		class="space-y-6"
+		on:change={handleChange}
+		on:submit={handleSubmit}
+	>
 		<SelectField
-			label="Department"
-			name="departmentId"
+			label="Directorate"
+			name="directorateId"
 			required
-			options={departments}
-			isLoading={loadDepartment}
-			on:change={readUnits}
+			options={directorates}
 			clearable={false}
+			on:change={readDeparments}
+			readonly={readOnly}
 		/>
-	{/key}
-	{#key renderId}
-		{#key renderUnit}
+		{#key renderId}
 			<SelectField
-				label="Unit"
-				name="unitId"
+				label="Department"
+				name="departmentId"
 				required
-				options={units}
-				isLoading={loadUnit}
+				options={departments}
+				isLoading={loadDepartment}
+				on:change={readUnits}
 				clearable={false}
+				readonly={readOnly}
 			/>
 		{/key}
-	{/key}
+		{#key renderId}
+			{#key renderUnit}
+				<SelectField
+					label="Unit"
+					name="unitId"
+					required
+					options={units}
+					isLoading={loadUnit}
+					clearable={false}
+					readonly={readOnly}
+				/>
+			{/key}
+		{/key}
 
-	<DateField label="Posting date" name="postingDate" />
-	<div class="flex flex-col sm:flex-row sm:justify-end gap-3 pt-4">
-		<Button label="Reset" type="reset" />
-		<Button label="Submit" type="submit" color="success" {busy} />
-	</div>
-</Form>
+		<DateField label="Posting date" name="postingDate" readonly={readOnly} />
+		<div class="flex flex-col sm:flex-row sm:justify-end gap-3 pt-4" class:hidden={readOnly}>
+			<Button label="Reset" type="reset" />
+			<Button label="Submit" type="submit" color="success" {busy} />
+		</div>
+	</Form>
+{/key}

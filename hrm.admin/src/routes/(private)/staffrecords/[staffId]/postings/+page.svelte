@@ -1,8 +1,10 @@
-<script>
+<script lang="ts">
 	import { page } from '$app/stores';
 	import { activePage, breadCrumb } from '$data/appStore';
 	import { extractQueryParam } from '$lib/utils';
-	import Details from '$modules/staffrecords/postings.svelte';
+	import Details, { type IPostingFormDto } from '$modules/staffrecords/postings.svelte';
+
+	export let data;
 	$: isApplicant = extractQueryParam($page.url.search, 'applicant');
 	$: polymorphicId = extractQueryParam($page.url.search, 'polymorphicId');
 
@@ -19,6 +21,18 @@
 		],
 		true
 	);
+	let formData = {
+		directorateId: data?.staff?.staffPosting?.directorateId || '',
+		departmentId: data?.staff?.staffPosting?.departmentId || '',
+		unitId: data?.staff?.staffPosting?.unitId || '',
+		postingDate: data?.staff?.staffPosting?.postingDate || null
+	} as IPostingFormDto;
 </script>
 
-<Details isRequest={isApplicant === 'true' ? true : false} {polymorphicId} />
+<Details
+	isRequest={isApplicant === 'true' ? true : false}
+	{polymorphicId}
+	readOnly={Boolean(formData.directorateId)}
+	directorates={data.directorates}
+	{formData}
+/>

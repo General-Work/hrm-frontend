@@ -70,6 +70,7 @@
 		{placeholder}
 		{name}
 		{readonly}
+		disabled={readonly}
 		class={cn(
 			'border border-gray-300 border-solid h-[38.4px] rounded-[5px] w-full placeholder:font-thin cursor-pointer disabled:cursor-default',
 			otherClasses

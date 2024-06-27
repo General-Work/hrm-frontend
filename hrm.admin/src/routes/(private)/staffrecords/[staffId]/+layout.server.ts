@@ -1,6 +1,6 @@
 import type { IButtonConfig } from '$cmps/ui/cardButton.svelte';
 import { getRecordsActions } from '$lib/recordsActions.js';
-import type { DocumentStatus, IStaff, IStaffHeader } from '$lib/types';
+import type { DocumentStatus, IStaff, IStaffByID, IStaffHeader } from '$lib/types';
 import { extractQueryParam, isStaffNumber } from '$lib/utils';
 import { readStaffById, readStaffs } from '$svc/staff/index.js';
 import { readRequest } from '$svc/staffrequests/home';
@@ -53,6 +53,7 @@ export async function load({ url, params }) {
 	});
 	let staffHeaderData = {} as IStaffHeader;
 	let documentStaus: DocumentStatus = 'PENDING';
+	let staff = {} as IStaffByID;
 	if (isApplicant === 'true' && !isStaffNumber(staffId)) {
 		const ret = await readRequest(staffId);
 		// console.log(ret);
@@ -78,23 +79,25 @@ export async function load({ url, params }) {
 		documentStaus = status;
 		const ret = await readStaffById(staffId);
 		if (ret.success) {
-			const data = ret.data as IStaff;
+			const data = ret.data as IStaffByID;
 			staffHeaderData = {
 				passportPicture: data.passportPicture || '',
 				fullName: `${data.title} ${data.firstName} ${data.lastName} ${data.otherNames ?? ''}`,
-				status: 'ACTIVE',
-				staffId: data.staffIdentificationNumber,
-				directorate: '-',
-				department: '-',
-				unit: '-',
-				email: data.phone,
-				phone: data.phone
+				status: `${data.status}`,
+				staffId: data.staffIdentificationNumber || '-',
+				directorate: data.directorate?.directorateName || '-',
+				department: data.department?.departmentName || '-',
+				unit: data.unit?.unitName || '-',
+				email: data.email || '-',
+				phone: data.phone || '-'
 			};
+			staff = data;
 		}
 	}
 
 	return {
 		pages: getRecordsActions(k, isApplicant === 'true' ? true : false, documentStaus),
-		staffHeaderData
+		staffHeaderData,
+		staff: staff
 	};
 }

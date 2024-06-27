@@ -132,6 +132,69 @@ export type DocumentType = 'NEW REGISTRATION' | 'BANK UPDATE';
 
 export type DocumentStatus = 'PENDING' | 'APPROVED' | 'APPOINTED';
 
+interface IBaseAppointment {
+	id: string;
+	gradeId: string;
+	staffId: string;
+	staffSpecialityId: string;
+	createdAt: string;
+	updatedAt: string;
+	appointmentType: string;
+	staffType: string;
+	endDate: string;
+	paymentSource: string;
+	notionalDate: string;
+	substantiveDate: string;
+	step: string;
+	speciality: { id: string; specialityName: string };
+	grade: {
+		id: string;
+		createdAt: string;
+		updatedAt: string;
+		categoryId: string;
+		gradeName: string;
+		level: string;
+		scale: string;
+		marketPremium: number;
+		minimunStep: number;
+		maximumStep: number;
+		category: null;
+		steps: null;
+	};
+	staff: null;
+}
+
+interface IUnit {
+	id: string;
+	unitName: string;
+}
+
+interface IDepartment {
+	id: string;
+	departmentName: string;
+}
+
+interface IDirectorate {
+	id: string;
+	directorateName: string;
+}
+
+interface ISpeciality {
+	id: string;
+	specialityName: string;
+}
+
+interface IStaffPosting {
+	id: string;
+	staffId: string;
+	directorateId: string;
+	departmentId: string;
+	unitId: string;
+	createdAt: string;
+	updatedAt: string;
+	postingDate: string;
+}
+
 export interface IStaff {
 	id: string;
 	createdAt: Date;
@@ -166,10 +229,41 @@ export interface IStaff {
 	appointmentHistory: null | any;
 }
 
+export interface IStaffByID {
+	id: string;
+	createdAt: Date;
+	updatedAt: Date;
+	title: string;
+	gpsAddress: string;
+	staffIdentificationNumber: string;
+	firstName: string;
+	lastName: string;
+	otherNames: string;
+	dateOfBirth: string;
+	phone: string;
+	gender: string;
+	snnitNumber: string;
+	email: string;
+	disability: string;
+	passportPicture: string;
+	ecowasCardNumber: string;
+	status: string;
+	isApproved: boolean;
+	isAlterable: boolean;
+	unit: IUnit | null;
+	department: IDepartment | null;
+	directorate: IDirectorate | null;
+	staffPosting: IStaffPosting | null;
+	speciality: ISpeciality | null;
+	category: null;
+	currentAppointment: IBaseAppointment;
+	firstAppointment: IBaseAppointment;
+}
+
 export interface IStaffHeader {
 	passportPicture: string;
 	fullName: string;
-	status: 'ACTIVE' | 'APPLICANT';
+	status: string;
 	staffId: string;
 	directorate: string;
 	department: string;
