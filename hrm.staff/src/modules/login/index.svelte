@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
-	import { loginStaff } from '$svc/auth';
 	import { extractRedirectToRoute, showError } from '$lib/utils';
+	import axios from 'axios';
 	// import logo from '$assets/images/logo1.png';
 
 	const bgImageUrl = 'https://citinewsroom.com/wp-content/uploads/2018/06/Korle-Bu.jpg';
@@ -21,7 +21,14 @@
 	async function handleLogin() {
 		try {
 			busy = true;
-			await loginStaff({ staffId: 'Msas', password: 'wewe' });
+			const ret = await axios.post('/login', {
+				staffId: formData.username,
+				password: formData.password
+			});
+			if (!ret.data.success) {
+				showError(ret.data.message);
+				return;
+			}
 			const redirect = extractRedirectToRoute($page.url.search);
 			if (redirect) {
 				goto(redirect);
@@ -44,11 +51,11 @@
 					<div>
 						<div class="justify-center grid">
 							<!-- <div class="rounded-full border-2 p-5 border-indigo-600 shadow-md shadow-gray-400"> -->
-								<img
-									class="w-64"
-									src="https://citinewsroom.com/wp-content/uploads/2023/07/Korlebu-logo-NEW.png"
-									alt="Logo"
-								/>
+							<img
+								class="w-64"
+								src="https://citinewsroom.com/wp-content/uploads/2023/07/Korlebu-logo-NEW.png"
+								alt="Logo"
+							/>
 							<!-- </div> -->
 						</div>
 						<div class="text-center">
@@ -71,16 +78,17 @@
 						<div>
 							<form class="space-y-6" on:submit|preventDefault={handleLogin}>
 								<div>
-									<label for="username" class="block text-sm font-medium leading-6 text-gray-900"
-										>Username</label
+									<label for="staffNumber" class="block text-sm font-medium leading-6 text-gray-900"
+										>Staff ID</label
 									>
 									<div class="mt-2">
 										<input
-											id="username"
-											name="username"
-											type="username"
-											autocomplete="username"
+											id="staffNumber"
+											name="staffNumber"
+											type="staffNumber"
+											autocomplete="on"
 											required
+											bind:value={formData.username}
 											class="block px-3 w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
 										/>
 									</div>
@@ -96,6 +104,7 @@
 											name="password"
 											type="password"
 											autocomplete="current-password"
+											bind:value={formData.password}
 											required
 											class="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
 										/>

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { browser } from '$app/environment';
 	import { goto } from '$app/navigation';
 	import AlertDialog from '$cmps/alerts/alertDialog.svelte';
 	import HeaderPanel from '$cmps/layout/headerPanel.svelte';
@@ -12,10 +13,10 @@
 		sideQuickActions,
 		breadCrumb
 	} from '$data/appStore';
-	import { menuItems } from '$data/userStore';
-	import { logoutStaff } from '$svc/auth';
+	import type { IUserInfo } from '$lib/types';
 	import { showSearchBox } from '$svc/command';
-	import { Drawer, CloseButton } from 'flowbite-svelte';
+	import axios from 'axios';
+	import { Drawer, CloseButton, Modal, Button } from 'flowbite-svelte';
 	import { sineIn } from 'svelte/easing';
 
 	export let data;
@@ -29,6 +30,7 @@
 		duration: 200,
 		easing: sineIn
 	};
+	let dialogInfo = { show: false, message: '', service: '', action: '' };
 
 	$: rightDrawerOptions = $sideQuickActions;
 	$: activeBreadCrumb = $breadCrumb[$breadCrumb.length - 1].title;
@@ -36,8 +38,8 @@
 	let showAlert = false;
 
 	const logout = async () => {
-		await logoutStaff();
-		goto('/login');
+		await axios.delete('/login');
+		if (browser) window.location.reload();
 	};
 
 	const toggleLogout = () => {
@@ -52,6 +54,54 @@
 		breadCrumb.removeFromFront(index);
 		// goto(path);
 	}
+
+	async function showDialogs(user: IUserInfo) {
+		if (!user) return;
+
+		let message = '';
+		let service = '';
+		let action = '';
+
+		if (user.newStaffPrerequisiteCheck.bankData === false) {
+			message =
+				'Welcome! Your bank details are not yet added to your profile. Please update your profile by clicking the button below to proceed with other actions.';
+			service = '/profile/bank';
+			action = 'Bank Details';
+		} else if (user.newStaffPrerequisiteCheck.familyData == false) {
+			message =
+				'Welcome! Your family details are not yet added to your profile. Please update your profile by clicking the button below to proceed with other actions.';
+			service = '/profile/family';
+			action = 'Family Details';
+		} else if (user.newStaffPrerequisiteCheck.childrenData == false) {
+			message =
+				'Welcome! Your children details are not yet added to your profile. Please update your profile by clicking the button below to proceed with other actions.';
+			service = '/profile/children';
+			action = 'Children Details';
+		} else if (user.newStaffPrerequisiteCheck.professionalLicenceData == false) {
+			message =
+				'Welcome! Your professional licence details are not yet added to your profile. Please update your profile by clicking the button below to proceed with other actions.';
+			service = '/profile/professionallicence';
+			action = 'Professional Licence';
+		} else if (user.newStaffPrerequisiteCheck.accomodationData == false) {
+			message =
+				'Welcome! Your accomodation details are not yet added to your profile. Please update your profile by clicking the button below to proceed with other actions.';
+			service = '/profile/accomdation';
+			action = 'Accomodation Details';
+		}
+
+		if (message !== '') {
+			dialogInfo = {
+				show: true,
+				message: message,
+				service: service,
+				action: action
+			};
+		}
+	}
+
+	$: if (data.user) {
+		showDialogs(data.user);
+	}
 </script>
 
 {#if $showSearchBox}
@@ -60,7 +110,7 @@
 <div class="w-screen h-svh overflow-hidden">
 	<div class="flex w-full h-full">
 		<div class="w-[19rem] h-full hidden lg:flex shrink-0">
-			<SidePanel menuItems={$menuItems} on:click={toggleLogout} user={data.user} />
+			<SidePanel menuItems={data.menuItems} on:click={toggleLogout} user={data.user} />
 		</div>
 		<div class="flex-grow flex flex-col h-full gap-4">
 			<HeaderPanel
@@ -100,7 +150,7 @@
 			<div
 				class="flex-grow shrink-0 overflow-y-auto scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch"
 			>
-				<SidePanel user={data.user} menuItems={$menuItems} on:click={toggleLogout} />
+				<SidePanel user={data.user} menuItems={data.menuItems} on:click={toggleLogout} />
 			</div>
 		</div>
 	</Drawer>
@@ -141,3 +191,20 @@
 	on:cancel={() => (showAlert = false)}
 	on:yes={logout}
 />
+
+<Modal open={dialogInfo.show} size="xs" autoclose={false} outsideclose={false} dismissable={false}>
+	<div class="text-center">
+		<iconify-icon
+			icon="ph:warning"
+			width="48"
+			height="48"
+			class="mx-auto mb-4 text-orange-400 w-12 h-12 dark:text-gray-200"
+		/>
+		<h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">{dialogInfo.message}</h3>
+		<a
+			class="bg-blue-600 px-3 py-2 text-white rounded-md text-sm hover:bg-blue-700"
+			href={dialogInfo.service}
+			on:click={() => (dialogInfo = { ...dialogInfo, show: false })}>{dialogInfo.action}</a
+		>
+	</div>
+</Modal>

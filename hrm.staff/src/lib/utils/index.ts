@@ -260,3 +260,8 @@ export const fileOrStringValidation = (
 		return z.instanceof(File);
 	});
 };
+
+export function convertIsoToTimestamp(isoDateString: string): number {
+	const date = new Date(isoDateString);
+	return date.getTime();
+}

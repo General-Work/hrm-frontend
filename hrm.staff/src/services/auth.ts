@@ -18,43 +18,12 @@ function extractNumber(input: string): string {
 	return trimmed;
 }
 
-export const newStaffData: IUserInfo = {
-	id: 1,
-	email: '',
-	firstName: 'Yaw',
-	surname: 'Kyei',
-	otherNames: '',
-	fullName: 'Yaw Kyei',
-	profileImage: '',
-	initials: 'YK',
-	isNewStaff: true,
-	phoneNumber: '0123456789',
-	staffId: ''
-};
-
 export function initNewStaff(data: IApplicantInfo) {
 	applicantInfo.set(data);
 }
 
 export function clearNewStaffInit() {
 	userInfo.set(null);
-}
-
-export function initStaff() {
-	userInfo.set({
-		id: 1,
-		email: '',
-		firstName: 'Yaw',
-		surname: 'Kyei',
-		otherNames: '',
-		fullName: 'Yaw Kyei',
-		profileImage:
-			'https://t3.ftcdn.net/jpg/03/73/52/24/360_F_373522464_UzkM3IvqgqpS0qIy2kpkB5QiV7Bw7NyS.jpg',
-		staffId: 'MS00017',
-		initials: 'YK',
-		isNewStaff: false,
-		phoneNumber: '0123456789'
-	});
 }
 
 export function clearInitStaff() {
@@ -88,8 +57,25 @@ export function logoutNewStaff() {
 	return axios.delete('/register');
 }
 
-export function loginStaff(data: { staffId: string; password: string }) {
-	return axios.post('/login', data);
+export async function loginStaff(data: { staffId: string; password: string }) {
+	try {
+		const ret = await axiosInstance.post('/staff/login', {
+			staffIdentificationNumber: data.staffId,
+			password: data.password
+		});
+		return queryResult(ret, ret.data);
+	} catch (error) {
+		return axiosError(error);
+	}
+}
+
+export async function readAuthStaff() {
+	try {
+		const ret = await axiosInstance.get('/staff/auth-staff');
+		return queryResult(ret, ret.data);
+	} catch (error) {
+		return axiosError(error);
+	}
 }
 
 export function logoutStaff() {

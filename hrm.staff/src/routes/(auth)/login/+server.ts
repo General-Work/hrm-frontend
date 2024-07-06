@@ -1,17 +1,19 @@
-import { STAFF_LOGIN_KEY, authToken, clearInitStaff, initStaff } from '$svc/auth';
+import { convertIsoToTimestamp } from '$lib/utils';
+import { STAFF_LOGIN_KEY, authToken, loginStaff } from '$svc/auth';
 import { json } from '@sveltejs/kit';
 
 export const POST = async ({ request, cookies }) => {
-	const ret = await request.json();
+	const body = await request.json();
 
-	console.log(ret);
-
-	if (!ret) {
+	if (!body) {
 		return json({ message: 'Bad Request', status: 400, success: false });
 	} else {
-		await new Promise((resolve) => setTimeout(resolve, 700));
-		const expiresIn = 60 * 60 * 24 * 5 * 1000;
-		const sessionCookie = 'sessionCookie';
+		const ret = await loginStaff(body);
+		if (!ret.success) {
+			return json({ message: ret.message, status: 400, success: false });
+		}
+		const sessionCookie = ret.data.accessToken;
+		const expiresIn = convertIsoToTimestamp(ret.data.expires);
 		const options = {
 			maxAge: expiresIn,
 			httpOnly: true,
@@ -20,14 +22,12 @@ export const POST = async ({ request, cookies }) => {
 		};
 		cookies.set(STAFF_LOGIN_KEY, sessionCookie, options);
 
-		initStaff();
-		return json({ message: 'Created new record', status: 200, success: true });
+		return json({ message: 'Login Successful', status: 200, success: true });
 	}
 };
 
 export async function DELETE({ cookies }) {
 	cookies.delete(STAFF_LOGIN_KEY, { path: '/' });
-	clearInitStaff();
 	authToken.set('');
 	return json({ status: 'unAuthenticated' });
 }

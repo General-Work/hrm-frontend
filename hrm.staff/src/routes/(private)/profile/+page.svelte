@@ -3,7 +3,7 @@
 	import Home from '$modules/staffdetails/home/index.svelte';
 
 	$activePage = {
-		title: 'Staff Details',
+		title: 'Staff Profile',
 		showBreadCrumb: false
 	};
 </script>

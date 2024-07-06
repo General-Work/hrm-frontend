@@ -1,6 +1,6 @@
 // See https://kit.svelte.dev/docs/types#app
 
-import type { IApplicantInfo } from '$lib/types';
+import type { IApplicantInfo, IUserInfo } from '$lib/types';
 
 // for information about these interfaces
 declare global {
@@ -8,7 +8,7 @@ declare global {
 		// interface Error {}
 		interface Locals {
 			// userId: number;
-		
+			user: IUserInfo | null;
 		}
 		// interface PageData {}
 		// interface PageState {}

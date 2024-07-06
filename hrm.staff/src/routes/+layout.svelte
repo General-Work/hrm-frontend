@@ -1,5 +1,5 @@
 <script lang="ts" context="module">
-	import axios from 'axios';
+	import axios, { AxiosError } from 'axios';
 
 	const url = 'https://hrm-backend-vsa.fly.dev/api';
 	export const axiosInstance = axios.create({
@@ -22,6 +22,22 @@
 			return config;
 		},
 		function (error) {
+			return Promise.reject(error);
+		}
+	);
+
+	axiosInstance.interceptors.response.use(
+		async (response) => {
+			return response;
+		},
+		async (error: AxiosError) => {
+			if (error.response?.status == 401) {
+				// await signOut({
+				//   redirect: false,
+				// });
+				// window.location.assign(encodeURIComponent(`/login`));
+				// axios.delete('/login');
+			}
 			return Promise.reject(error);
 		}
 	);

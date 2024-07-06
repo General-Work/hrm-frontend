@@ -24,18 +24,30 @@ export interface ISideMenu {
 	title: string;
 }
 
+export interface IRequiredForm {
+	bankData: boolean;
+	professionalLicenceData: boolean;
+	accomodationData: boolean;
+	familyData: boolean;
+	childrenData: boolean;
+}
+
 export interface IUserInfo {
-	id: number;
-	email?: string;
-	firstName?: string;
-	surname?: string;
-	otherNames?: string;
-	fullName: string;
-	profileImage?: string | null;
-	initials?: string;
-	isNewStaff: boolean;
-	phoneNumber: string;
-	staffId: string;
+	id: string;
+	staffIdentificationNumber: string;
+	firstName: string;
+	lastName: string;
+	otherNames: string;
+	specialityId: string | null;
+	dateOfBirth: string;
+	phone: string;
+	gender: string;
+	snnitNumber: string;
+	email: string;
+	disability: string;
+	passportPicture: string;
+	unreadCount: number;
+	newStaffPrerequisiteCheck: IRequiredForm;
 }
 
 export interface IApplicantInfo {

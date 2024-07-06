@@ -4,13 +4,13 @@
 			label: 'Bio Details',
 			kind: 'form',
 			subLabel: 'Update your biography details',
-			path: '/staffdetails/biodata'
+			path: '/profile/biodata'
 		},
 		{
 			label: 'Bank Details',
 			kind: 'form',
 			subLabel: 'Update your bank details',
-			path: '/staffdetails/bank',
+			path: '/profile/bank',
 			icon: 'mdi:bank-outline',
 			iconBgColor: 'bg-orange-100',
 			iconColor: 'text-orange-500'
@@ -20,7 +20,7 @@
 			kind: 'generic',
 			icon: 'fluent-mdl2:family',
 			subLabel: 'Update your family details',
-			path: '/staffdetails/family'
+			path: '/profile/family'
 		},
 		{
 			label: 'Children Details',
@@ -29,14 +29,14 @@
 			subLabel: 'Update your children details',
 			iconBgColor: 'bg-pink-100',
 			iconColor: 'text-pink-500',
-			path: '/staffdetails/children'
+			path: '/profile/children'
 		},
 		{
 			label: 'Professional Licence',
 			kind: 'form',
 			icon: 'material-symbols:license',
 			subLabel: 'Update your licence details',
-			path: '/staffdetails/professionallicence'
+			path: '/profile/professionallicence'
 		},
 		{
 			label: 'Accomodation',
@@ -45,7 +45,7 @@
 			subLabel: 'Update your accomodation details',
 			iconBgColor: 'bg-yellow-100',
 			iconColor: 'text-yellow-600',
-			path: '/staffdetails/accomodation'
+			path: '/profile/accomodation'
 		}
 	];
 </script>

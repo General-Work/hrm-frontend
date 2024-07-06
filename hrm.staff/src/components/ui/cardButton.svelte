@@ -118,8 +118,7 @@
 </script>
 
 <a
-	class=" rounded-[6px] border-gray-400/20 pl-4 py-2.5 w-full cursor-pointer {!showBg &&
-		'hover:bg-pink-50'} flex items-center"
+	class="border rounded-[6px] border-gray-400/20 pl-4 py-2.5 w-full cursor-pointer flex items-center"
 	class:bg-white={showBg}
 	class:shadow-sm={showBg}
 	class:shadow={showShadow}
@@ -127,13 +126,14 @@
 	class:shadow-gray-100={showShadow}
 	class:hover:scale-95={showBg}
 	class:h-20={moreHeight}
-	class:bg-pink-50={active}
+	class:isActive={active}
+	class:isNotActive={!active}
 	on:click
 	{href}
 >
 	<div class="flex justify-between items-center w-full">
 		<div class="flex justify-start items-center gap-3">
-			<div class="{iconBgColor} grid place-content-center p-2.5 rounded-[5px]">
+			<div class="bg-white grid place-content-center p-2.5 w-12 h-12 rounded-full loginbox">
 				<iconify-icon {icon} style="font-size: {iconSize}px;" class={iconColor} />
 			</div>
 			<div class="flex flex-col text-left">
@@ -141,10 +141,19 @@
 				<span class="text-sm text-gray-500 truncate">{subLabel}</span>
 			</div>
 		</div>
-		{#if showArrow}
+		<!-- {#if showArrow}
 			<p class=" rounded-full w-9 h-9 grid place-content-center">
 				<iconify-icon icon="iconamoon:arrow-right-2-light" style="font-size: 25px;" />
 			</p>
-		{/if}
+		{/if} -->
 	</div>
 </a>
+
+<style>
+	.isActive {
+		@apply border-pink-400 bg-pink-50/80;
+	}
+	.isNotActive {
+		@apply border-transparent hover:border-pink-400;
+	}
+</style>

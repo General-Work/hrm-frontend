@@ -8,7 +8,7 @@
 
 	$: breadCrumb.addToFirstIndex(
 		[
-			{ title: 'Staff Details', path: '/staffdetails' },
+			{ title: 'Staff Profile', path: '/profile' },
 			{ title: 'Accomodation Details', path: '/staffdetails/accomodation' }
 		],
 		true

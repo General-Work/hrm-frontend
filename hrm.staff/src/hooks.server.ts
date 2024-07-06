@@ -10,7 +10,11 @@ export const handle = (async ({ event, resolve }) => {
 	// Todo try and do redirection for authenticated users
 	if (applicantSession && !(event.route.id?.split('/')[1] === '(newstaff)')) {
 		throw redirect(307, '/register');
-	} else if (staffSession && !(event.route.id?.split('/')[1] === '(private)')) {
+	} else if (
+		staffSession &&
+		!(event.route.id?.split('/')[1] === '(private)') &&
+		event.request.method !== 'DELETE'
+	) {
 		throw redirect(307, '/home');
 	} else if (!staffSession && event.route.id?.split('/')[1] === '(private)') {
 		throw redirect(307, `login?redirectTo=${event.url.pathname}`);
