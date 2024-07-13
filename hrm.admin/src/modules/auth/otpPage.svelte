@@ -54,11 +54,15 @@
 				if (ok) {
 					const path = extractQueryParam($page.url.search, 'redirectTo');
 
-					if (path) {
-						goto(path);
-					} else {
-						goto('/dashboard');
-					}
+					// if (path) {
+					// 	if (browser) {
+					// 		// goto(path);
+					// 		// window.location.href = path;
+					// 	}
+					// } else {
+					// 	// goto('/dashboard');
+					// }
+					if (browser) window.location.reload();
 				}
 			}
 		} catch (e: any) {
