@@ -1,4 +1,4 @@
-import { axiosInstance } from '$routes/+layout.svelte';
+import axiosInstance from '$lib/axios';
 import { axiosError, callResult } from '$svc/shared';
 
 export interface INewRegistration {

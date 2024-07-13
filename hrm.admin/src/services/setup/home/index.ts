@@ -1,4 +1,4 @@
-import type { IMenuItem } from '$types/appTypes';
+import type { IMenuItem } from "$lib/types";
 
 export const dataPages: IMenuItem[] = [
 	{

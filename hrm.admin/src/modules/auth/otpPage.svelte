@@ -4,6 +4,7 @@
 	import { page } from '$app/stores';
 	import Button from '$cmps/ui/button.svelte';
 	import { extractQueryParam, extractRedirectToRoute, showError, showInfo } from '$lib/utils';
+	import { userInfo } from '$svc/auth';
 	import { signIn } from '@auth/sveltekit/client';
 	import SvelteOtp from '@k4ung/svelte-otp';
 	import axios from 'axios';
@@ -43,6 +44,10 @@
 				redirect: false
 			});
 
+			// if (ret) {
+			// 	console.log(ret);
+			// }
+
 			if (ret) {
 				const error = await ret?.json();
 				if (error?.url.includes('?error=Configuration')) {
@@ -52,15 +57,14 @@
 				const { ok } = ret;
 
 				if (ok) {
-					const path = extractQueryParam($page.url.search, 'redirectTo');
+					// const path = extractQueryParam($page.url.search, 'redirectTo');
 
 					// if (path) {
 					// 	if (browser) {
-					// 		// goto(path);
-					// 		// window.location.href = path;
+					// 		goto(path);
 					// 	}
 					// } else {
-					// 	// goto('/dashboard');
+					// 	goto('/dashboard');
 					// }
 					if (browser) window.location.reload();
 				}

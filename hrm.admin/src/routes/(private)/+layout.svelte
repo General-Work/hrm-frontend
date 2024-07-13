@@ -16,6 +16,7 @@
 	import { onMount } from 'svelte';
 	import { showError } from '$lib/utils/index.js';
 	import { page } from '$app/stores';
+	import { setAuthToken } from '$lib/axios';
 	// import { onMount } from 'svelte';
 	// import { showError } from '$lib/utils/index.js';
 	// import { readAuthUser, userInfo } from '$svc/auth';
@@ -41,7 +42,8 @@
 
 	async function logout() {
 		await signOut();
-		authToken.set('');
+		// authToken.set('');
+		setAuthToken('');
 		if (browser) window.location.reload();
 	}
 

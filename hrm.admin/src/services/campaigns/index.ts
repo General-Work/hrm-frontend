@@ -1,5 +1,5 @@
+import axiosInstance from '$lib/axios';
 import type { APIQueryParams, IPageInfo } from '$lib/types';
-import { axiosInstance } from '$routes/+layout.svelte';
 import { axiosError, callResult, queryResult } from '$svc/shared';
 import type { AxiosResponse } from 'axios';
 

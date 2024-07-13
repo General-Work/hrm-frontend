@@ -1,6 +1,6 @@
 import { SvelteKitAuth } from '@auth/sveltekit';
 import CredentialsProvider from '@auth/sveltekit/providers/credentials';
-import { accountConfirmation } from './auth';
+import { accountConfirmation, userInfo } from './auth';
 
 export const { handle, signIn, signOut } = SvelteKitAuth({
 	providers: [
@@ -55,7 +55,7 @@ export const { handle, signIn, signOut } = SvelteKitAuth({
 	},
 	secret: import.meta.env.VITE_AUTH_SECRET,
 	debug: process.env.NODE_ENV == 'development',
-  trustHost: true,
+	trustHost: true,
 	pages: {
 		signIn: '/login',
 		error: '/login'

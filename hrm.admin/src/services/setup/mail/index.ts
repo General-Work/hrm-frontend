@@ -1,4 +1,4 @@
-import type { ICampaignTemplate, IPageInfo } from '$lib/types';
+import type { ICampaignTemplate } from "..";
 
 const x: ICampaignTemplate[] = [
 	{

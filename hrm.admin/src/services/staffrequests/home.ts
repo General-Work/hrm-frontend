@@ -1,29 +1,7 @@
+import axiosInstance from '$lib/axios';
 import type { APIQueryParams, DocumentKind, IActivity, IPageInfo, IStaff } from '$lib/types';
-import { axiosInstance } from '$routes/+layout.svelte';
 import { axiosError, callResult, queryResult } from '$svc/shared';
 
-const x = [
-	{
-		id: 1,
-		type: 'NEW REGISTRATION',
-		staffId: '-',
-		staffName: 'Yaw Kusi',
-		requestDate: new Date(),
-		status: 'PENDING',
-		assignedTo: 'James Marfo',
-		updateOn: '-'
-	},
-	{
-		id: 2,
-		type: 'BANK UPDATE',
-		staffId: 'MS00012',
-		staffName: 'Paul Jackson',
-		requestDate: new Date(),
-		status: 'PENDING',
-		assignedTo: 'James Gravi',
-		updateOn: '-'
-	}
-];
 
 export interface IRequest {
 	id: string;

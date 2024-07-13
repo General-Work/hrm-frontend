@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<!-- <script lang="ts" context="module">
 	import axios from 'axios';
 
 	const url = import.meta.env.VITE_SERVER_URL;
@@ -25,7 +25,9 @@
 			return Promise.reject(error);
 		}
 	);
-</script>
+
+
+</script> -->
 
 <script>
 	import './styles.css';
@@ -35,8 +37,10 @@
 	import dayjs from 'dayjs';
 	import relativeTime from 'dayjs/plugin/relativeTime';
 	import advancedFormat from 'dayjs/plugin/advancedFormat';
+	import { authToken } from '$svc/auth';
 	import { Toaster } from 'svelte-french-toast';
 	import { page } from '$app/stores';
+	import { setAuthToken } from '$lib/axios';
 
 	dayjs.extend(relativeTime);
 	dayjs.extend(advancedFormat);
@@ -52,7 +56,7 @@
 	hideSpinner();
 	$: if ($page.data.session) {
 		//@ts-ignore
-		token = $page.data.session.accessToken;
+		setAuthToken($page.data.session.accessToken);
 	}
 	// authToken.subscribe((val) => (token = val));
 </script>

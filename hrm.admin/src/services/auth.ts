@@ -2,7 +2,7 @@ import type { IUserInfo } from '$lib/types';
 import { writable } from 'svelte/store';
 import axios from 'axios';
 import { axiosError, queryResult } from './shared';
-import { axiosInstance } from '$routes/+layout.svelte';
+import axiosInstance from '$lib/axios';
 
 export const userInfo = writable<IUserInfo | null>();
 export const isAuthenticated = writable(false);
