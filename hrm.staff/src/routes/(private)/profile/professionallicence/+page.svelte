@@ -1,6 +1,7 @@
 <script>
 	import { activePage, breadCrumb } from '$data/appStore';
 	import Licence from '$modules/staffdetails/licence/index.svelte';
+	export let data;
 	$activePage = {
 		title: 'Professional Licence Details',
 		showBreadCrumb: true
@@ -15,4 +16,4 @@
 	);
 </script>
 
-<Licence />
+<Licence data={data.professionalLicenceDetails} bodies={data.professionalBodies} />

@@ -18,6 +18,8 @@
 	export let altInput = true;
 	export let weekNumbers = false;
 	export let mode: 'single' | 'multiple' | 'range' = 'single';
+	export let minDate: string | Date = '';
+	export let maxDate: string | Date = '';
 
 	let id = nanoid();
 	let pickerId = nanoid();
@@ -35,6 +37,8 @@
 		altFormat,
 		altInput,
 		weekNumbers,
+		minDate,
+		maxDate,
 		element: fullPickerId,
 		onChange(selectedDates: any, dateStr: any) {
 			// console.log('changed', { name, selectedDates, dateStr });

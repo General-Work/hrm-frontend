@@ -53,11 +53,14 @@ const basicMenuItems: IRouteItems[] = [
 ];
 
 export function generateMenutItems(user: IUserInfo | null) {
-	if (!user) return allMenuItems;
+	if (!user) return [];
 	if (
 		user.newStaffPrerequisiteCheck?.bankData === false ||
-		user.newStaffPrerequisiteCheck?.familyData === false
+		user.newStaffPrerequisiteCheck?.familyData === false ||
+		user.newStaffPrerequisiteCheck?.accomodationData == false
 	) {
 		return basicMenuItems;
+	} else {
+		return allMenuItems;
 	}
 }

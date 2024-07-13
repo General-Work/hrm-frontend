@@ -11,8 +11,9 @@ export async function load({ url, params }) {
 	const polymorphicId = extractQueryParam(url.search, 'polymorphicId');
 	const staffId = extractQueryParam(url.search, 'staffId');
 	const res = await readRequest(id);
+	// console.log(res);
 	if (!res.success) {
-		error(res.status!, res.message ?? 'Failed to load data');
+		error(400, res.message ?? 'Failed to load data');
 	}
 	const component = getComponent(type as DocumentKind);
 	const currentStatatus =

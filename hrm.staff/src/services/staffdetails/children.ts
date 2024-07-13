@@ -1,42 +1,26 @@
-import type { IPageInfo } from '$lib/types';
+import { axiosInstance } from '$routes/+layout.svelte';
+import { axiosError, callResult, queryResult } from '$svc/shared';
 
-const x = [
-	{
-		id: 1,
-		name: 'Child 1',
-		dob: new Date(),
-		gender: 'MALE'
-	},
-	{
-		id: 2,
-		name: 'Child 2',
-		dob: new Date(),
-		gender: 'FEMALE'
+export interface IChildDto {
+	childName: string;
+	dateOfBirth: string;
+	gender: string;
+}
+export interface IChildDetails extends IChildDto {}
+export async function readChildrenDetails() {
+	try {
+		const ret = await axiosInstance.get('/staff/children-detail');
+		return queryResult(ret, ret.data);
+	} catch (error) {
+		return axiosError(error);
 	}
-];
-export function readChildrenDetails(): Promise<{
-	success: boolean;
-	message: string;
-	status: number;
-	data: { totalCount: number; pageInfo: IPageInfo; items: any[] };
-}> {
-	return new Promise((resolve) => {
-		setTimeout(() => {
-			resolve({
-				success: true,
-				message: 'success',
-				status: 200,
-				data: {
-					totalCount: x.length,
-					pageInfo: {
-						hasNextPage: false,
-						hasPreviousPage: false,
-						nextPageUrl: '',
-						previousPageUrl: ''
-					},
-					items: x
-				}
-			});
-		}, 700);
-	});
+}
+
+export async function postChildrenDetail(params: IChildDto) {
+	try {
+		const ret = await axiosInstance.post('/staff-request/children-details', params);
+		return callResult(ret, ret.data);
+	} catch (error) {
+		return axiosError(error);
+	}
 }

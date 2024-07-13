@@ -3,28 +3,81 @@
 	import Form from '$cmps/forms/form.svelte';
 	import SelectField from '$cmps/forms/selectField.svelte';
 	import TextField from '$cmps/forms/textField.svelte';
+	import Button from '$cmps/ui/button.svelte';
 	import Fieldset from '$cmps/ui/fieldset.svelte';
 	import { ACCOMODATIONSOURCE, ACCOMODATIONTYPE } from '$lib/constants';
+	import { endProgress, showError, showInfo, startProgress } from '$lib/utils';
+	import type { IAccomodationDetails } from '$svc/staffdetails';
+	import axios from 'axios';
+	import dayjs from 'dayjs';
 	import * as z from 'zod';
 
-	const schema = z.object({});
+	export let data: IAccomodationDetails;
 
 	let init = {
-		source: '',
-		gpsAddress: '',
-		type: '',
-		flatNumber: '',
-		allocationDate: ''
+		source: data.source || '',
+		gpsAddress: data.gpsAddress || '',
+		accomodationType: data.accomodationType || '',
+		flatNumber: data.flatNumber || '',
+		allocationDate: data.allocationDate || null
 	};
+	let busy = false;
+	const schema = z
+		.object({
+			source: z.enum(['OFFICIAL', 'RENTED', 'PERSONAL']),
+			gpsAddress: z.string().min(1, 'Required'),
+			accomodationType: z.string().min(1, 'Required'),
+			allocationDate: z.string().optional(),
+			flatNumber: z.string().optional()
+		})
+		.superRefine((data, ctx) => {
+			if (data.source === 'OFFICIAL' && !data.allocationDate) {
+				ctx.addIssue({
+					code: z.ZodIssueCode.custom,
+					message: 'Required',
+					path: ['allocationDate']
+				});
+			}
+		});
 
 	function handleChange({ detail }: any) {
 		const { values } = detail;
 		init = values;
 	}
+
+	async function handleSubmit({ detail }: CustomEvent) {
+		const { values } = detail;
+		try {
+			startProgress();
+			busy = true;
+			const ret = await axios.post('/profile/accomodation', {
+				...values,
+				allocationDate: values.allocationDate
+					? dayjs(values.allocationDate).format('YYYY-MM-DD')
+					: ''
+			});
+			if (!ret.data.success) {
+				showError(ret.data.message);
+				return;
+			}
+			showInfo('Successfully updated accomodation details');
+		} catch (error: any) {
+			showError(error.message || error);
+		} finally {
+			busy = false;
+			endProgress();
+		}
+	}
 </script>
 
 <Fieldset label="Accomodation Details" kind="pink">
-	<Form {schema} class="space-y-6" on:change={handleChange}>
+	<Form
+		{schema}
+		initialValues={init}
+		class="space-y-6"
+		on:change={handleChange}
+		on:submit={handleSubmit}
+	>
 		<SelectField
 			options={ACCOMODATIONSOURCE}
 			label="Source"
@@ -42,7 +95,7 @@
 		<SelectField
 			options={ACCOMODATIONTYPE}
 			placeholder="Select accomodation type"
-			name="type"
+			name="accomodationType"
 			label="Accomodation Type"
 			required
 			labelAsValue
@@ -53,7 +106,12 @@
 				label="Select allocation date"
 				name="allocationDate"
 				required={init.source === 'OFFICIAL'}
+				maxDate={dayjs().toDate()}
 			/>
+		</div>
+		<div class="flex justify-end gap-2 md:pb-8 pt-3">
+			<Button label="Reset" type="reset" />
+			<Button label="Submit" type="submit" color="primary" {busy} />
 		</div>
 	</Form>
 </Fieldset>

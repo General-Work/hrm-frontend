@@ -24,9 +24,9 @@ export const DISABILITYLIST = [
 export const TITLELIST = ['MR', 'MRS', 'MISS', 'DR', 'PROF'];
 export const GENDERLIST = ['MALE', 'FEMALE'];
 
-export const ACCOMODATIONSOURCE = ['OFFICIAL', 'RENTED', 'PERSONAL'];
+export const ACCOMODATIONSOURCE: string[] = ['OFFICIAL', 'RENTED', 'PERSONAL'];
 
-export const ACCOMODATIONTYPE = [
+export const ACCOMODATIONTYPE: string[] = [
 	'Flat',
 	'Compound house',
 	'Self-contained',
@@ -36,6 +36,7 @@ export const ACCOMODATIONTYPE = [
 ].map((item) => item.toUpperCase());
 
 export const DELIVERYTPES = ['CS', 'NORMAL'];
+export const ACCOUNTTYPE = ['SAVINGS', 'CURRENT'];
 
 export const CERTIFICATES = [
 	'PROFESSOR',

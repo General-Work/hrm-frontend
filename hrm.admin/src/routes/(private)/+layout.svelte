@@ -11,9 +11,16 @@
 	import { CloseButton, Drawer } from 'flowbite-svelte';
 	import { sineIn } from 'svelte/easing';
 	import { browser } from '$app/environment';
-	import axios from 'axios';
+	import { signOut } from '@auth/sveltekit/client';
+	import { authToken, readAuthUser, userInfo } from '$svc/auth';
+	import { onMount } from 'svelte';
+	import { showError } from '$lib/utils/index.js';
+	import { page } from '$app/stores';
+	// import { onMount } from 'svelte';
+	// import { showError } from '$lib/utils/index.js';
+	// import { readAuthUser, userInfo } from '$svc/auth';
 
-	export let data;
+	// export let data;
 
 	let hideSidebar = false;
 	let showAlert = false;
@@ -32,92 +39,108 @@
 		// goto(path);
 	}
 
-	async function signOut() {
-		await axios.delete('/login');
+	async function logout() {
+		await signOut();
+		authToken.set('');
 		if (browser) window.location.reload();
 	}
+
+	onMount(async () => {
+		try {
+			const ret = await readAuthUser();
+			if (ret.success) {
+				userInfo.set(ret.data);
+			}
+		} catch (error: any) {
+			showError(error.message || error);
+		}
+	});
 </script>
 
-<div class="w-screen h-screen overflow-hidden relative">
-	<aside id="sidebar" class="relative overflow-y-hidden flex flex-col" class:hide={hideSidebar}>
-		<div class="flex justify-center pt-4">
-			<!-- <div
+{#if userInfo}
+	<div class="w-screen h-screen overflow-hidden relative">
+		<aside id="sidebar" class="relative overflow-y-hidden flex flex-col" class:hide={hideSidebar}>
+			<div class="flex justify-center pt-4">
+				<!-- <div
         class:px-10={!hideSidebar}
         class="rounded-md border-2 py-4 w-fit border-indigo-600 shadow-md shadow-gray-400"
       > -->
-			<div class="space-y-2">
-				<a href="/dashboard" class="brand">
-					<img src={logo} alt="Logo" class={hideSidebar ? 'w-12 ' : 'w-12 md:w-[250px]'} />
-				</a>
-				<!-- <p
+				<div class="space-y-2">
+					<a href="/dashboard" class="brand">
+						<img src={logo} alt="Logo" class={hideSidebar ? 'w-12 ' : 'w-12 md:w-[250px]'} />
+					</a>
+					<!-- <p
 					class=" text-center uppercase font-semibold text-xl text-blue-800 {hideSidebar
 						? 'hidden'
 						: 'hidden md:block'}"
 				>
 					Archiving
 				</p> -->
-			</div>
-			<!-- </div> -->
-		</div>
-		<Divider otherClasses="mx-6 mb-5 mt-3 bg-gray-200" />
-		<SidePanel routeItems={$menuItems} {hideSidebar} />
-	</aside>
-	<section id="content" class="w-full h-full overflow-hidden">
-		<Navbar
-			user={data.user}
-			bind:hideSidebar
-			on:signout={() => (showAlert = true)}
-			on:rightDrawer={(_) => ($hideRightDrawer = !$hideRightDrawer)}
-		/>
-		<section class="bg-[#f5e9eb78] w-full h-full flex-grow flex flex-col">
-			<div
-				class:hidden={!$activePage.showBreadCrumb}
-				class="head-title pt-4 pb-4 px-2 md:px-4 2xl:px-0 lg:container lg:mx-auto"
-			>
-				<div class="left">
-					<BreadCrumb options={$breadCrumb} {activeBreadCrumb} on:click={optionClicked} />
 				</div>
+				<!-- </div> -->
 			</div>
-			<div class=" w-full h-full flex-grow overflow-hidden">
-				<div class="w-full h-full">
-					<slot />
+			<Divider otherClasses="mx-6 mb-5 mt-3 bg-gray-200" />
+			<SidePanel routeItems={$menuItems} {hideSidebar} />
+		</aside>
+		<section id="content" class="w-full h-full overflow-hidden">
+			<Navbar
+				user={$userInfo}
+				bind:hideSidebar
+				on:signout={() => (showAlert = true)}
+				on:rightDrawer={(_) => ($hideRightDrawer = !$hideRightDrawer)}
+			/>
+			<section class="bg-[#f5e9eb78] w-full h-full flex-grow flex flex-col">
+				<div
+					class:hidden={!$activePage.showBreadCrumb}
+					class="head-title pt-4 pb-4 px-2 md:px-4 2xl:px-0 lg:container lg:mx-auto"
+				>
+					<div class="left">
+						<BreadCrumb options={$breadCrumb} {activeBreadCrumb} on:click={optionClicked} />
+					</div>
 				</div>
-			</div>
+				<div class=" w-full h-full flex-grow overflow-hidden">
+					<div class="w-full h-full">
+						<slot />
+					</div>
+				</div>
+			</section>
 		</section>
-	</section>
-</div>
+	</div>
 
-<div class="lg:hidden relative z-[1000]">
-	{#if rightDrawerOptions}
-		<Drawer
-			bind:hidden={$hideRightDrawer}
-			transitionType="fly"
-			transitionParams={rightDrawerTransitionParams}
-			placement="right"
-			title={rightDrawerOptions.title || 'Quick Actions'}
-			width={'w-96'}
-		>
-			<div class="h-full flex flex-col overflow-y-hidden">
-				<div class="flex items-center">
-					<h5 class="text-base font-semibold text-gray-500">
-						{rightDrawerOptions.title || 'Quick Actions'}
-					</h5>
-					<CloseButton on:click={(_) => ($hideRightDrawer = true)} />
+	<div class="lg:hidden relative z-[1000]">
+		{#if rightDrawerOptions}
+			<Drawer
+				bind:hidden={$hideRightDrawer}
+				transitionType="fly"
+				transitionParams={rightDrawerTransitionParams}
+				placement="right"
+				title={rightDrawerOptions.title || 'Quick Actions'}
+				width={'w-96'}
+			>
+				<div class="h-full flex flex-col overflow-y-hidden">
+					<div class="flex items-center">
+						<h5 class="text-base font-semibold text-gray-500">
+							{rightDrawerOptions.title || 'Quick Actions'}
+						</h5>
+						<CloseButton on:click={(_) => ($hideRightDrawer = true)} />
+					</div>
+					<Divider />
+					<div class="flex-grow overflow-y-auto pt-3">
+						<svelte:component this={rightDrawerOptions.component} {...rightDrawerOptions.props} />
+					</div>
 				</div>
-				<Divider />
-				<div class="flex-grow overflow-y-auto pt-3">
-					<svelte:component this={rightDrawerOptions.component} {...rightDrawerOptions.props} />
-				</div>
-			</div>
-		</Drawer>
-	{/if}
-</div>
+			</Drawer>
+		{/if}
+	</div>
 
-<AlertDialog
-	bind:open={showAlert}
-	message="Are you sure you want to sign out?"
-	on:cancel={() => (showAlert = false)}
-	on:yes={signOut}
-/>
+	<AlertDialog
+		bind:open={showAlert}
+		message="Are you sure you want to sign out?"
+		on:cancel={() => (showAlert = false)}
+		on:yes={logout}
+	/>
 
-<Dialog />
+	<Dialog />
+{:else}
+	<div class="flex justify-center items-center">hii</div>
+{/if}

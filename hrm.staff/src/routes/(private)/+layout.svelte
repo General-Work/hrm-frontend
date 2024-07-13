@@ -72,20 +72,10 @@
 				'Welcome! Your family details are not yet added to your profile. Please update your profile by clicking the button below to proceed with other actions.';
 			service = '/profile/family';
 			action = 'Family Details';
-		} else if (user.newStaffPrerequisiteCheck.childrenData == false) {
-			message =
-				'Welcome! Your children details are not yet added to your profile. Please update your profile by clicking the button below to proceed with other actions.';
-			service = '/profile/children';
-			action = 'Children Details';
-		} else if (user.newStaffPrerequisiteCheck.professionalLicenceData == false) {
-			message =
-				'Welcome! Your professional licence details are not yet added to your profile. Please update your profile by clicking the button below to proceed with other actions.';
-			service = '/profile/professionallicence';
-			action = 'Professional Licence';
 		} else if (user.newStaffPrerequisiteCheck.accomodationData == false) {
 			message =
 				'Welcome! Your accomodation details are not yet added to your profile. Please update your profile by clicking the button below to proceed with other actions.';
-			service = '/profile/accomdation';
+			service = '/profile/accomodation';
 			action = 'Accomodation Details';
 		}
 

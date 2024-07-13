@@ -16,4 +16,4 @@
 	);
 </script>
 
-<Children tableDataInfo={data.data} />
+<Children data={data.children} />

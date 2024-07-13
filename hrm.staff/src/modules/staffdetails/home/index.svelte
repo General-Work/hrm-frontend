@@ -1,5 +1,9 @@
-<script>
-	import { Alert } from 'flowbite-svelte';
+<script lang="ts">
+	import type { IStaffProfile } from '$svc/staffdetails';
+
+	export let data: IStaffProfile;
+
+	$:console.log(data);
 </script>
 
 <div class="w-full h-full">

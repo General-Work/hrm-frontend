@@ -1,6 +1,8 @@
-import { convertIsoToTimestamp } from '$lib/utils/index.js';
-import { LOGIN_KEY, accountConfirmation, authToken, loginUser } from '$svc/auth.js';
+import { convertIsoToTimestamp } from '$lib/utils';
+import { LOGIN_KEY, accountConfirmation, authToken, loginUser } from '$svc/auth';
+import { signOut } from '$svc/authentication';
 import { json, redirect } from '@sveltejs/kit';
+import {} from '@auth/sveltekit';
 
 export const PATCH = async ({ request }) => {
 	const body = await request.json();
@@ -55,3 +57,6 @@ export async function DELETE({ cookies }) {
 	authToken.set('');
 	return json({ status: 'unAuthenticated' });
 }
+// export async function DELETE() {
+// 	return handleAuth();
+// }

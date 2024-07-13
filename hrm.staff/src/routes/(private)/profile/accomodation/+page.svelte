@@ -1,6 +1,7 @@
 <script>
 	import { activePage, breadCrumb } from '$data/appStore';
 	import Accomodation from '$modules/staffdetails/accomodation/index.svelte';
+	export let data
 	$activePage = {
 		title: 'Accomodation Details',
 		showBreadCrumb: true
@@ -9,10 +10,10 @@
 	$: breadCrumb.addToFirstIndex(
 		[
 			{ title: 'Staff Profile', path: '/profile' },
-			{ title: 'Accomodation Details', path: '/staffdetails/accomodation' }
+			{ title: 'Accomodation Details', path: '' }
 		],
 		true
 	);
 </script>
 
-<Accomodation />
+<Accomodation data={data.accomodatioDetail}/>

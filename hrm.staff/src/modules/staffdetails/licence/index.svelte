@@ -3,27 +3,82 @@
 	import Form from '$cmps/forms/form.svelte';
 	import SelectField from '$cmps/forms/selectField.svelte';
 	import TextField from '$cmps/forms/textField.svelte';
+	import Button from '$cmps/ui/button.svelte';
 	import Fieldset from '$cmps/ui/fieldset.svelte';
+	import { endProgress, showError, showInfo, startProgress } from '$lib/utils';
+	import type { IProfessionalLicenceDetails } from '$svc/staffdetails';
+	import axios from 'axios';
+	import dayjs from 'dayjs';
 	import * as z from 'zod';
+	export let data: IProfessionalLicenceDetails;
+	export let bodies: any[] = [];
 
-	const schema = z.object({});
+	const schema = z.object({
+		professionalBodyId: z.string().min(1, 'Required'),
+		pin: z.string().min(1, 'Required'),
+		issuedDate: z.string().min(1, 'Required'),
+		expiryDate: z.string().min(1, 'Required')
+	});
+
+	let init = {
+		professionalBodyId: data.professionalBodyId || '',
+		pin: data.pin || '',
+		issuedDate: data.issuedDate || null,
+		expiryDate: data.expiryDate || null
+	};
+	let busy = false;
+
+	async function handleSubmit({ detail }: CustomEvent) {
+		const { values } = detail;
+		try {
+			startProgress();
+			busy = true;
+			const ret = await axios.post('/profile/professionallicence', {
+				...values,
+				issuedDate: dayjs(values.issuedDate).format('YYYY-MM-DD'),
+				expiryDate: dayjs(values.expiryDate).format('YYYY-MM-DD')
+			});
+			if (!ret.data.success) {
+				showError(ret.data.message);
+				return;
+			}
+			showInfo('Successfully updated accomodation details');
+		} catch (error: any) {
+			showError(error.message || error);
+		} finally {
+			busy = false;
+			endProgress();
+		}
+	}
 </script>
 
 <Fieldset label="Professional Details" kind="pink" icon="gridicons:institution">
-	<Form {schema} class="space-y-6">
+	<Form {schema} initialValues={init} class="space-y-6" on:submit={handleSubmit}>
 		<SelectField
 			label="Professional Body"
 			placeholder="Select professional body"
 			required
-			name="professionalBody"
+			name="professionalBodyId"
+			options={bodies}
 		/>
 		<TextField label="PIN" name="pin" placeholder="Enter your PIN" required />
-		<DateField label="Issue Date" placeholder="Select pin issue date" name="pinDate" required />
+		<DateField
+			label="Issue Date"
+			placeholder="Select pin issue date"
+			name="issuedDate"
+			required
+			maxDate={dayjs().toDate()}
+		/>
 		<DateField
 			label="Expiry Date"
 			placeholder="Select pin expiry date"
 			name="expiryDate"
 			required
+			minDate={dayjs().toDate()}
 		/>
+		<div class="flex justify-end gap-2 md:pb-8 pt-3">
+			<Button label="Reset" type="reset" />
+			<Button label="Submit" type="submit" color="primary" {busy} />
+		</div>
 	</Form>
 </Fieldset>

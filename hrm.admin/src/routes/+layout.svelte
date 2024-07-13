@@ -1,7 +1,7 @@
 <script lang="ts" context="module">
 	import axios from 'axios';
 
-	const url = 'https://hrm-backend-vsa.fly.dev/api';
+	const url = import.meta.env.VITE_SERVER_URL;
 	export const axiosInstance = axios.create({
 		baseURL: url,
 		withCredentials: true,
@@ -35,8 +35,8 @@
 	import dayjs from 'dayjs';
 	import relativeTime from 'dayjs/plugin/relativeTime';
 	import advancedFormat from 'dayjs/plugin/advancedFormat';
-	import { authToken } from '$svc/auth';
 	import { Toaster } from 'svelte-french-toast';
+	import { page } from '$app/stores';
 
 	dayjs.extend(relativeTime);
 	dayjs.extend(advancedFormat);
@@ -50,7 +50,11 @@
 	});
 
 	hideSpinner();
-	authToken.subscribe((val) => (token = val));
+	$: if ($page.data.session) {
+		//@ts-ignore
+		token = $page.data.session.accessToken;
+	}
+	// authToken.subscribe((val) => (token = val));
 </script>
 
 <Toaster

@@ -10,7 +10,6 @@ export const authToken = writable<string>('');
 
 export const LOGIN_KEY = 'hrm_admin_log_in';
 
-
 export async function loginUser(data: { email: string; password: string }) {
 	try {
 		const ret = await axiosInstance.post('/auth/user/login', data);

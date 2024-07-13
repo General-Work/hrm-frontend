@@ -1,13 +1,14 @@
-import { readChildrenDetails } from '$svc/staffdetails';
-import { generateTableDataProps } from '$lib/utils';
-import { error } from '@sveltejs/kit';
+import { readChildrenDetails, type IChildDetails } from '$svc/staffdetails';
 
 export async function load() {
-	const res = await readChildrenDetails();
-	if (!res.success) {
-		error(res.status, res.message ?? 'Failed to load data');
-	}
+	let data: IChildDetails[] = [];
+	try {
+		const ret = await readChildrenDetails();
+		if (ret.success) {
+			data = ret.data;
+		}
+	} catch (error) {}
 	return {
-		data: generateTableDataProps(1, 10, res.data!)
+		children: data
 	};
 }
