@@ -54,7 +54,10 @@
 	});
 
 	hideSpinner();
-
+	$: if ($page.data.session) {
+		//@ts-ignore
+		setAuthToken($page.data.session.accessToken)
+	}
 	// authToken.subscribe((val) => (token = val));
 </script>
 

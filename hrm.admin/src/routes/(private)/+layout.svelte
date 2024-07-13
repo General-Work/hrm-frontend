@@ -15,13 +15,13 @@
 	import { authToken, readAuthUser, userInfo } from '$svc/auth';
 	import { onMount } from 'svelte';
 	import { showError } from '$lib/utils/index.js';
-	// import { page } from '$app/stores';
+	import { page } from '$app/stores';
 	import { setAuthToken } from '$lib/axios';
 	// import { onMount } from 'svelte';
 	// import { showError } from '$lib/utils/index.js';
 	// import { readAuthUser, userInfo } from '$svc/auth';
 
-	export let data;
+	// export let data;
 
 	let hideSidebar = false;
 	let showAlert = false;
@@ -45,11 +45,6 @@
 		// authToken.set('');
 		setAuthToken('');
 		if (browser) window.location.reload();
-	}
-
-	$: if (data.session) {
-		//@ts-ignore
-		setAuthToken(data.session.accessToken);
 	}
 
 	onMount(async () => {
