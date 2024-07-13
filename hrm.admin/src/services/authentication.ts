@@ -55,6 +55,7 @@ export const { handle, signIn, signOut } = SvelteKitAuth({
 	},
 	secret: import.meta.env.VITE_AUTH_SECRET,
 	debug: process.env.NODE_ENV == 'development',
+  trustHost: true,
 	pages: {
 		signIn: '/login',
 		error: '/login'
