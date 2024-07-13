@@ -47,6 +47,11 @@
 		if (browser) window.location.reload();
 	}
 
+	$: if ($page.data.session) {
+		//@ts-ignore
+		setAuthToken($page.data.session.accessToken);
+	}
+
 	onMount(async () => {
 		try {
 			const ret = await readAuthUser();
