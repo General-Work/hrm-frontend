@@ -17,6 +17,7 @@
 	import { showError } from '$lib/utils/index.js';
 	import { page } from '$app/stores';
 	import { setAuthToken } from '$lib/axios';
+	import axios from 'axios';
 	// import { onMount } from 'svelte';
 	// import { showError } from '$lib/utils/index.js';
 	// import { readAuthUser, userInfo } from '$svc/auth';
@@ -47,16 +48,20 @@
 		if (browser) window.location.reload();
 	}
 
-	onMount(async () => {
+	async function fetchData() {
 		try {
-			const ret = await readAuthUser();
-			if (ret.success) {
-				userInfo.set(ret.data);
+			const ret = await axios.get('/auth/user');
+			if (ret.data.success) {
+				userInfo.set(ret.data.data);
 			}
 		} catch (error: any) {
 			showError(error.message || error);
 		}
-	});
+	}
+
+	$: if ($page.data.session) {
+		fetchData();
+	}
 </script>
 
 {#if userInfo}
