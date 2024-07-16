@@ -1,7 +1,0 @@
-{
-	"functions": {
-		"routes/**/*.js": {
-			"maxDuration": 30
-		}
-	}
-}
