@@ -125,6 +125,7 @@
 				pageInfo.totalItems = xs.totalCount;
 				pageInfo.setHasNextPage(xs.pageInfo.hasNextPage);
 				pageInfo.setHasPrevPage(xs.pageInfo.hasPreviousPage);
+				// pageInfo.setCure = xs.currentPage;
 				tableData = xs.items;
 			} else {
 				showError(ret?.data.message || 'Failed to load data');
@@ -263,7 +264,9 @@
 		}
 		const search = current.toString();
 		const page = search ? `?${search}` : '';
+		// debouncedSearch(1, value);
 		debouncedSearch(pageInfo.currentPage, value);
+
 		// goto(`${pathname}${page}`);
 	}
 
