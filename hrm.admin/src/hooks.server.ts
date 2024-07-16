@@ -48,7 +48,11 @@ async function authorizationHandle({ event, resolve }: any) {
 	const session = await event.locals.auth();
 	if (authenticatedPath) {
 		if (!session) {
-			throw redirect(307, `login?redirectTo=${event.url.pathname}`);
+			if (event.url.pathname.includes('?')) {
+				throw redirect(307, `/login`);
+			} else {
+				throw redirect(307, `/login?redirectTo=${event.url.pathname}`);
+			}
 		}
 	} else if (authPath) {
 		if (session) {
