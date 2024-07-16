@@ -50,7 +50,7 @@
 
 	async function fetchData() {
 		try {
-			const ret = await axios.get('/auth/user');
+			const ret = await axios.get('/authuser');
 			if (ret.data.success) {
 				userInfo.set(ret.data.data);
 			}
@@ -62,6 +62,8 @@
 	$: if ($page.data.session) {
 		fetchData();
 	}
+	// onMount(() => {
+	// });
 </script>
 
 {#if userInfo}

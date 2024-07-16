@@ -6,10 +6,5 @@ export const GET = async () => {
 	if (!res.success) {
 		return json({ message: res.message, status: 400, success: res.success });
 	}
-	return json({
-		// status: ,
-		success: res.success,
-		message: res.message,
-		data: res.data
-	});
+	return json(res);
 };
