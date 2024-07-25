@@ -122,7 +122,7 @@
 </script>
 
 <div class="w-full h-full flex-auto">
-	<div class="grid grid-cols-1 gap-2">
+	<div class="grid grid-cols-1 gap-2 ">
 		<div
 			class=" overflow-x-auto w-full h-full max-h-[{height}px] scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch"
 			style="max-height: {height}px; min-height: {showMiniWidth && '250px'};"

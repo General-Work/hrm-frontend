@@ -8,6 +8,10 @@ export function getComponent(type: DocumentKind) {
 			return 'bankUpdate';
 		case 'biodata':
 			return 'biodata';
+		case 'family-details':
+			return 'familyDetails';
+		case 'accommodation':
+			return 'accomodation';
 		default:
 			// console.log('not found', type);
 			return null;
@@ -132,6 +136,11 @@ export function getActions(
 			buttons = defaultActions(id, polymorphicId, staffNumber);
 		case 'biodata':
 			buttons = defaultActions(id, polymorphicId, staffNumber);
+		case 'family-details':
+			buttons = defaultActions(id, polymorphicId, staffNumber);
+		case 'accommodation':
+			buttons = defaultActions(id, polymorphicId, staffNumber);
+
 		default:
 			// console.log('not found', type);
 			break;

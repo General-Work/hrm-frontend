@@ -66,27 +66,15 @@
 	// });
 </script>
 
-{#if userInfo}
+{#if userInfo !== null}
 	<div class="w-screen h-screen overflow-hidden relative">
 		<aside id="sidebar" class="relative overflow-y-hidden flex flex-col" class:hide={hideSidebar}>
 			<div class="flex justify-center pt-4">
-				<!-- <div
-        class:px-10={!hideSidebar}
-        class="rounded-md border-2 py-4 w-fit border-indigo-600 shadow-md shadow-gray-400"
-      > -->
 				<div class="space-y-2">
 					<a href="/dashboard" class="brand">
 						<img src={logo} alt="Logo" class={hideSidebar ? 'w-12 ' : 'w-12 md:w-[250px]'} />
 					</a>
-					<!-- <p
-					class=" text-center uppercase font-semibold text-xl text-blue-800 {hideSidebar
-						? 'hidden'
-						: 'hidden md:block'}"
-				>
-					Archiving
-				</p> -->
 				</div>
-				<!-- </div> -->
 			</div>
 			<Divider otherClasses="mx-6 mb-5 mt-3 bg-gray-200" />
 			<SidePanel routeItems={$menuItems} {hideSidebar} />

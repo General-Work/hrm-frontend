@@ -7,6 +7,7 @@ export function getRecordsActions(
 	status: DocumentStatus
 ) {
 	let buttons: IButtonConfig[] = [];
+	console.log(status)
 	if (isApplicant) {
 		if (status === 'APPROVED') {
 			buttons = [actions[0]];

@@ -158,41 +158,44 @@
 	}
 </script>
 
-<Box bgWhite shadow rounded>
-	<!-- <Table {tableColumns} data={[]} headerColor="sky" /> -->
-	<DatatablePage
-		showIndex
-		{tableColumns}
-		{tableDataInfo}
-		editorComponent={{}}
-		fillSpace={false}
-		showAdd={false}
-		showTopActionsBackground={false}
-		rowClickable
-		bind:reloadData
-		searchPlaceholder="Staff Number..."
-		pageUrl={`/staffrequests?requestType=${filters.requestType}&startDate=${filters.startDate}&endDate=${filters.endDate}`}
-		on:view={({ detail }) => {
-			if (searchParam) {
-				goto(
-					`/staffrequests/${detail.id}?q=${searchParam}&type=${detail.requestType}&status=${detail.status}&polymorphicId=${detail.requestDetailPolymorphicId}&staffId=${detail.requestFromStaff ? detail.requestFromStaff.staffIdentificationNumber : ''}`
-				);
-			} else {
-				goto(
-					`/staffrequests/${detail.id}?type=${detail.requestType}&status=${detail.status}&polymorphicId=${detail.requestDetailPolymorphicId}&staffId=${detail.requestFromStaff ? detail.requestFromStaff.staffIdentificationNumber : ''}`
-				);
-			}
-		}}
-	>
-		<div slot="filters">
-			<TableFilters
-				{requestTypes}
-				{currentRequest}
-				on:click={resetForm}
-				on:typeChange={handleTypeChange}
-				on:startDate={handleStartDate}
-				on:endDate={handleEndDate}
-			/>
-		</div>
-	</DatatablePage>
-</Box>
+<div class="w-full h-full ">
+	<Box bgWhite shadow rounded>
+		<!-- <Table {tableColumns} data={[]} headerColor="sky" /> -->
+		<DatatablePage
+			showIndex
+			{tableColumns}
+			{tableDataInfo}
+			editorComponent={{}}
+			fillSpace={false}
+			showAdd={false}
+			showTopActionsBackground={false}
+			height={tableDataInfo?.pageSize && tableDataInfo.pageSize > 15 ? 800 : 730}
+			rowClickable
+			bind:reloadData
+			searchPlaceholder="Staff Number..."
+			pageUrl={`/staffrequests?requestType=${filters.requestType}&startDate=${filters.startDate}&endDate=${filters.endDate}`}
+			on:view={({ detail }) => {
+				if (searchParam) {
+					goto(
+						`/staffrequests/${detail.id}?q=${searchParam}&type=${detail.requestType}&status=${detail.status}&polymorphicId=${detail.requestDetailPolymorphicId}&staffId=${detail.requestFromStaff ? detail.requestFromStaff.staffIdentificationNumber : ''}`
+					);
+				} else {
+					goto(
+						`/staffrequests/${detail.id}?type=${detail.requestType}&status=${detail.status}&polymorphicId=${detail.requestDetailPolymorphicId}&staffId=${detail.requestFromStaff ? detail.requestFromStaff.staffIdentificationNumber : ''}`
+					);
+				}
+			}}
+		>
+			<div slot="filters">
+				<TableFilters
+					{requestTypes}
+					{currentRequest}
+					on:click={resetForm}
+					on:typeChange={handleTypeChange}
+					on:startDate={handleStartDate}
+					on:endDate={handleEndDate}
+				/>
+			</div>
+		</DatatablePage>
+	</Box>
+</div>

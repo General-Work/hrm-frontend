@@ -27,7 +27,7 @@
 			source: z.enum(['OFFICIAL', 'RENTED', 'PERSONAL']),
 			gpsAddress: z.string().min(1, 'Required'),
 			accomodationType: z.string().min(1, 'Required'),
-			allocationDate: z.string().optional(),
+			allocationDate: z.string().nullable(),
 			flatNumber: z.string().optional()
 		})
 		.superRefine((data, ctx) => {

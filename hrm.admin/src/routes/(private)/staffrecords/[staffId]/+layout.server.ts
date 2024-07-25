@@ -20,14 +20,16 @@ const actionsButtons: IButtonConfig[] = [
 		icon: 'clarity:file-group-solid'
 		// iconBgColor: 'bg-green-100',
 		// iconColor: 'text-green-500'
+	},
+	{
+		label: 'Leave History',
+		kind: 'generic',
+		icon: 'fluent-mdl2:date-time-mirrored',
+		subLabel: '',
+		path: '/leavehistory',
+		iconBgColor: 'bg-pink-100'
+		// iconColor: 'text-green-500'
 	}
-	// {
-	// 	label: 'Excuse Duty',
-	// 	kind: 'generic',
-	// 	icon: 'iconoir:healthcare',
-	// 	subLabel: 'Request for an excuse duty',
-	// 	path: ''
-	// }
 ];
 
 export async function load({ url, params }) {
@@ -78,7 +80,9 @@ export async function load({ url, params }) {
 	} else {
 		documentStaus = status;
 		const ret = await readStaffById(staffId);
+
 		if (ret.success) {
+			// console.log(ret.data);
 			const data = ret.data as IStaffByID;
 			staffHeaderData = {
 				passportPicture: data.passportPicture || '',
@@ -92,9 +96,9 @@ export async function load({ url, params }) {
 				phone: data.phone || '-'
 			};
 			staff = data;
+			// documentStaus = staffHeaderData.status as DocumentStatus;
 		}
 	}
-
 	return {
 		pages: getRecordsActions(k, isApplicant === 'true' ? true : false, documentStaus),
 		staffHeaderData,

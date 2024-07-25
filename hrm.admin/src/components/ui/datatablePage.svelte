@@ -321,36 +321,38 @@
 	</div>
 	<div class:custom-container={!fillSpace} class="w-full h-full flex flex-col gap-2">
 		<slot name="filters" />
-		<DataTable
-			{height}
-			{headerColor}
-			data={tableData}
-			{bgWhite}
-			{headerTextColor}
-			{tableColumns}
-			{initialSortKeys}
-			{showActions}
-			{showCheckBox}
-			{showViewDetails}
-			{showEdit}
-			{selectAllChecked}
-			{showMiniWidth}
-			{rowClickable}
-			{hideWhiteSpace}
-			{selectedRows}
-			{showIndex}
-			{actionLists}
-			bind:hiddenColumns
-			bind:allColumns
-			bind:sortedColumns
-			on:cancel
-			on:delete
-			on:edit={handleEdit}
-			on:feed
-			on:handleCheckbox
-			on:view
-			on:actionClicked
-		/>
+		<div class="w-full h-full">
+			<DataTable
+				{height}
+				{headerColor}
+				data={tableData}
+				{bgWhite}
+				{headerTextColor}
+				{tableColumns}
+				{initialSortKeys}
+				{showActions}
+				{showCheckBox}
+				{showViewDetails}
+				{showEdit}
+				{selectAllChecked}
+				{showMiniWidth}
+				{rowClickable}
+				{hideWhiteSpace}
+				{selectedRows}
+				{showIndex}
+				{actionLists}
+				bind:hiddenColumns
+				bind:allColumns
+				bind:sortedColumns
+				on:cancel
+				on:delete
+				on:edit={handleEdit}
+				on:feed
+				on:handleCheckbox
+				on:view
+				on:actionClicked
+			/>
+		</div>
 	</div>
 </div>
 

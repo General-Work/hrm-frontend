@@ -2,7 +2,7 @@
 	import Form from '$cmps/forms/form.svelte';
 	import TextField from '$cmps/forms/textField.svelte';
 	import type { IBank } from '$svc/setup';
-	import { onMount } from 'svelte';
+	// import { onMount } from 'svelte';
 	import * as z from 'zod';
 
 	export let isValid = false;
@@ -12,8 +12,8 @@
 		return true;
 	};
 	let form: any;
-	let formData = { bankName: '' };
-	let renderId = 0;
+	let formData = { bankName: data.bankName ||'' };
+	// let renderId = 0;
 	const schema = z.object({
 		bankName: z.string().min(1, 'Bank Name is required')
 	});
@@ -24,15 +24,15 @@
 			isValid = val;
 		});
 	}
-	onMount(() => {
-		if (data.id) {
-			formData = { bankName: data.bankName };
-			renderId++;
-		}
-	});
+	// onMount(() => {
+	// 	if (data.id) {
+	// 		formData = { bankName: data.bankName };
+	// 		renderId++;
+	// 	}
+	// });
 </script>
 
-{#key renderId}
+<!-- {#key renderId} -->
 	<Form
 		{schema}
 		initialValues={formData}
@@ -43,4 +43,4 @@
 	>
 		<TextField label="Bank" name="bankName" placeholder="Enter name of bank" required />
 	</Form>
-{/key}
+<!-- {/key} -->

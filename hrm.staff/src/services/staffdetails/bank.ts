@@ -6,6 +6,7 @@ export interface IBankDto {
 	accountType: string;
 	branch: string;
 	accountNumber: string;
+	accountName:string
 }
 
 export interface IBankDetail extends IBankDto {

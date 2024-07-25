@@ -27,11 +27,9 @@ export async function readAccomodationDetail() {
 
 export async function postAccomodationDetail(params: IAccomodationDto) {
 	try {
-		console.log(params);
-		const ret = await axiosInstance.post('/staff-request/accomodation', params);
+		const ret = await axiosInstance.post('/staff-request/accommodation', params);
 		return callResult(ret, ret.data);
 	} catch (error) {
-		console.log(error);
 		return axiosError(error);
 	}
 }

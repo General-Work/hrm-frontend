@@ -124,13 +124,13 @@ export type DocumentKind =
 	| 'family-details'
 	| 'children-details'
 	| 'professional-license'
-	| 'accomodation'
+	| 'accommodation'
 	| 'leave_plan'
 	| 'leave_request';
 
 export type DocumentType = 'NEW REGISTRATION' | 'BANK UPDATE';
 
-export type DocumentStatus = 'PENDING' | 'APPROVED' | 'APPOINTED';
+export type DocumentStatus = 'PENDING' | 'APPROVED' | 'APPOINTED' | 'ACTIVE';
 
 interface IBaseAppointment {
 	id: string;

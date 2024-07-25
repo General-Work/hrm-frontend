@@ -10,7 +10,9 @@
 		acceptRequest: AcceptRequestEditor,
 		transferRequest: TransferEditor,
 		bankUpdate: BankUpdateEditor,
-		biodata: BiodataEditor
+		biodata: BiodataEditor,
+		familyDetails: FamilyDetails,
+		accomodation: AccomodationEditor
 	};
 
 	function textToComponent(typeName: string): ConstructorOfATypedSvelteComponent {
@@ -42,6 +44,8 @@
 	import BiodataEditor from './editors/biodataEditor.svelte';
 	import type { ISideMenu } from '$lib/types';
 	import { goto } from '$app/navigation';
+	import FamilyDetails from './editors/familyDetails.svelte';
+	import AccomodationEditor from './editors/accomodationEditor.svelte';
 
 	initMappers(); // set the component mappers
 

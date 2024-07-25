@@ -80,44 +80,63 @@
 	};
 
 	const genderoption: echarts.EChartsOption = {
+		// tooltip: {
+		// 	trigger: 'item'
+		// },
+		// legend: {
+		// 	top: '5%',
+		// 	left: 'center'
+		// },
+		// series: [
+		// 	{
+		// 		name: 'Gender Share',
+		// 		type: 'pie',
+		// 		radius: ['40%', '70%'],
+		// 		avoidLabelOverlap: false,
+		// 		itemStyle: {
+		// 			borderRadius: 10,
+		// 			borderColor: '#fff',
+		// 			borderWidth: 2
+		// 		},
+		// 		label: {
+		// 			show: false,
+		// 			position: 'center'
+		// 		},
+		// 		emphasis: {
+		// 			label: {
+		// 				show: true,
+		// 				fontSize: 40,
+		// 				fontWeight: 'bold'
+		// 			}
+		// 		},
+		// 		labelLine: {
+		// 			show: false
+		// 		},
+			
+		// 	}
+		// ]
+
 		tooltip: {
-			trigger: 'item'
-		},
-		legend: {
-			top: '5%',
-			left: 'center'
-		},
-		series: [
-			{
-				name: 'Gender Share',
-				type: 'pie',
-				radius: ['40%', '70%'],
-				avoidLabelOverlap: false,
-				itemStyle: {
-					borderRadius: 10,
-					borderColor: '#fff',
-					borderWidth: 2
-				},
-				label: {
-					show: false,
-					position: 'center'
-				},
-				emphasis: {
-					label: {
-						show: true,
-						fontSize: 40,
-						fontWeight: 'bold'
-					}
-				},
-				labelLine: {
-					show: false
-				},
-				data: [
+      trigger: "item",
+    },
+    series: [
+      {
+        name: 'Gender Share',
+        type: "pie",
+        radius: "100%",
+        data: 	 [
 					{ value: 735, name: 'Male' },
 					{ value: 1048, name: 'Female' }
-				]
-			}
-		]
+				],
+        emphasis: {
+          itemStyle: {
+            shadowBlur: 10,
+            shadowOffsetX: 0,
+            shadowColor: "rgba(0, 0, 0, 0.5)",
+          },
+        },
+      },
+    ],
 	};
 
 	const events: IActivity[] = [{ name: 'Staff Durbar', start: new Date(), end: new Date() }];
@@ -189,12 +208,15 @@
 									<div class="grid grid-cols-1 lg:grid-cols-2 gap-3">
 										<div class="">
 											<p class=" text-lg p-3 bg-teal-100">Staff distribution per directorate</p>
-
-											<Echart options={distributionOption} height={400} />
+											<div class="h-96">
+												<Echart chartOptions={distributionOption} />
+											</div>
 										</div>
 										<div>
 											<p class="p-3 text-lg bg-blue-100">Attrition Rate per month</p>
-											<Echart options={atrritionoption} height={400} />
+											<div class="h-96">
+												<Echart chartOptions={atrritionoption} />
+											</div>
 										</div>
 									</div>
 								</div>
@@ -204,7 +226,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="w-full 2xl:w-1/3 pt-8 h-full">
+		<div class="w-full 2xl:w-1/3 pt-8 2xl:pt-0 h-full">
 			<div class="grid grid-cols-1 lg:grid-cols-2 gap-4 2xl:grid-cols-1 2xl:gap-6 h-full">
 				<div class="w-full h-full bg-white rounded-lg shadow dark:bg-dark-card">
 					<div class="flex-auto w-full h-full">
@@ -214,8 +236,8 @@
 							</div>
 
 							<div class="lg:flex lg:grid-cols-2 mx-auto max-w-sm h-full">
-								<div class="flex-auto">
-									<Echart options={genderoption} height={300} />
+								<div class="flex-auto h-52">
+									<Echart chartOptions={genderoption} />
 								</div>
 								<div>
 									<div class="flex justify-center gap-4 lg:flex-col lg:justify-start pt-10 lg:pr-2">

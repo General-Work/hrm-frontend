@@ -5,7 +5,7 @@
 	export let placeholder = '';
 	export let value = '';
 	export let readonly = false;
-	export let addParams = false;
+	// export let addParams = false;
 
 	// $: ({ searchParams, pathname } = $page.url);
 
