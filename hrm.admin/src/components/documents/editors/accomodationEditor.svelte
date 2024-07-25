@@ -33,7 +33,9 @@
 		<FieldPair label="Flat Number" subLabel={data.flatNumber || '-'} />
 		<FieldPair
 			label="Allocation Date"
-			subLabel={dayjs(data.allocationDate).format('ddd DD, MMMM, YYYY') || '-'}
+			subLabel={data?.allocationDate
+				? dayjs(data.allocationDate).format('ddd DD, MMMM, YYYY')
+				: '-'}
 		/>
 	</div>
 </div>
