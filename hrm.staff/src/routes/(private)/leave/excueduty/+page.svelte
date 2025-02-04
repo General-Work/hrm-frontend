@@ -8,7 +8,7 @@
 
 	$: breadCrumb.addToFirstIndex(
 		[
-			{ title: 'Leave Details', path: '/leave' },
+			{ title: 'Leave Overview', path: '/leave' },
 			{ title: 'Excuse Duty', path: '/leave/excueduty' }
 		],
 		true
