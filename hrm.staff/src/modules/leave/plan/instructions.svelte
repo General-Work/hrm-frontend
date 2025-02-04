@@ -18,7 +18,7 @@
 	>
 		<Helper
 			><span class="text-sm 2xl:text-base"
-				>Kindly go through these people you start your planning</span
+				>Kindly go through these before you start your planning</span
 			></Helper
 		>
 		<div class="space-y-3 2xl:space-y-5 bg-purple-50 p-4">
