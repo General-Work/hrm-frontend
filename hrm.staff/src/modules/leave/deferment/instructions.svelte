@@ -45,6 +45,6 @@
 			/>
 		</div>
 
-		<slot />
+		<slot isValid={true} />
 	</form>
 </div>

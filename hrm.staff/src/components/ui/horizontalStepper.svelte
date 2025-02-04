@@ -30,7 +30,7 @@
 
 	export let nextText = 'Next';
 	let props: Record<string, any> = {};
-	let isValid = false;
+	// let isValid = false;
 
 	const dispatch = createEventDispatcher();
 	let onMessage = (step: IStepper, message: any) => {
@@ -82,8 +82,8 @@
 			on:message={(e) => {
 				onMessage(steps[isActiveStep], e.detail);
 			}}
-			bind:isValid
-			bind:busy
+			let:isValid
+			let:busy
 		>
 			<div class="pt-5 flex flex-col md:flex-row md:justify-end gap-3 pr-1 pb-2">
 				<Button

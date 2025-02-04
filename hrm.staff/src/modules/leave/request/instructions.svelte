@@ -17,8 +17,7 @@
 		class="w-full h-full flex flex-col gap-3 2xl:gap-6 p-4 pt-0"
 	>
 		<Helper
-			><span class="text-sm 2xl:text-base"
-				>Kindly go through these before you start your leave</span
+			><span class="text-sm 2xl:text-base">Kindly go through these before you start your leave</span
 			></Helper
 		>
 		<div class="space-y-3 2xl:space-y-5 bg-purple-50 p-4">
@@ -72,6 +71,6 @@
 				</div>
 			</div>
 		</div> -->
-		<slot />
+		<slot isValid={true} />
 	</form>
 </div>

@@ -52,7 +52,7 @@
 				/>
 				<TextField required name="endDate" label="End Date" readonly />
 			</div>
-			<div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+			<!-- <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
 				<SelectField
 					required
 					name="department"
@@ -67,15 +67,15 @@
 					placeholder="Select your current unit"
 					options={unit}
 				/>
-			</div>
+			</div> -->
 			<div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-				<SelectField
+				<!-- <SelectField
 					required
 					name="supervisor"
 					label="Supervisor"
 					placeholder="Select your supervisor"
 					options={supervisor}
-				/>
+				/> -->
 				<TextField
 					name="altContact"
 					label="Contact when away"
@@ -83,8 +83,8 @@
 					placeholder="Enter emergency contact"
 				/>
 				<TextField label="Medical Officer" name="officer" required placeholder="Enter medical officer's name"/>
-				<TextField label="Facility" name="facility" required placeholder="Enter facility' name"/>
 			</div>
+			<TextField label="Facility" name="facility" required placeholder="Enter facility' name"/>
 			<FileUpload label="Medical report" name="file" required />
 			<slot />
 		</Form>

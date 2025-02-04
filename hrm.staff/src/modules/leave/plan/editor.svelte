@@ -6,7 +6,9 @@
 	import Fieldset from '$cmps/ui/fieldset.svelte';
 	import { generateEndDate } from '$lib/utils';
 	import dayjs from 'dayjs';
+	import { Avatar } from 'flowbite-svelte';
 	import * as z from 'zod';
+	import DaysReminderBar from '../DaysReminderBar.svelte';
 
 	const schema = z.object({});
 	let init = {
@@ -33,6 +35,7 @@
 </script>
 
 <Fieldset label="Plan Form" kind="pink" icon="game-icons:archive-register">
+	<DaysReminderBar daysEntitled={46} daysPlanned={0} daysRemaining={46} />
 	{#key renderId}
 		<Form {schema} class="flex flex-col gap-4 p-2" initialValues={init} on:change={handleChange}>
 			<TextField readonly required name="planYear" label="Plan Year" />
@@ -44,17 +47,17 @@
 				type="number"
 				placeholder="Enter number of days planning"
 			/>
-			<div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-				<DateField
-					required
-					name="startDate"
-					label="Start Date"
-					placeholder="Select when you want your plan to begin"
-				/>
-				<TextField required name="endDate" label="End Date" readonly />
-			</div>
+			<!-- <div class="grid grid-cols-1 lg:grid-cols-2 gap-4"> -->
+			<DateField
+				required
+				name="startDate"
+				label="Start Date"
+				placeholder="Select when you want your plan to begin"
+			/>
+			<TextField required name="endDate" label="End Date" readonly />
+			<!-- </div> -->
 
-			<SelectField
+			<!-- <SelectField
 				required
 				name="department"
 				label="Department"
@@ -74,7 +77,7 @@
 				label="Supervisor"
 				placeholder="Select your supervisor"
 				options={supervisor}
-			/>
+			/> -->
 			<slot />
 		</Form>
 	{/key}

@@ -80,7 +80,7 @@
 				/>
 				<TextField required name="endDate" label="Proposed End Date" readonly />
 			</div>
-			<div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+			<!-- <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
 				<SelectField
 					required
 					name="department"
@@ -95,17 +95,17 @@
 					placeholder="Select your current unit"
 					options={unit}
 				/>
-			</div>
-			<div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+			</div> -->
+			<!-- <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
 				<SelectField
 					required
 					name="supervisor"
 					label="Supervisor"
 					placeholder="Select your supervisor"
 					options={supervisor}
-				/>
+				/> -->
 				<TextField name="relievingOfficer" label="Relieving Officer" required />
-			</div>
+			<!-- </div> -->
 
 			<TextField name="altContact" label="Contact when away" required />
 
