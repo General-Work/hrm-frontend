@@ -13,7 +13,7 @@
 	// import { slide } from 'svelte/transition';
 
 	export let descriptor: IComponentDescriptor;
-  export let showTitle = true
+	export let showTitle = true;
 
 	let component: ConstructorOfATypedSvelteComponent | null;
 	let props: any;
@@ -48,7 +48,7 @@
 						/>
 					</button>
 					<button
-						on:click={e => dispatch("close", { id: descriptor.id, data: e.detail })}
+						on:click={(e) => dispatch('close', { id: descriptor.id, data: e.detail })}
 						class="grid place-content-center hover:bg-red-200 hover:text-red-400 rounded-full p-1"
 						class:hidden={!descriptor.closable}
 					>
@@ -58,7 +58,12 @@
 			</div>
 		{/if}
 		<div class:hidden={descriptor.collapsed}>
-			<svelte:component this={component} {...props} on:close={e => dispatch("close", { descriptor, data: e.detail })}/>
+			<svelte:component
+				this={component}
+				{...props}
+				on:close={(e) => dispatch('close', { descriptor, data: e.detail })}
+				on:removeItem
+			/>
 		</div>
 	</div>
 {:else}

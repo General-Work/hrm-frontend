@@ -13,7 +13,6 @@
 	export let actions: IRequestAction[] = [];
 	export let otherActions: IRequestAction[] = [];
 	export let showActions = true;
-	export let feeds: any;
 
 	const dispatch = createEventDispatcher();
 	let panelSize = '300px'; // todo: update this for chat
@@ -68,7 +67,7 @@
 			defaultClass="flex-grow grid "
 		>
 			<div class="flex-grow flex flex-col px-2 pt-3">
-				<Feeds {feeds} />
+				<Feeds {documentId} />
 			</div>
 		</TabItem>
 	</Tabs>

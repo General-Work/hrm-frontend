@@ -12,7 +12,9 @@
 		bankUpdate: BankUpdateEditor,
 		biodata: BiodataEditor,
 		familyDetails: FamilyDetails,
-		accomodation: AccomodationEditor
+		accomodation: AccomodationEditor,
+		appointementDetailsForm: AppointmentDetails,
+		postingDetailsForm: Postings
 	};
 
 	function textToComponent(typeName: string): ConstructorOfATypedSvelteComponent {
@@ -42,10 +44,16 @@
 	import TransferEditor from './editors/transferEditor.svelte';
 	import BankUpdateEditor from './editors/bankUpdateEditor.svelte';
 	import BiodataEditor from './editors/biodataEditor.svelte';
-	import type { ISideMenu } from '$lib/types';
+	import type { DocumentKind, ISideMenu } from '$lib/types';
 	import { goto } from '$app/navigation';
 	import FamilyDetails from './editors/familyDetails.svelte';
 	import AccomodationEditor from './editors/accomodationEditor.svelte';
+	import { readRequest } from '$svc/staffrequests';
+	import { getActions, getComponent } from '$lib/requestMetaData';
+	import PageLoader from '$cmps/ui/pageLoader.svelte';
+	import { slide } from 'svelte/transition';
+	import AppointmentDetails from '$modules/staffrecords/appointmentDetails.svelte';
+	import Postings from '$modules/staffrecords/postings.svelte';
 
 	initMappers(); // set the component mappers
 
@@ -54,9 +62,14 @@
 	export let showActions = true;
 	export let meta: any = {};
 	export let requestData: any = {};
+	export let documentType: DocumentKind = '';
+	export let polymorphicId = '';
+	export let staffId = '';
+	export let documentStatus = '';
 	let elements: IComponentDescriptor[] = [];
 	let document: any = { actions: [], otherActions: [] };
 	let scrollingDiv: HTMLElement = {} as HTMLElement;
+	let busy = true;
 
 	async function loadDocument() {
 		// return document
@@ -108,22 +121,57 @@
 		// 	showError(e?.message || e);
 		// }
 
-		if (!meta) {
-			return;
+		try {
+			const ret = await readRequest(documentId);
+			// console.log({ ret });
+
+			if (ret.success) {
+				requestData = ret.data;
+				const currentStatatus =
+					documentType === 'new-registeration' &&
+					ret.data.applicationStatus !== 'PENDING' &&
+					ret.data.applicationStatus !== 'APPROVED'
+						? ret.data.applicationStatus
+						: documentStatus;
+				meta = {
+					component: getComponent(documentType),
+					data: ret.data,
+					actions: getActions(
+						documentType,
+						documentId,
+						polymorphicId,
+						currentStatatus,
+
+						ret.data?.staff?.staffIdentificationNumber || staffId
+					),
+					status: currentStatatus
+					// feeds: readRequestFeeds(id)
+				};
+
+				if (!meta) {
+					return;
+				}
+				// title = extractQueryParam($page.url.search, 'type').toLocaleLowerCase();
+				add(
+					{
+						type: meta.component,
+						// type: 'recommendLoan',
+						collapsed: false,
+						collapsible: false,
+						closable: false,
+						title: '',
+						props: { documentId: documentId, data: requestData }
+					},
+					true
+				);
+			}
+		} catch (error: any) {
+			showError(error?.message || error);
+		} finally {
+			busy = false;
 		}
-		title = extractQueryParam($page.url.search, 'type').toLocaleLowerCase();
-		add(
-			{
-				type: meta.component,
-				// type: 'recommendLoan',
-				collapsed: false,
-				collapsible: false,
-				closable: false,
-				title: '',
-				props: { documentId: documentId, data: requestData }
-			},
-			true
-		);
+
+		// return;
 	});
 
 	onDestroy(async () => {
@@ -249,29 +297,36 @@
 	});
 </script>
 
-<div class="h-full flex flex-col w-full">
-	<div class="flex-grow shadow-lgx flex bg-gray-100x xborder-1 w-full h-full">
-		<!-- add p-2 to the class -->
-		<ScrollArea otherClasses="flex-grow rounded-lg p-2  h-full w-full ">
-			<div class="loginbox">
-				<Canvas
-					bind:scrollingDiv
-					children={elements}
-					on:close={closeAComponent}
-					on:toggleCollapse={toggleCollapse}
+{#if busy}
+	<div class="pt-10">
+		<PageLoader size={50} />
+	</div>
+{:else}
+	<div class="h-full flex flex-col w-full" in:slide>
+		<div class="flex-grow shadow-lgx flex bg-gray-100x xborder-1 w-full h-full">
+			<!-- add p-2 to the class -->
+			<ScrollArea otherClasses="flex-grow rounded-lg p-2  h-full w-full">
+				<div class="loginbox">
+					<Canvas
+						bind:scrollingDiv
+						children={elements}
+						on:close={closeAComponent}
+						on:toggleCollapse={toggleCollapse}
+						on:removeItem
+					/>
+				</div>
+				<div class="h-16" />
+			</ScrollArea>
+			<div class="hidden h-full flex-grow" class:lg:block={$hideRightDrawer}>
+				<RightPanel
+					{showActions}
+					actions={meta.actions}
+					otherActions={document.otherActions}
+					status={meta.status}
+					on:click={onAction}
+					{documentId}
 				/>
 			</div>
-		</ScrollArea>
-		<div class="hidden h-full flex-grow" class:lg:block={$hideRightDrawer}>
-			<RightPanel
-				{showActions}
-				actions={meta.actions}
-				otherActions={document.otherActions}
-				status={meta.status}
-				feeds={meta.feeds}
-				on:click={onAction}
-				{documentId}
-			/>
 		</div>
 	</div>
-</div>
+{/if}

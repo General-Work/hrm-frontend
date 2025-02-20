@@ -45,6 +45,7 @@
 	import DatatablePage from '$cmps/ui/datatablePage.svelte';
 	import type { ITableColumn } from '$cmps/ui/table.svelte';
 	import type { IStaff, ITableDataProps } from '$lib/types';
+	import { createEventDispatcher } from 'svelte';
 
 	export let tableDataInfo: ITableDataProps<any> | undefined | null;
 	// export let searchParam = '';
@@ -52,6 +53,8 @@
 	// export let currentRequest: any = {};
 
 	let reloadData = false;
+
+	const dispatch = createEventDispatcher();
 </script>
 
 <DatatablePage
@@ -67,7 +70,9 @@
 	searchPlaceholder="Search..."
 	pageUrl={`/staffrecords`}
 	on:view={({ detail }) => {
-		goto(`/staffrecords/${detail.staffIdentificationNumber}`);
+		dispatch('addTab', detail);
+
+		// goto(`/staffrecords/${detail.staffIdentificationNumber}`);
 		// if (searchParam) {
 		// 	goto(
 		// 		`/staffrequests/${detail.id}?q=${searchParam}&type=${detail.requestType}&status=${detail.status}&polymorphicId=${detail.requestDetailPolymorphicId}&staffId=${detail.requestFromStaff ? detail.requestFromStaff.staffIdentificationNumber : ''}`

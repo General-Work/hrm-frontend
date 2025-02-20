@@ -27,7 +27,8 @@ export function axiosError(error: any): IFailureResult {
 			(error.response.data &&
 				error.response.detail &&
 				error.response.detail.map((x: any) => x.msg).join(' , ')) ||
-			error.response.message;
+			error.response.message ||
+			error.message;
 		('Unknown error');
 
 		return { success: false, message: errorMessage };

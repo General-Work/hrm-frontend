@@ -24,7 +24,7 @@
 			in:receive={{ key: child.id }}
 			out:send={{ key: child.id }}
 		>
-			<ComponentRenderer descriptor={child} on:close on:toggleCollapse />
+			<ComponentRenderer descriptor={child} on:close on:toggleCollapse on:removeItem />
 		</div>
 	{/each}
 	{#if toRender.length === 0}

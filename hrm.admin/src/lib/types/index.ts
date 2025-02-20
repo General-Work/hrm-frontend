@@ -92,15 +92,17 @@ export interface IRequestAction {
 	subLabel?: string;
 	cmd: {
 		action: ViewerKind;
+		insertTop?: boolean;
 		args: {
 			type: string;
 			title: string;
 			path?: string;
 			props: {
-				polymorphicId: string;
-				documentId: string;
+				polymorphicId?: string;
+				documentId?: string;
 				staffNumber?: string;
 				size?: IModalSize;
+				isFromRequest?: false;
 			};
 		};
 	};

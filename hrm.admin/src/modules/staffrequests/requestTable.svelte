@@ -82,6 +82,7 @@
 	import type { ITableDataProps } from '$lib/types';
 	import type { IRequest } from '$svc/staffrequests';
 	import dayjs from 'dayjs';
+	import { createEventDispatcher } from 'svelte';
 
 	export let tableDataInfo: ITableDataProps<IRequest> | undefined | null;
 	export let searchParam = '';
@@ -95,6 +96,8 @@
 		requestType: '',
 		remember: false
 	};
+
+	const dispatch = createEventDispatcher();
 
 	function handleFilter({ detail }: any) {
 		const { values } = detail;
@@ -158,7 +161,7 @@
 	}
 </script>
 
-<div class="w-full h-full ">
+<div class="w-full h-full">
 	<Box bgWhite shadow rounded>
 		<!-- <Table {tableColumns} data={[]} headerColor="sky" /> -->
 		<DatatablePage
@@ -175,15 +178,16 @@
 			searchPlaceholder="Staff Number..."
 			pageUrl={`/staffrequests?requestType=${filters.requestType}&startDate=${filters.startDate}&endDate=${filters.endDate}`}
 			on:view={({ detail }) => {
-				if (searchParam) {
-					goto(
-						`/staffrequests/${detail.id}?q=${searchParam}&type=${detail.requestType}&status=${detail.status}&polymorphicId=${detail.requestDetailPolymorphicId}&staffId=${detail.requestFromStaff ? detail.requestFromStaff.staffIdentificationNumber : ''}`
-					);
-				} else {
-					goto(
-						`/staffrequests/${detail.id}?type=${detail.requestType}&status=${detail.status}&polymorphicId=${detail.requestDetailPolymorphicId}&staffId=${detail.requestFromStaff ? detail.requestFromStaff.staffIdentificationNumber : ''}`
-					);
-				}
+				// if (searchParam) {
+				// 	goto(
+				// 		`/staffrequests/${detail.id}?q=${searchParam}&type=${detail.requestType}&status=${detail.status}&polymorphicId=${detail.requestDetailPolymorphicId}&staffId=${detail.requestFromStaff ? detail.requestFromStaff.staffIdentificationNumber : ''}`
+				// 	);
+				// } else {
+				// 	goto(
+				// 		`/staffrequests/${detail.id}?type=${detail.requestType}&status=${detail.status}&polymorphicId=${detail.requestDetailPolymorphicId}&staffId=${detail.requestFromStaff ? detail.requestFromStaff.staffIdentificationNumber : ''}`
+				// 	);
+				// }
+				dispatch('addTab', detail);
 			}}
 		>
 			<div slot="filters">

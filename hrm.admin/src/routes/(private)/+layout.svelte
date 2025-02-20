@@ -66,7 +66,15 @@
 	// });
 </script>
 
-{#if userInfo !== null}
+{#if !$userInfo}
+	<div class="w-screen h-screen flex items-center justify-center">
+		<iconify-icon
+			icon="svg-spinners:3-dots-move"
+			class="text-purple-600"
+			style="font-size: 80px;"
+		/>
+	</div>
+{:else}
 	<div class="w-screen h-screen overflow-hidden relative">
 		<aside id="sidebar" class="relative overflow-y-hidden flex flex-col" class:hide={hideSidebar}>
 			<div class="flex justify-center pt-4">
@@ -138,6 +146,4 @@
 	/>
 
 	<Dialog />
-{:else}
-	<div class="flex justify-center items-center">hii</div>
 {/if}

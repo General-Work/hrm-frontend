@@ -95,11 +95,12 @@ export function getActions(
 									kind: 'approve',
 									label: 'Appointment Details',
 									cmd: {
-										action: 'link',
+										action: 'inlineViewer',
+										insertTop: true,
 										args: {
-											path: `/staffrecords/${id}/appointmentdetails?applicant=true&polymorphicId=${polymorphicId}&status=${status}`,
-											type: 'acceptRequest',
-											title: 'Approve Request',
+											// path: `/staffrecords/${id}/appointmentdetails?applicant=true&polymorphicId=${polymorphicId}&status=${status}`,
+											type: 'appointementDetailsForm',
+											title: 'Appointment Details',
 											props: {
 												documentId: id,
 												polymorphicId,
@@ -109,6 +110,25 @@ export function getActions(
 										}
 									}
 								}
+
+								// {
+								// 	kind: 'approve',
+								// 	label: 'Postings',
+								// 	cmd: {
+								// 		action: 'inlineViewer',
+								// 		insertTop: true,
+								// 		args: {
+								// 			type: 'postingDetailsForm',
+								// 			title: 'Posting Details',
+								// 			// path: `/staffrecords/${staffNumber}/postings?applicant=true&polymorphicId=${polymorphicId}&status=${status}`,
+								// 			props: {
+								// 				documentId: id,
+								// 				polymorphicId,
+								// 				staffNumber: staffNumber
+								// 			}
+								// 		}
+								// 	}
+								// }
 							]
 						: status === 'APPOINTED'
 							? [
@@ -116,11 +136,12 @@ export function getActions(
 										kind: 'approve',
 										label: 'Postings',
 										cmd: {
-											action: 'link',
+											action: 'inlineViewer',
+											insertTop: true,
 											args: {
-												type: 'acceptRequest',
-												title: 'Approve Request',
-												path: `/staffrecords/${staffNumber}/postings?applicant=true&polymorphicId=${polymorphicId}&status=${status}`,
+												type: 'postingDetailsForm',
+												title: 'Posting Details',
+												// path: `/staffrecords/${staffNumber}/postings?applicant=true&polymorphicId=${polymorphicId}&status=${status}`,
 												props: {
 													documentId: id,
 													polymorphicId,
@@ -146,4 +167,110 @@ export function getActions(
 			break;
 	}
 	return buttons;
+}
+
+interface IRecordsActions {
+	actions: IRequestAction[];
+	supportingDocuments: IRequestAction[];
+}
+
+export function getRecordsActions(
+	hasAppointment: boolean,
+	hasPosting: boolean,
+	staffId: string
+): IRecordsActions {
+	let data: IRecordsActions = { actions: [], supportingDocuments: [] };
+
+	if (hasAppointment) {
+		data = {
+			...data,
+			supportingDocuments: [
+				...data.supportingDocuments,
+				{
+					kind: 'approve',
+					label: 'Appointment Details',
+					cmd: {
+						action: 'inlineViewer',
+						insertTop: true,
+						args: {
+							type: 'appointEditor',
+							title: 'Appointment Details',
+							props: {
+								staffNumber: staffId
+							}
+						}
+					}
+				}
+			]
+		};
+	} else {
+		data = {
+			...data,
+			actions: [
+				...data.actions,
+				{
+					kind: 'approve',
+					label: 'Appointment Details',
+					cmd: {
+						action: 'inlineViewer',
+						insertTop: true,
+						args: {
+							type: 'appointementDetailsForm',
+							title: 'Appointment Details',
+							props: {
+								staffNumber: staffId
+							}
+						}
+					}
+				}
+			]
+		};
+	}
+	if (hasPosting) {
+		data = {
+			...data,
+			supportingDocuments: [
+				...data.supportingDocuments,
+				{
+					kind: 'approve',
+					label: 'Postings',
+					cmd: {
+						action: 'inlineViewer',
+						insertTop: true,
+						args: {
+							type: 'postingEditor',
+							title: 'Posting Details',
+							props: {
+								staffNumber: staffId
+							}
+						}
+					}
+				}
+			]
+		};
+	} else {
+		data = {
+			...data,
+			actions: [
+				...data.actions,
+				{
+					kind: 'approve',
+					label: 'Postings',
+					cmd: {
+						action: 'inlineViewer',
+						insertTop: true,
+						args: {
+							type: 'postingDetailsForm',
+							title: 'Posting Details',
+							props: {
+								staffNumber: staffId
+							}
+						}
+					}
+				}
+			]
+		};
+	}
+
+	return data;
 }

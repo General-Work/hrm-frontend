@@ -1,10 +1,11 @@
-<script>
-	// @ts-nocheck
-
+<script lang="ts">
 	import { page } from '$app/stores';
 	import { activePage } from '$data/appStore';
 	import RequestTable from '$modules/staffrequests/requestTable.svelte';
 	import { extractQueryParam } from '$lib/utils';
+	import Tabs, { type ITab } from '$cmps/ui/tabs.svelte';
+	import DocumentViewer from '$cmps/documents/documentViewer.svelte';
+	import { getComponent } from '$lib/requestMetaData.js';
 	export let data;
 
 	$: searchParam = extractQueryParam($page.url.search) ?? '';
@@ -17,15 +18,67 @@
 		// 		? data.documentKinds[searchParam]
 		// 		: data.documentKinds['all']
 	};
+
+	let activeTab = '1';
+
+	let tabs: ITab[] = [
+		{
+			label: 'Home',
+			id: '1',
+			component: RequestTable,
+			isClosable: false,
+			props: {
+				tableDataInfo: data.data,
+				searchParam,
+				requestTypes: Object.values(data.documentKinds),
+				currentRequest:
+					searchParam && data.documentKinds
+						? data.documentKinds[searchParam]
+						: data.documentKinds['all']
+			}
+		}
+	];
+
+	function addTab({ detail }: CustomEvent) {
+		if (tabs.find((x) => x.id === detail.id)) {
+			activeTab = detail.id;
+			return;
+		}
+		const formattedRequestType = detail.requestType.replace(/-/g, ' ').toLocaleUpperCase();
+		tabs = [
+			...tabs,
+			{
+				id: detail.id,
+				isClosable: true,
+				component: DocumentViewer,
+				label: `${formattedRequestType} - ${detail.requestFromStaff ? detail.requestFromStaff.staffIdentificationNumber : ''}`,
+				props: {
+					title: '',
+					documentId: detail.id,
+					documentType: detail.requestType,
+					polymorphicId: detail.requestDetailPolymorphicId,
+					staffId: detail.requestFromStaff ? detail.requestFromStaff.staffIdentificationNumber : '',
+					documentStatus: detail.status
+				}
+			}
+		];
+		activeTab = detail.id;
+	}
+	function removeTab({ detail }: CustomEvent) {
+		const { tabId } = detail;
+		tabs = tabs.filter((tab) => tab.id !== tabId);
+		activeTab = tabs[tabs.length - 1].id;
+	}
 </script>
 
 <div class="w-full h-full custom-container pt-4">
-	<RequestTable
+	<!-- <RequestTable
 		tableDataInfo={data.data}
 		{searchParam}
 		requestTypes={Object.values(data.documentKinds)}
 		currentRequest={searchParam && data.documentKinds
 			? data.documentKinds[searchParam]
 			: data.documentKinds['all']}
-	/>
+	/> -->
+	<Tabs {tabs} bind:activeTab on:removeItem={removeTab} on:addTab={addTab} on:addItem={addTab} />
 </div>
