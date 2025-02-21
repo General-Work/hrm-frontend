@@ -62,7 +62,7 @@
 
 	let dropdown = -1;
 	let openDropDown = false;
-
+	let previousSelectAllChecked = false;
 	const dispatch = createEventDispatcher();
 
 	let tableData = writable(data);
@@ -92,16 +92,16 @@
 	$: sortedColumns = $sortKeys;
 
 	function handleRowCheckboxChange(row: any) {
-		const selectedIndex = selectedRows.indexOf(row);
-		if (selectedIndex === -1) {
-			const updatedSelectedRows = [...selectedRows, row];
-			selectedRows = updatedSelectedRows;
-			dispatch('handleCheckbox', updatedSelectedRows);
-		} else {
-			const updatedSelectedRows = selectedRows.filter((index) => index !== row);
-			selectedRows = updatedSelectedRows;
-			dispatch('handleCheckbox', updatedSelectedRows);
-		}
+		const updatedSelectedRows = [...selectedRows, row];
+		selectedRows = updatedSelectedRows;
+		dispatch('handleCheckbox', selectedRows);
+	}
+
+	function handleRowCheckboxUncheck(row: any) {
+		const updatedSelectedRows = selectedRows.filter((x) => x.id !== row.id);
+		selectedRows = updatedSelectedRows;
+		dispatch('handleCheckbox', selectedRows);
+		previousSelectAllChecked = true;
 	}
 
 	const handleSelectAllChange = () => {
@@ -116,13 +116,26 @@
 		selectAllChecked = !selectAllChecked;
 	};
 
+
+	// TODO: Recheck later 
+	// $: if (selectAllChecked && previousSelectAllChecked === false) {
+	// 	const allDataIds = data.map((d) => d.id);
+	// 	const selectedIds = selectedRows.map((x) => x.id);
+	// 	const allSelected = allDataIds.every((id) => selectedIds.includes(id));
+
+	// 	if (!allSelected) {
+	// 		const newSelectedRows = data.filter((d) => !selectedIds.includes(d.id));
+	// 		selectedRows = [...selectedRows, ...newSelectedRows];
+	// 		dispatch('handleCheckbox', selectedRows);
+	// 	}
+	// }
 	function toggleSubmenu(index: any) {
 		dropdown = dropdown === index ? -1 : index;
 	}
 </script>
 
 <div class="w-full h-full flex-auto">
-	<div class="grid grid-cols-1 gap-2 ">
+	<div class="grid grid-cols-1 gap-2">
 		<div
 			class=" overflow-x-auto w-full h-full max-h-[{height}px] scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch"
 			style="max-height: {height}px; min-height: {showMiniWidth && '250px'};"
@@ -214,7 +227,14 @@
 										<input
 											type="checkbox"
 											class="cursor-pointer"
-											on:change={() => handleRowCheckboxChange(getRow(row))}
+											on:change={(event) => {
+												const d = getRow(row);
+												if (event.target.checked) {
+													handleRowCheckboxChange(d);
+												} else {
+													handleRowCheckboxUncheck(d);
+												}
+											}}
 											checked={selectedRows.find((x) => x.id === getRow(row).id) ?? false}
 										/>
 									</td>

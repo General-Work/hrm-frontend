@@ -24,12 +24,28 @@ const routesItems: IRouteItem[] = [
 				title: 'Campaigns',
 				icon: 'ion:megaphone',
 				path: '/campaigns'
+			},
+			{
+				title: 'Interviews',
+				icon: 'clarity:employee-group-solid',
+				path: '/interviews'
 			}
 			// {
 			// 	title: 'Reports*',
 			// 	icon: 'mdi:report-bar',
 			// 	path: '/reports'
 			// }
+		]
+	},
+
+	{
+		name: 'Promotions',
+		items: [
+			{
+				title: 'Staff Due Promotion',
+				icon: 'famicons:people',
+				path: '/duepromotion'
+			}
 		]
 	},
 

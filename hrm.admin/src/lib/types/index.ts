@@ -197,6 +197,8 @@ interface IStaffPosting {
 	postingDate: string;
 }
 
+export type IPromotionType = 'Special' | 'First' | 'Subsquent';
+
 export interface IStaff {
 	id: string;
 	createdAt: Date;
@@ -229,6 +231,8 @@ export interface IStaff {
 	staffAccomodation: null | any;
 	currentAppointment: null | any;
 	appointmentHistory: null | any;
+	isDuePromtion?: boolean;
+	promotionType?: IPromotionType;
 }
 
 export interface IStaffByID {
@@ -260,6 +264,8 @@ export interface IStaffByID {
 	category: null;
 	currentAppointment: IBaseAppointment;
 	firstAppointment: IBaseAppointment;
+	isDuePromtion?: boolean;
+	promotionType?: IPromotionType;
 }
 
 export interface IStaffHeader {

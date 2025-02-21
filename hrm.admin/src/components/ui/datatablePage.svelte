@@ -70,10 +70,8 @@
 	export let isFormData = false;
 	export let fillSpace = true;
 	export let showTopActionsBackground = true;
-	// export let tableActions: IActionList[] = [
-	// 	{ icon: 'ri:edit-2-fil', name: 'Edit detail' }
-	// 	// { icon: 'ri:edit-2-fil', name: 'Edit detail' }
-	// ];
+	export let addFuction: (() => void) | null = null;
+
 	let showForm = false;
 	let oldQuery = '';
 	let pageInfo = new PageInfo();
@@ -175,6 +173,10 @@
 	}
 
 	function addNew() {
+		if (addFuction) {
+			addFuction();
+			return;
+		}
 		editorHeading = addNewHeading;
 		activeEntry = (newRecord && { ...newRecord }) || null;
 		editing = false;
@@ -313,6 +315,7 @@
 						bind:hiddenColumns
 					/>
 				</div>
+				<slot name="customHeaderActions" />
 				<div class:hidden={!showAdd} class="grid">
 					<Button label={addButtonLabel} color="primary" on:click={addNew} />
 				</div>
@@ -334,7 +337,7 @@
 				{showCheckBox}
 				{showViewDetails}
 				{showEdit}
-				{selectAllChecked}
+				bind:selectAllChecked
 				{showMiniWidth}
 				{rowClickable}
 				{hideWhiteSpace}
