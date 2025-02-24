@@ -6,9 +6,9 @@
 
 	async function fetchData() {
 		try {
-			const ret = await readAuthUser();
-			if (ret.success) {
-				userInfo.set(ret.data);
+			const ret = await axios.get('/authuser');
+			if (ret.data.success) {
+				userInfo.set(ret.data.data);
 			}
 		} catch (error: any) {
 			showError(error.message || error);
