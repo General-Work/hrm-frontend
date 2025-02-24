@@ -5,7 +5,8 @@
 		appointementDetailsForm: AppointmentDetails,
 		appointEditor: AppointEditor,
 		postingEditor: PostingEditor,
-		postingDetailsForm: Postings
+		postingDetailsForm: Postings,
+		interviewOverview: InterviewOverview
 	};
 
 	function textToComponent(typeName: string): ConstructorOfATypedSvelteComponent {
@@ -31,7 +32,7 @@
 	import ScrollArea from '$cmps/ui/scrollArea.svelte';
 	import StaffHeader from '$cmps/ui/staffHeader.svelte';
 	import { hideRightDrawer, modalConfig, sideQuickActions } from '$data/appStore';
-	import { getRecordsActions } from '$lib/requestMetaData';
+	import { getRecordsActions, type IViewerUsage } from '$lib/requestMetaData';
 	import type { DocumentStatus, ISideMenu, IStaffByID, IStaffHeader } from '$lib/types';
 	import { showError } from '$lib/utils';
 	import { readStaffById } from '$svc/staff';
@@ -43,12 +44,13 @@
 	import AppointmentDetails from '$modules/staffrecords/appointmentDetails.svelte';
 	import AppointEditor from '$modules/staffrecords/partials/appointEditor.svelte';
 	import PostingEditor from '$modules/staffrecords/partials/postingEditor.svelte';
+	import InterviewOverview from '$routes/(private)/(aux)/interview-session/interviewOverview.svelte';
 
 	initMappers(); // set the component mappers
 
 	export let data;
 	export let staffId = '';
-
+	export let viewerUsage: IViewerUsage;
 	let staffHeaderData = {} as IStaffHeader;
 	let documentStaus: DocumentStatus = 'PENDING';
 	let staff = {} as IStaffByID;
@@ -166,7 +168,8 @@
 				const { actions: x, supportingDocuments: y } = getRecordsActions(
 					staff.currentAppointment ? true : false,
 					staff.staffPosting ? true : false,
-					staff.staffIdentificationNumber
+					staff.staffIdentificationNumber,
+					viewerUsage
 				);
 				actions = x;
 				supportDocuments = y;

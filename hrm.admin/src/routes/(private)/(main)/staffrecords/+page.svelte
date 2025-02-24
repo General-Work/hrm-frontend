@@ -31,7 +31,6 @@
 		activeTab = tabs[tabs.length - 1].id;
 	}
 	function addTab({ detail }: CustomEvent) {
-		console.log({ detail });
 		if (tabs.find((x) => x.id === detail.id)) {
 			activeTab = detail.id;
 			return;
@@ -44,12 +43,7 @@
 				component: RecordsViewer,
 				label: `${detail.lastName} - ${detail.staffIdentificationNumber}`,
 				props: {
-					// title: '',
-					// documentId: detail.id,
-					// documentType: detail.requestType,
-					// polymorphicId: detail.requestDetailPolymorphicId,
-					// staffId: detail.requestFromStaff ? detail.requestFromStaff.staffIdentificationNumber : '',
-					// documentStatus: detail.status
+					viewerUsage: 'records',
 					staffId: detail.staffIdentificationNumber
 				}
 			}

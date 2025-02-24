@@ -3,7 +3,7 @@
 	import TextField from '$cmps/forms/textField.svelte';
 	import Button from '$cmps/ui/button.svelte';
 
-	import { extractRedirectToRoute, showError, showInfo } from '$lib/utils';
+	import { extractQueryParam, extractRedirectToRoute, showError, showInfo } from '$lib/utils';
 	import * as z from 'zod';
 	import axios from 'axios';
 	import { goto } from '$app/navigation';
@@ -26,9 +26,9 @@
 				return;
 			}
 			showInfo(ret.data.message);
-			goto(
-				`/otp?redirectTo=${extractRedirectToRoute($page.url.search) ?? ''}&email=${encodeURIComponent(values.email)}&pwd=${encodeURIComponent(values.password)}`
-			);
+			const redirectTo = `${extractQueryParam($page.url.search, 'redirectTo') ?? ''}&email=${encodeURIComponent(values.email)}&pwd=${encodeURIComponent(values.password)}`;
+			console.log({ search: $page.url.search, redirectTo });
+			goto(`/otp?redirectTo=${redirectTo}`);
 		} catch (error: any) {
 			showError(error.message || error);
 		} finally {

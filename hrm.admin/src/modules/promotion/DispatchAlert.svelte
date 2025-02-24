@@ -3,10 +3,12 @@
 	import Form from '$cmps/forms/form.svelte';
 	import SelectField from '$cmps/forms/selectField.svelte';
 	import TextAreaField from '$cmps/forms/textAreaField.svelte';
+	import PageLoader from '$cmps/ui/pageLoader.svelte';
 	import type { IStaffByID } from '$lib/types';
 	import { showError } from '$lib/utils';
 	import { readSmsTemplates, type ICampaignTemplate } from '$svc/setup';
 	import { createEventDispatcher, onMount } from 'svelte';
+	import { slide } from 'svelte/transition';
 	import { z } from 'zod';
 
 	export let selectedItems: IStaffByID[] = [];
@@ -26,6 +28,7 @@
 	let renderTemplate = 0;
 	let selectedMessage = '';
 	let showAlert = false;
+	let busy = true;
 
 	const dispatch = createEventDispatcher();
 
@@ -79,50 +82,58 @@
 			}));
 		} catch (error: any) {
 			showError(error?.message || error);
+		} finally {
+			busy = false;
 		}
 	});
 </script>
 
-<div class="w-full h-full px-4 py-2">
-	<fieldset class="flex flex-wrap gap-3 bg-blue-50 shadow p-3 rounded-md">
-		<legend class="text-sm bg-blue-500 text-white rounded-[5px] px-2 py-0.5">Selected Staff</legend>
-		{#each selectedItems as item}
-			<div class="bg-orange-300 px-1.5 py-1 flex items-center gap-1 rounded-[4px]">
-				<p class="text-xs">{item.lastName} - {item.staffIdentificationNumber}</p>
-				<iconify-icon
-					icon="ic:round-close"
-					style="font-size: 15px;"
-					role="button"
-					class="hover:text-red-600"
-					on:click={() => dispatch('removeItem', item)}
-					tabindex="0"
-					on:keydown={() => dispatch('removeItem', item)}
-				/>
-			</div>
-		{/each}
-	</fieldset>
+{#if busy}
+	<div class="w-full h-full"><PageLoader size={50} /></div>
+{:else}
+	<div class="w-full h-full px-4 py-2" in:slide>
+		<fieldset class="flex flex-wrap gap-3 bg-blue-50 shadow p-3 rounded-md">
+			<legend class="text-sm bg-blue-500 text-white rounded-[5px] px-2.5 py-0.5">
+				{selectedItems.length} Selected Staff
+			</legend>
+			{#each selectedItems as item}
+				<div class="bg-orange-300 px-1.5 py-1 flex items-center gap-1 rounded-[4px]">
+					<p class="text-xs">{item.lastName} - {item.staffIdentificationNumber}</p>
+					<iconify-icon
+						icon="ic:round-close"
+						style="font-size: 15px;"
+						role="button"
+						class="hover:text-red-600"
+						on:click={() => dispatch('removeItem', item)}
+						tabindex="0"
+						on:keydown={() => dispatch('removeItem', item)}
+					/>
+				</div>
+			{/each}
+		</fieldset>
 
-	<Form
-		initialValues={formData}
-		{schema}
-		on:change={handleForm}
-		class="space-y-4 pt-4"
-		on:submit
-		bind:this={form}
-	>
-		{#key renderTemplate}
-			<SelectField
-				label="Templates"
-				options={templates}
-				name="smsTemplateId"
-				on:change={templateChanged}
-			/>
-		{/key}
-		{#key renderId}
-			<TextAreaField label="Message" required rows={7} name="message" value={selectedMessage} />
-		{/key}
-	</Form>
-</div>
+		<Form
+			initialValues={formData}
+			{schema}
+			on:change={handleForm}
+			class="space-y-4 pt-4"
+			on:submit
+			bind:this={form}
+		>
+			{#key renderTemplate}
+				<SelectField
+					label="Templates"
+					options={templates}
+					name="smsTemplateId"
+					on:change={templateChanged}
+				/>
+			{/key}
+			{#key renderId}
+				<TextAreaField label="Message" required rows={7} name="message" value={selectedMessage} />
+			{/key}
+		</Form>
+	</div>
+{/if}
 
 <AlertDialog
 	message="Are you sure want to replace the selected template's messge with the current message?."

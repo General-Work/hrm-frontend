@@ -10,6 +10,8 @@ import type { DecodedSession, IPageInfo, ITableDataProps, StaffNumberPrefix } fr
 import { crossfade } from 'svelte/transition';
 import { quintOut } from 'svelte/easing';
 
+export const deployedAppURL = 'http://localhost:5181';
+
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
 }
@@ -283,7 +285,7 @@ export function parseQueryParams(url: string): { baseUrl: string; queryParams: Q
 export function isSessionExpired(session: DecodedSession): boolean {
 	console.log(session.exp);
 	console.log(new Date(session.exp));
-	console.log(new Date(1719185536317))
+	console.log(new Date(1719185536317));
 	return new Date(session.exp * 1000) < new Date();
 }
 

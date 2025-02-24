@@ -40,26 +40,47 @@
 import { redirect, type Handle } from '@sveltejs/kit';
 import { handle as authenticationHandle } from './services/authentication';
 import { sequence } from '@sveltejs/kit/hooks';
+import { extractQueryParam } from '$lib/utils';
 
 async function authorizationHandle({ event, resolve }: any) {
 	const authenticatedPath = event.route.id?.split('/')[1] === '(private)';
 	const authPath = event.route.id?.split('/')[1] === '(auth)';
+	const auxPath = event.route.id?.split('/')[1] === '(aux)';
 
 	const session = await event.locals.auth();
 	if (authenticatedPath) {
+		// console.log('here 1');
+		// console.log({ session });
+		// if (!session) {
+		// 	if (event.url.pathname.includes('?')) {
+		// 		throw redirect(307, `/login`);
+		// 	} else {
+		// 		throw redirect(307, `/login?redirectTo=${event.url.pathname}`);
+		// 	}
+		// }
 		if (!session) {
-			if (event.url.pathname.includes('?')) {
-				throw redirect(307, `/login`);
-			} else {
-				throw redirect(307, `/login?redirectTo=${event.url.pathname}`);
-			}
+			const redirectTo = encodeURIComponent(event.url.pathname + event.url.search);
+
+			throw redirect(307, `/login?redirectTo=${redirectTo}`);
 		}
 	} else if (authPath) {
 		if (session) {
+
+			// throw redirect(307, '/dashboard');
+			const redirectTo = extractQueryParam(event.url.search, 'redirectTo');
+
+			const page = encodeURIComponent(event.url.pathname + event.url.search);
+
+
+			throw redirect(307, redirectTo ? redirectTo : page);
+		}
+	} else if (auxPath) {
+
+		// return resolve(event);
+	} else {
+		if (session) {
 			throw redirect(307, '/dashboard');
 		}
-	} else {
-		if (session) throw redirect(307, '/dashboard');
 		throw redirect(307, '/login');
 	}
 

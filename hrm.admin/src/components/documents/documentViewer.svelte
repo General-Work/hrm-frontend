@@ -31,7 +31,7 @@
 	import RightPanel from './panel.svelte';
 	import Canvas from '$cmps/canvas/index.svelte';
 	import type { IComponentDescriptor } from '$cmps/canvas/types';
-	import { onDestroy, onMount } from 'svelte';
+	import { onDestroy, onMount, tick } from 'svelte';
 	import { extractQueryParam, showError } from '$lib/utils';
 	import { browser } from '$app/environment';
 	import ScrollArea from '$cmps/ui/scrollArea.svelte';
@@ -179,7 +179,7 @@
 		// $actions = [];
 	});
 
-	function add(descriptor: IComponentDescriptor, insertTop: boolean = false) {
+	async function add(descriptor: IComponentDescriptor, insertTop: boolean = false) {
 		if (descriptor.id) {
 			// likely this has already been added. For now, just skip it. Later, set focus to it.
 			// on delete, we need to clear the id so it can be re-added
@@ -195,6 +195,8 @@
 		// 		scrollToBottom();
 		// 	}, 500);
 		// }
+		await tick();
+		scrollToBottom();
 	}
 
 	function onAction({ detail }: any) {

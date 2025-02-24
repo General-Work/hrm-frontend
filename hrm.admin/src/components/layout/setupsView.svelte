@@ -8,12 +8,13 @@
 	export let cards: IMenuItem[] = [];
 	export let moreHeight = true;
 	export let moreShadow = false;
+	export let allowCustomContainerClass = false;
 </script>
 
-<ScrollArea otherClasses="w-full h-full ">
+<ScrollArea otherClasses="w-full h-full {allowCustomContainerClass && 'pr-2'}">
 	<SlideDown otherClasses="w-full h-full pr-2">
 		{#if cards && cards.length}
-			<div class="flex flex-col gap-8 pb-4">
+			<div class="flex flex-col gap-8 pb-4" class:custom-container={allowCustomContainerClass}>
 				{#each cards as card}
 					<div class="space-y-3">
 						<div class="border-b border-gray-300 text-teal-500 text-lg">{card.title}</div>

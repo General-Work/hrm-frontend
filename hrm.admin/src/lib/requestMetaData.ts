@@ -174,102 +174,165 @@ interface IRecordsActions {
 	supportingDocuments: IRequestAction[];
 }
 
+export type IViewerUsage = 'interview' | 'records';
+
 export function getRecordsActions(
 	hasAppointment: boolean,
 	hasPosting: boolean,
-	staffId: string
+	staffId: string,
+	usage: IViewerUsage
 ): IRecordsActions {
 	let data: IRecordsActions = { actions: [], supportingDocuments: [] };
 
-	if (hasAppointment) {
-		data = {
-			...data,
-			supportingDocuments: [
-				...data.supportingDocuments,
-				{
-					kind: 'approve',
-					label: 'Appointment Details',
-					cmd: {
-						action: 'inlineViewer',
-						insertTop: true,
-						args: {
-							type: 'appointEditor',
-							title: 'Appointment Details',
-							props: {
-								staffNumber: staffId
+	switch (usage) {
+		case 'records':
+			if (hasAppointment) {
+				data = {
+					...data,
+					supportingDocuments: [
+						...data.supportingDocuments,
+						{
+							kind: 'approve',
+							label: 'Appointment Details',
+							cmd: {
+								action: 'inlineViewer',
+								insertTop: true,
+								args: {
+									type: 'appointEditor',
+									title: 'Appointment Details',
+									props: {
+										staffNumber: staffId
+									}
+								}
+							}
+						}
+					]
+				};
+			} else {
+				data = {
+					...data,
+					actions: [
+						...data.actions,
+						{
+							kind: 'approve',
+							label: 'Appointment Details',
+							cmd: {
+								action: 'inlineViewer',
+								insertTop: true,
+								args: {
+									type: 'appointementDetailsForm',
+									title: 'Appointment Details',
+									props: {
+										staffNumber: staffId
+									}
+								}
+							}
+						}
+					]
+				};
+			}
+			if (hasPosting) {
+				data = {
+					...data,
+					supportingDocuments: [
+						...data.supportingDocuments,
+						{
+							kind: 'approve',
+							label: 'Postings',
+							cmd: {
+								action: 'inlineViewer',
+								insertTop: true,
+								args: {
+									type: 'postingEditor',
+									title: 'Posting Details',
+									props: {
+										staffNumber: staffId
+									}
+								}
+							}
+						}
+					]
+				};
+			} else {
+				data = {
+					...data,
+					actions: [
+						...data.actions,
+						{
+							kind: 'approve',
+							label: 'Postings',
+							cmd: {
+								action: 'inlineViewer',
+								insertTop: true,
+								args: {
+									type: 'postingDetailsForm',
+									title: 'Posting Details',
+									props: {
+										staffNumber: staffId
+									}
+								}
+							}
+						}
+					]
+				};
+			}
+			break;
+
+		case 'interview':
+			data = {
+				actions: [
+					{
+						kind: 'approve',
+						label: 'Give Marks',
+						cmd: {
+							action: 'modalViewer',
+							args: {
+								type: 'addInterviewMarks',
+								title: 'Give Marks',
+								props: {
+									staffNumber: staffId
+								}
 							}
 						}
 					}
-				}
-			]
-		};
-	} else {
-		data = {
-			...data,
-			actions: [
-				...data.actions,
-				{
-					kind: 'approve',
-					label: 'Appointment Details',
-					cmd: {
-						action: 'inlineViewer',
-						insertTop: true,
-						args: {
-							type: 'appointementDetailsForm',
-							title: 'Appointment Details',
-							props: {
-								staffNumber: staffId
+				],
+				supportingDocuments: [
+					{
+						kind: 'approve',
+						label: 'Appointment Details',
+						cmd: {
+							action: 'inlineViewer',
+							insertTop: true,
+							args: {
+								type: 'appointEditor',
+								title: 'Appointment Details',
+								props: {
+									staffNumber: staffId
+								}
+							}
+						}
+					},
+					{
+						kind: 'approve',
+						label: 'Postings',
+						cmd: {
+							action: 'inlineViewer',
+							insertTop: true,
+							args: {
+								type: 'postingDetailsForm',
+								title: 'Posting Details',
+								props: {
+									staffNumber: staffId
+								}
 							}
 						}
 					}
-				}
-			]
-		};
-	}
-	if (hasPosting) {
-		data = {
-			...data,
-			supportingDocuments: [
-				...data.supportingDocuments,
-				{
-					kind: 'approve',
-					label: 'Postings',
-					cmd: {
-						action: 'inlineViewer',
-						insertTop: true,
-						args: {
-							type: 'postingEditor',
-							title: 'Posting Details',
-							props: {
-								staffNumber: staffId
-							}
-						}
-					}
-				}
-			]
-		};
-	} else {
-		data = {
-			...data,
-			actions: [
-				...data.actions,
-				{
-					kind: 'approve',
-					label: 'Postings',
-					cmd: {
-						action: 'inlineViewer',
-						insertTop: true,
-						args: {
-							type: 'postingDetailsForm',
-							title: 'Posting Details',
-							props: {
-								staffNumber: staffId
-							}
-						}
-					}
-				}
-			]
-		};
+				]
+			};
+			break;
+
+		default:
+			break;
 	}
 
 	return data;

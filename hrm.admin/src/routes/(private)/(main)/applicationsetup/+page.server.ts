@@ -93,6 +93,17 @@ const dataPages: IMenuItem[] = [
 			}
 		]
 	},
+	{
+		title: 'Promotions',
+		items: [
+			{
+				title: 'Promotion Types',
+				description: 'Manage all types of promotions',
+				icon: 'carbon:category-new-each',
+				path: '/applicationsetup/promotiontypes'
+			}
+		]
+	},
 
 	{
 		title: 'General',

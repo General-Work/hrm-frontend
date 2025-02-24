@@ -11,6 +11,7 @@
 
 	export let hideSidebar = false;
 	export let user: IUserInfo | null | undefined;
+	export let showMenuIcon = true;
 
 	let showUser = false;
 
@@ -18,11 +19,13 @@
 </script>
 
 <nav class="py-1.5 flex items-center gap-4">
-	<IconButton
-		icon={hideSidebar ? 'mdi:menu-close' : 'ic:round-menu-open'}
-		color="default"
-		on:click={() => (hideSidebar = !hideSidebar)}
-	/>
+	<div class:hidden={!showMenuIcon}>
+		<IconButton
+			icon={hideSidebar ? 'mdi:menu-close' : 'ic:round-menu-open'}
+			color="default"
+			on:click={() => (hideSidebar = !hideSidebar)}
+		/>
+	</div>
 	<div class="hidden sm:flex flex-grow gap-4 items-center">
 		<p class=" font-semibold capitalize">
 			{$activePage.title}
