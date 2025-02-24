@@ -10,7 +10,8 @@ import type { DecodedSession, IPageInfo, ITableDataProps, StaffNumberPrefix } fr
 import { crossfade } from 'svelte/transition';
 import { quintOut } from 'svelte/easing';
 
-export const deployedAppURL = 'http://localhost:5181';
+// export const deployedAppURL = 'http://localhost:5181';
+export const deployedAppURL = 'https://hrm-admin-rust.vercel.app';
 
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
