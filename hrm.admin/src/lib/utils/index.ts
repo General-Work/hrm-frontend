@@ -11,7 +11,8 @@ import { crossfade } from 'svelte/transition';
 import { quintOut } from 'svelte/easing';
 
 // export const deployedAppURL = 'http://localhost:5181';
-export const deployedAppURL = 'https://hrm-admin-rust.vercel.app';
+// export const deployedAppURL = 'https://hrm-admin-rust.vercel.app';
+export const deployedAppURL = import.meta.env.VITE_AUTH_URL;
 
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
