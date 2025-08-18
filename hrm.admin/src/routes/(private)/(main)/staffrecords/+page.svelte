@@ -44,7 +44,8 @@
 				label: `${detail.lastName} - ${detail.staffIdentificationNumber}`,
 				props: {
 					viewerUsage: 'records',
-					staffId: detail.staffIdentificationNumber
+					staffNumber: detail.staffIdentificationNumber,
+					staffDbId: detail.id
 				}
 			}
 		];

@@ -47,8 +47,9 @@
 	export let polymorphicId: string;
 	export let readOnly = false;
 	export let documentId = '';
-	export let staffId = '';
-	export let hasAppointment = false
+	export let staffNumber = '';
+	export let staffDbId = ''
+	export let hasAppointment = false;
 	export let formData: IAppointmentFormDto = {
 		staffType: '',
 		appointmentType: '',
@@ -69,6 +70,7 @@
 		endDate: null
 	};
 	// const id = $page.params.staffId;
+	$: console.log({ staffNumber, polymorphicId });
 
 	const schema = z.object({
 		staffType: z.string().min(1, 'Required'),
@@ -116,7 +118,8 @@
 			startProgress();
 			busy = true;
 			const d: AppointmentDto = {
-				polymorphicId: polymorphicId,
+				polymorphicId: null,
+				staffId: staffDbId,
 				gradeId: values.currentAppointmentGrade,
 				appointmentType: values.appointmentType,
 				staffType: values.staffType,

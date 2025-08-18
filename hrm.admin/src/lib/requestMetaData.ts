@@ -180,7 +180,8 @@ export function getRecordsActions(
 	hasAppointment: boolean,
 	hasPosting: boolean,
 	staffId: string,
-	usage: IViewerUsage
+	usage: IViewerUsage,
+	dbId?: string
 ): IRecordsActions {
 	let data: IRecordsActions = { actions: [], supportingDocuments: [] };
 
@@ -201,7 +202,8 @@ export function getRecordsActions(
 									type: 'appointEditor',
 									title: 'Appointment Details',
 									props: {
-										staffNumber: staffId
+										staffNumber: staffId,
+										staffDbId: dbId
 									}
 								}
 							}
@@ -223,7 +225,8 @@ export function getRecordsActions(
 									type: 'appointementDetailsForm',
 									title: 'Appointment Details',
 									props: {
-										staffNumber: staffId
+										staffNumber: staffId,
+										staffDbId: dbId
 									}
 								}
 							}
@@ -246,7 +249,8 @@ export function getRecordsActions(
 									type: 'postingEditor',
 									title: 'Posting Details',
 									props: {
-										staffNumber: staffId
+										staffNumber: staffId,
+										staffDbId: dbId
 									}
 								}
 							}
@@ -268,7 +272,8 @@ export function getRecordsActions(
 									type: 'postingDetailsForm',
 									title: 'Posting Details',
 									props: {
-										staffNumber: staffId
+										staffNumber: staffId,
+										staffDbId: dbId
 									}
 								}
 							}
@@ -290,7 +295,8 @@ export function getRecordsActions(
 								type: 'addInterviewMarks',
 								title: 'Give Marks',
 								props: {
-									staffNumber: staffId
+									staffNumber: staffId,
+									staffDbId: dbId
 								}
 							}
 						}
@@ -307,7 +313,8 @@ export function getRecordsActions(
 								type: 'appointEditor',
 								title: 'Appointment Details',
 								props: {
-									staffNumber: staffId
+									staffNumber: staffId,
+									staffDbId: dbId
 								}
 							}
 						}
@@ -322,7 +329,8 @@ export function getRecordsActions(
 								type: 'postingDetailsForm',
 								title: 'Posting Details',
 								props: {
-									staffNumber: staffId
+									staffNumber: staffId,
+									staffDbId: dbId
 								}
 							}
 						}

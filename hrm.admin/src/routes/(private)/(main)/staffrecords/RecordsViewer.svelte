@@ -49,7 +49,8 @@
 	initMappers(); // set the component mappers
 
 	export let data;
-	export let staffId = '';
+	export let staffNumber = '';
+	export let staffDbId = '';
 	export let viewerUsage: IViewerUsage;
 	let staffHeaderData = {} as IStaffHeader;
 	let documentStaus: DocumentStatus = 'PENDING';
@@ -68,6 +69,7 @@
 			return;
 		}
 		const cmd = detail.cmd;
+		console.log({ cmd });
 		switch (cmd.action) {
 			case 'inlineViewer':
 				if (!cmd.args) {
@@ -146,7 +148,7 @@
 
 	onMount(async () => {
 		try {
-			const [staffRes] = await Promise.all([readStaffById(staffId)]);
+			const [staffRes] = await Promise.all([readStaffById(staffNumber)]);
 			if (staffRes.success) {
 				// console.log(ret.data);
 				const data = staffRes.data as IStaffByID;
@@ -162,14 +164,15 @@
 					phone: data.phone || '-'
 				};
 				staff = data;
-				console.log({ staff });
+				// console.log({ staff });
 				// documentStaus = staffHeaderData.status as DocumentStatus;
 
 				const { actions: x, supportingDocuments: y } = getRecordsActions(
 					staff.currentAppointment ? true : false,
 					staff.staffPosting ? true : false,
 					staff.staffIdentificationNumber,
-					viewerUsage
+					viewerUsage,
+					staffDbId
 				);
 				actions = x;
 				supportDocuments = y;

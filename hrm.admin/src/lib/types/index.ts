@@ -101,6 +101,7 @@ export interface IRequestAction {
 				polymorphicId?: string;
 				documentId?: string;
 				staffNumber?: string;
+				staffDbId?:string
 				size?: IModalSize;
 				isFromRequest?: false;
 			};

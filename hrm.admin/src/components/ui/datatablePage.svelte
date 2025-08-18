@@ -218,6 +218,7 @@
 
 				allowDispatchAfterAction &&
 					dispatch('afterAction', { type: 'create', values, data: ret.data.data });
+				closeSideModal();
 			} else {
 				showError(ret.data.message);
 			}
