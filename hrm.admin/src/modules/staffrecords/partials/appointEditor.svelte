@@ -66,5 +66,7 @@
 		isApplicant={false}
 		polymorphicId=""
 		grade={grades}
+		updating={!readonly}
+		staffDbId={staff.id}
 	/>
 {/if}

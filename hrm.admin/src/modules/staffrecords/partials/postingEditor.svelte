@@ -43,6 +43,8 @@
 			busy = false;
 		}
 	});
+
+	// $: console.log({ readonly });
 </script>
 
 {#if busy}
@@ -56,5 +58,7 @@
 		polymorphicId=""
 		documentId=""
 		directorates={directorate}
+		updating={!readonly}
+		staffDbId={staff.id}
 	/>
 {/if}

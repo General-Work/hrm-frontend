@@ -87,10 +87,28 @@ export async function addNewAppointmentDetails(data: AppointmentDto) {
 		return axiosError(error);
 	}
 }
-
+export async function updateNewAppointmentDetails(data: AppointmentDto) {
+	try {
+		const ret = await axiosInstance.put('/staff-request/update-current-appointment', data);
+		return callResult(ret, ret.data);
+	} catch (error) {
+		console.log(error);
+		return axiosError(error);
+	}
+}
 export async function addPostingDetails(data: PostingsDto) {
 	try {
 		const ret = await axiosInstance.post('/staff-request/new-posting', data);
+		return callResult(ret, ret.data);
+	} catch (error) {
+		// console.log(error);
+		return axiosError(error);
+	}
+}
+
+export async function updatePostingDetails(data: PostingsDto) {
+	try {
+		const ret = await axiosInstance.put('/staff-request/update-current-posting', data);
 		return callResult(ret, ret.data);
 	} catch (error) {
 		// console.log(error);

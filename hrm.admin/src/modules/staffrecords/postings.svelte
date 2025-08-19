@@ -18,7 +18,7 @@
 	import PageLoader from '$cmps/ui/pageLoader.svelte';
 	import { endProgress, showError, showInfo, startProgress } from '$lib/utils';
 	import { readDirectorates, type IDirectorate } from '$svc/setup';
-	import { addPostingDetails, type PostingsDto } from '$svc/staffrequests';
+	import { addPostingDetails, updatePostingDetails, type PostingsDto } from '$svc/staffrequests';
 	import axios from 'axios';
 	import dayjs from 'dayjs';
 	import { createEventDispatcher, onMount } from 'svelte';
@@ -27,6 +27,7 @@
 	export let polymorphicId: string;
 	export let documentId: string;
 	export let readOnly = false;
+	export let updating = false;
 	export let directorates: any[] = [];
 	export let staffDbId = '';
 	export let formData: IPostingFormDto = {
@@ -58,6 +59,8 @@
 	let units: any[] = [];
 	let isLoading = true;
 	const dispatch = createEventDispatcher();
+
+	// $: console.log({ updating });
 
 	async function readDeparments({ detail }: CustomEvent) {
 		const { id } = detail;
@@ -114,12 +117,14 @@
 				unitId: values.unitId,
 				postingDate: dayjs(values.postingDate).format('YYYY-MM-DD')
 			};
-			const ret = await addPostingDetails(d);
+			const ret = updating ? await updatePostingDetails(d) : await addPostingDetails(d);
 			if (!ret.success) {
 				showError(ret.message);
 				return;
 			}
-			showInfo('Staff has been successfully posted');
+			showInfo(
+				updating ? 'Successfully updated staff record' : 'Staff has been successfully posted'
+			);
 			if ($page.url.pathname === '/staffrequests') {
 				dispatch('removeItem', { tabId: documentId });
 			}
@@ -130,6 +135,8 @@
 			busy = false;
 		}
 	}
+
+	// $: console.log({ formData, readOnly });
 
 	onMount(async () => {
 		if (directorates.length === 0) {
@@ -157,6 +164,8 @@
 			renderForm++;
 		}
 	});
+
+	$: if (updating) renderForm++;
 </script>
 
 {#if isLoading}
@@ -206,6 +215,7 @@
 			{/key}
 
 			<DateField label="Posting date" name="postingDate" readonly={readOnly} />
+
 			<div class="flex flex-col sm:flex-row sm:justify-end gap-3 pt-4" class:hidden={readOnly}>
 				<Button label="Reset" type="reset" />
 				<Button label="Submit" type="submit" color="success" {busy} />

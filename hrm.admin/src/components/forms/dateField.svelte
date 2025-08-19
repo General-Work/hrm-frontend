@@ -51,6 +51,8 @@
 	$: hasError = $touched[name] && $errors[name]?.length;
 	$: error = $errors[name]?.join(', ');
 
+	$:console.log({"a":$data[name]})
+
 	// todo: how to add additional classes
 </script>
 

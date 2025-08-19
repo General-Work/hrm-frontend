@@ -35,7 +35,11 @@
 	import { APPOINTMENTTYPELIST, STAFFPAYMENTTYPE, STAFFTYPE } from '$lib/constants';
 	import { endProgress, showError, showInfo, startProgress } from '$lib/utils';
 	import { readGrades, type IGrade, type ISpecialty } from '$svc/salaries';
-	import { addNewAppointmentDetails, type AppointmentDto } from '$svc/staffrequests';
+	import {
+		addNewAppointmentDetails,
+		updateNewAppointmentDetails,
+		type AppointmentDto
+	} from '$svc/staffrequests';
 	import axios from 'axios';
 	import dayjs from 'dayjs';
 	import { createEventDispatcher, onMount } from 'svelte';
@@ -49,6 +53,7 @@
 	export let documentId = '';
 	export let staffNumber = '';
 	export let staffDbId = '';
+	export let updating = false;
 	export let hasAppointment = false;
 	export let formData: IAppointmentFormDto = {
 		staffType: '',
@@ -114,8 +119,7 @@
 
 	async function handleSubmit({ detail }: CustomEvent) {
 		const { values } = detail;
-		dispatch('reload', { id: staffDbId });
-		return;
+
 		try {
 			startProgress();
 			busy = true;
@@ -144,12 +148,14 @@
 				staffSpecialityId: values.specialty || null
 			};
 
-			const ret = await addNewAppointmentDetails(d);
+			const ret = updating
+				? await updateNewAppointmentDetails(d)
+				: await addNewAppointmentDetails(d);
 			if (!ret.success) {
 				showError(ret.message);
 				return;
 			}
-			showInfo('Appointment details added');
+			showInfo(updating ? 'Appointment details updated' : 'Appointment details added');
 
 			// openAlert = true;
 			handleCancel();
@@ -268,6 +274,8 @@
 			handleSteps({ detail: { id: formData.step } } as CustomEvent);
 		}
 	});
+
+	$: if (updating) renderId++;
 </script>
 
 {#if isLoading}
