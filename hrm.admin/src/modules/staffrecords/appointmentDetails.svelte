@@ -48,7 +48,7 @@
 	export let readOnly = false;
 	export let documentId = '';
 	export let staffNumber = '';
-	export let staffDbId = ''
+	export let staffDbId = '';
 	export let hasAppointment = false;
 	export let formData: IAppointmentFormDto = {
 		staffType: '',
@@ -70,7 +70,7 @@
 		endDate: null
 	};
 	// const id = $page.params.staffId;
-	$: console.log({ staffNumber, polymorphicId });
+	// $: console.log({ staffNumber, polymorphicId });
 
 	const schema = z.object({
 		staffType: z.string().min(1, 'Required'),
@@ -114,6 +114,8 @@
 
 	async function handleSubmit({ detail }: CustomEvent) {
 		const { values } = detail;
+		dispatch('reload', { id: staffDbId });
+		return;
 		try {
 			startProgress();
 			busy = true;
@@ -151,6 +153,7 @@
 
 			// openAlert = true;
 			handleCancel();
+			dispatch('reload', { id: staffDbId });
 		} catch (error: any) {
 			showError(error.message || error);
 		} finally {

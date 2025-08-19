@@ -71,7 +71,7 @@
 	<div class=" w-full h-full" class:pt-12={makeTabSticky}>
 		{#each tabs as tab (tab.id)}
 			<div class:hidden={activeTab !== tab.id} class="w-full h-full">
-				<svelte:component this={tab.component} on:addTab on:addItem {...tab.props} on:removeItem />
+				<svelte:component this={tab.component} on:addTab on:addItem {...tab.props} on:removeItem on:reload />
 			</div>
 		{/each}
 	</div>

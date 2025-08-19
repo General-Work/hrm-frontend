@@ -9,6 +9,7 @@
 	import { readDirectorates, type IDirectorate } from '$svc/setup';
 
 	export let staffNumber = '';
+	export let readonly = true;
 	let staff: IStaffByID = {} as IStaffByID;
 	let formData: IPostingFormDto = {} as IPostingFormDto;
 	let busy = true;
@@ -49,5 +50,11 @@
 		<PageLoader size={50} />
 	</div>
 {:else}
-	<Postings readOnly {formData} polymorphicId="" documentId="" directorates={directorate} />
+	<Postings
+		readOnly={readonly}
+		{formData}
+		polymorphicId=""
+		documentId=""
+		directorates={directorate}
+	/>
 {/if}

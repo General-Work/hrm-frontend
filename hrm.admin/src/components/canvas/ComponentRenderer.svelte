@@ -36,6 +36,14 @@
 				</h3>
 				<div class="flex items-center gap-2">
 					<button
+						on:click={(_) => dispatch('toggleUpdate', descriptor.id)}
+						class:hidden={!descriptor.updatable}
+						class="flex items-center hover:bg-gray-200 rounded-[5px] p-1 gap-1 text-sm"
+					>
+						<iconify-icon icon="hugeicons:node-edit" style="font-size: 16px;" />
+						{descriptor.updating ? 'Cancel' : 'Update'}
+					</button>
+					<button
 						on:click={(_) => dispatch('toggleCollapse', descriptor.id)}
 						class="grid place-content-center hover:bg-gray-200 rounded-full p-1"
 						class:hidden={!descriptor.collapsible}
@@ -63,6 +71,7 @@
 				{...props}
 				on:close={(e) => dispatch('close', { descriptor, data: e.detail })}
 				on:removeItem
+				on:reload
 			/>
 		</div>
 	</div>

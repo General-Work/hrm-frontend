@@ -53,7 +53,7 @@ export interface INewRegistration {
 }
 
 export interface AppointmentDto {
-	polymorphicId?: string;
+	polymorphicId?: string | null;
 	gradeId: string;
 	appointmentType: string;
 	staffType: string;
@@ -66,11 +66,12 @@ export interface AppointmentDto {
 	firstAppointmentGradeId: string | null;
 	staffSpecialityId: string | null;
 	step: string;
-	staffId:string
+	staffId: string;
 }
 
 export interface PostingsDto {
-	polymorphicId: string;
+	polymorphicId?: string | null;
+	staffId?: string | null;
 	directorateId: string;
 	departmentId: string;
 	unitId: string;

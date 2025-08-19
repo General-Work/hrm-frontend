@@ -97,11 +97,12 @@ export interface IRequestAction {
 			type: string;
 			title: string;
 			path?: string;
+			updatable?: boolean;
 			props: {
 				polymorphicId?: string;
 				documentId?: string;
 				staffNumber?: string;
-				staffDbId?:string
+				staffDbId?: string;
 				size?: IModalSize;
 				isFromRequest?: false;
 			};

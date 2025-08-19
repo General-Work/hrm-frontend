@@ -28,7 +28,7 @@
 	export let documentId: string;
 	export let readOnly = false;
 	export let directorates: any[] = [];
-	export let staffId = '';
+	export let staffDbId = '';
 	export let formData: IPostingFormDto = {
 		directorateId: '',
 		departmentId: '',
@@ -107,7 +107,8 @@
 			startProgress();
 			busy = true;
 			const d: PostingsDto = {
-				polymorphicId: polymorphicId,
+				polymorphicId: null,
+				staffId: staffDbId,
 				directorateId: values.directorateId,
 				departmentId: values.departmentId,
 				unitId: values.unitId,

@@ -51,6 +51,21 @@
 		];
 		activeTab = detail.id;
 	}
+
+	function handleReload({ detail }: any) {
+		console.log({ detail });
+		const tabIdx = tabs.findIndex((x) => x.id === detail.id);
+		if (tabIdx !== -1) {
+			// Create a new object to force Svelte to re-render the component
+			const tab = tabs[tabIdx];
+			tabs = [
+				...tabs.slice(0, tabIdx),
+				{ ...tab, props: { ...tab.props, _reload: Date.now() } },
+				...tabs.slice(tabIdx + 1)
+			];
+			activeTab = detail.id;
+		}
+	}
 </script>
 
 <!-- <MemberSearchBox fetchFunction={readStaffWithStaffID} showAvatar href="/staffrecords" /> -->
@@ -60,5 +75,12 @@
 		<StaffTable tableDataInfo={data.data} />
 	</Box> -->
 
-	<Tabs {tabs} bind:activeTab on:removeItem={removeTab} on:addTab={addTab} on:addItem={addTab} />
+	<Tabs
+		{tabs}
+		bind:activeTab
+		on:removeItem={removeTab}
+		on:addTab={addTab}
+		on:addItem={addTab}
+		on:reload={handleReload}
+	/>
 </div>

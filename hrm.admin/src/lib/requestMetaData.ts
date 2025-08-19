@@ -201,6 +201,7 @@ export function getRecordsActions(
 								args: {
 									type: 'appointEditor',
 									title: 'Appointment Details',
+									updatable: true,
 									props: {
 										staffNumber: staffId,
 										staffDbId: dbId
@@ -246,6 +247,7 @@ export function getRecordsActions(
 								action: 'inlineViewer',
 								insertTop: true,
 								args: {
+									updatable: true,
 									type: 'postingEditor',
 									title: 'Posting Details',
 									props: {

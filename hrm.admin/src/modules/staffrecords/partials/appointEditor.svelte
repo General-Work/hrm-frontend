@@ -9,6 +9,9 @@
 	import { readGrades, type IGrade } from '$svc/salaries';
 
 	export let staffNumber = '';
+	export let readonly = true;
+
+	$: console.log({ readonly });
 	let staff: IStaffByID = {} as IStaffByID;
 	let formData: IAppointmentFormDto = {} as IAppointmentFormDto;
 	let busy = true;
@@ -57,5 +60,11 @@
 		<PageLoader size={50} />
 	</div>
 {:else}
-	<AppointmentDetails readOnly {formData} isApplicant={false} polymorphicId="" grade={grades} />
+	<AppointmentDetails
+		readOnly={readonly}
+		{formData}
+		isApplicant={false}
+		polymorphicId=""
+		grade={grades}
+	/>
 {/if}

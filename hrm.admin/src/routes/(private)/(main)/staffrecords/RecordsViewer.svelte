@@ -146,6 +146,21 @@
 		}
 	}
 
+	function handleUpdate({ detail }: any) {
+		const index = elements.findIndex((x) => x.id === detail);
+
+		if (index !== -1) {
+			const updatedElement = { ...elements[index] };
+
+			updatedElement.updating = !updatedElement.updating;
+			updatedElement.props = { ...updatedElement.props, readonly: !updatedElement.updating };
+			const updatedElements = [...elements];
+			updatedElements[index] = updatedElement;
+
+			elements = updatedElements;
+		}
+	}
+
 	onMount(async () => {
 		try {
 			const [staffRes] = await Promise.all([readStaffById(staffNumber)]);
@@ -209,6 +224,8 @@
 						on:close={closeAComponent}
 						on:toggleCollapse={toggleCollapse}
 						on:removeItem
+						on:toggleUpdate={handleUpdate}
+						on:reload
 					/>
 				</div>
 				<div class="h-16" />
