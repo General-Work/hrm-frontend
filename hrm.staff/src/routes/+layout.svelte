@@ -1,7 +1,7 @@
 <script lang="ts" context="module">
 	import axios, { AxiosError } from 'axios';
 
-	const url = 'https://hrm-backend-vsa.fly.dev/api';
+	const url = 'https://hrm-backend-vsa-delicate-rain-4100.fly.dev/api'
 	export const axiosInstance = axios.create({
 		baseURL: url,
 		withCredentials: true,
