@@ -15,29 +15,42 @@
 			}
 		}
 	];
-	export async function create(data: any) {
-		// return await axios.post('/usermanagement', data);
-	}
+	const fetchDataForTable = async (pageNumber: number, pageSize: number, filters: TableFilter) => {
+		// console.log({ pageNumber, pageSize, filters });
 
-	export async function read() {
-		// return await axios.get('/usermanagement');
-	}
+		return await readProfessionalBodies({
+			pageNumber: pageNumber,
+			pageSize: pageSize,
+			search: filters.search || ''
+		});
+	};
+
+	const update = async (params: any) => {
+		// console.log(params);
+		return await updateProfessionalBody(params.id, params.name);
+	};
+
+	const create = async (params: any) => {
+		// console.log(params);
+		return postProfessionalBody(params.name);
+	};
 </script>
 
 <script lang="ts">
-	import DatatablePage from '$cmps/ui/datatablePage.svelte';
+	import DatatablePage, { type TableFilter } from '$cmps/ui/datatablePage.svelte';
 	import type { ITableColumn } from '$cmps/ui/table.svelte';
-	import type { ITableDataProps } from '$lib/types';
-	import type { IProfessionalBody } from '$svc/setup';
+	import {
+		postProfessionalBody,
+		readProfessionalBodies,
+		updateProfessionalBody,
+		type IProfessionalBody
+	} from '$svc/setup';
 	import dayjs from 'dayjs';
 	import Editor from './editor.svelte';
-
-	export let tableDataInfo: ITableDataProps<any> | undefined;
 </script>
 
 <DatatablePage
 	tableColumns={columns}
-	{tableDataInfo}
 	editorComponent={Editor}
 	showEditorIn="side-modal"
 	addButtonLabel="New Professional Body"
@@ -45,6 +58,10 @@
 	updateHeading="Update Professional Body"
 	sideModalSize="sm"
 	showModalButtons
-	pageUrl="/applicationsetup/professionalbodies"
 	fillSpace={false}
+	createEntry={create}
+	read={fetchDataForTable}
+	updateEntry={update}
+	showActions
+	showEdit
 />

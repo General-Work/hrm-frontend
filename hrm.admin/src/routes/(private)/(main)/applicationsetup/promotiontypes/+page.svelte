@@ -15,6 +15,32 @@
 			}
 		}
 	];
+
+	async function load() {
+		const res = {
+			success: true,
+			message: '',
+
+			status: 200,
+			data: {
+				totalCount: 3,
+				totalPages: 1,
+				currentPage: 1,
+				pageSize: 17,
+				nextPageUrl: null,
+				previousPageUrl: null,
+				links: [],
+				path: 'http://hrm-backend-vsa.fly.dev/api/staff/all?pageNumber=1&pageSize=17&search=&sort=updatedAt_desc',
+				data: [
+					{ id: '1', name: 'First Promotion' },
+					{ id: '2', name: 'Subsequent Promotion' },
+					{ id: '3', name: 'Special Promotion' }
+				]
+			}
+		};
+
+		return generateDataTableProps(res.data);
+	}
 </script>
 
 <script lang="ts">
@@ -22,9 +48,9 @@
 	import DatatablePage from '$cmps/ui/datatablePage.svelte';
 	import type { ITableColumn } from '$cmps/ui/table.svelte';
 	import { activePage, breadCrumb } from '$data/appStore';
+	import { generateDataTableProps } from '$lib/utils';
 	import Editor from './editor.svelte';
 	// import PlanYear from '$modules/setup/planyear/index.svelte';
-	export let data;
 	$activePage = {
 		title: 'Promotion Types',
 		showBreadCrumb: true
@@ -42,7 +68,6 @@
 	<Box bgWhite shadow rounded>
 		<DatatablePage
 			tableColumns={columns}
-			tableDataInfo={data.data}
 			editorComponent={Editor}
 			showEditorIn="side-modal"
 			addButtonLabel="New Record"
@@ -51,6 +76,7 @@
 			sideModalSize="sm"
 			showModalButtons
 			fillSpace={false}
+			read={load}
 		/>
 	</Box>
 </div>

@@ -12,8 +12,7 @@
 		return true;
 	};
 	let form: any;
-	let renderId = 0;
-	let formData = { categoryName: '' };
+	let formData = { categoryName: data.categoryName || '' };
 	const schema = z.object({
 		categoryName: z.string().min(1, 'Name is required')
 	});
@@ -23,28 +22,20 @@
 			isValid = val;
 		});
 	}
-	onMount(() => {
-		if (data.id) {
-			formData = { categoryName: data.categoryName };
-			renderId++;
-		}
-	});
 </script>
 
-{#key renderId}
-	<Form
-		{schema}
-		initialValues={formData}
-		class="p-4"
-		on:submit
-		on:change={handleChange}
-		bind:this={form}
-	>
-		<TextField
-			name="categoryName"
-			label="Name of category"
-			required
-			placeholder="Enter name of category"
-		/>
-	</Form>
-{/key}
+<Form
+	{schema}
+	initialValues={formData}
+	class="p-4"
+	on:submit
+	on:change={handleChange}
+	bind:this={form}
+>
+	<TextField
+		name="categoryName"
+		label="Name of category"
+		required
+		placeholder="Enter name of category"
+	/>
+</Form>

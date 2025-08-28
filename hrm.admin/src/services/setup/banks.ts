@@ -1,6 +1,6 @@
 import axiosInstance from '$lib/axios';
 import type { APIQueryParams } from '$lib/types';
-import { axiosError, callResult, queryResult } from '$svc/shared';
+import { axiosError, callResult, paginatedQueryResult, queryResult } from '$svc/shared';
 
 export interface IBank {
 	id: string;
@@ -15,7 +15,7 @@ export async function readBanks(params?: APIQueryParams) {
 		const ret = params
 			? await axiosInstance.get('/bank/all', { params: { ...params, sort: 'updatedAt_desc' } })
 			: await axiosInstance.get('/bank/all');
-		return queryResult(ret, ret.data);
+		return params ? paginatedQueryResult(ret, ret.data) : queryResult(ret, ret.data);
 	} catch (error) {
 		return axiosError(error);
 	}

@@ -8,21 +8,31 @@
 		}
 		// { header: 'Category', accessor: (row:ISpecialty) =>  row.}
 	];
+
+	const fetchDataForTable = async (pageNumber: number, pageSize: number, filters: TableFilter) => {
+		return await readSpecialties({
+			pageNumber: pageNumber,
+			pageSize: pageSize,
+			search: filters.search || ''
+		});
+	};
+
+	const update = async (params: any) => {
+		return updateSpecialty(params.id, { specialityName: params.name, categoryId: params.category });
+	};
+
+	const create = async (params: any) => {
+		return postSpecialty({ specialityName: params.name, categoryId: params.category });
+	};
 </script>
 
 <script lang="ts">
-	import DatatablePage from '$cmps/ui/datatablePage.svelte';
+	import DatatablePage, { type TableFilter } from '$cmps/ui/datatablePage.svelte';
 	import Editor from './editor.svelte';
-	import type { ITableDataProps } from '$lib/types';
-	// import type { ISpecialty } from '$svc/salaries/specialty';
-	// import type { ICategory } from '$svc/salaries';
-
-	export let tableDataInfo: ITableDataProps<any> | undefined;
-	export let category: any;
+	import { postSpecialty, readSpecialties, updateSpecialty } from '$svc/salaries';
 </script>
 
 <DatatablePage
-	{tableDataInfo}
 	tableColumns={columns}
 	showEditorIn="side-modal"
 	addButtonLabel="New Specialty"
@@ -34,6 +44,7 @@
 	showActions
 	showEdit
 	fillSpace={false}
-	pageUrl="/applicationsetup/specialty"
-	optionalData={{ category }}
+	createEntry={create}
+	updateEntry={update}
+	read={fetchDataForTable}
 />

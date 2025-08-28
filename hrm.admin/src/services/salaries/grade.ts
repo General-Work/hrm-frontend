@@ -1,6 +1,6 @@
 import axiosInstance from '$lib/axios';
 import type { APIQueryParams } from '$lib/types';
-import { axiosError, callResult, queryResult } from '$svc/shared';
+import { axiosError, callResult, paginatedQueryResult, queryResult } from '$svc/shared';
 
 export interface IGradeDto {
 	categoryId: string;
@@ -38,7 +38,7 @@ export async function readGrades(params?: APIQueryParams) {
 		const ret = params
 			? await axiosInstance.get('/grade/all', { params: { ...params, sort: 'updatedAt_desc' } })
 			: await axiosInstance.get('/grade/all');
-		return queryResult(ret, ret.data);
+		return params ? paginatedQueryResult(ret, ret.data) : queryResult(ret, ret.data);
 	} catch (error) {
 		return axiosError(error);
 	}
@@ -46,11 +46,12 @@ export async function readGrades(params?: APIQueryParams) {
 
 export async function postGrade(data: IGradeDto) {
 	try {
-		// console.log('data', data);
+		console.log('data', data);
 		const ret = await axiosInstance.post('/grade', data);
-		// console.log('ret', ret);
+		console.log('ret', ret);
 		return queryResult(ret, ret.data);
 	} catch (error) {
+		console.log(error);
 		return axiosError(error);
 	}
 }

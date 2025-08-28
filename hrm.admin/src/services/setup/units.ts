@@ -30,7 +30,7 @@ export async function readUnits(params?: APIQueryParams) {
 					params: { ...params, sort: 'updatedAt_desc' }
 				})
 			: await axiosInstance.get('/unit/all');
-		return paginatedQueryResult(ret, ret.data);
+		return params ? paginatedQueryResult(ret, ret.data) : queryResult(ret, ret.data);
 	} catch (error) {
 		return axiosError(error);
 	}

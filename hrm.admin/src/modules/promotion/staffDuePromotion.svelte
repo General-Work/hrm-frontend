@@ -44,6 +44,27 @@
 			}
 		}
 	];
+
+	async function load() {
+		const res = {
+			success: true,
+			message: '',
+			status: 200,
+			data: {
+				totalCount: 5,
+				totalPages: 1,
+				currentPage: 1,
+				pageSize: 17,
+				nextPageUrl: null,
+				previousPageUrl: null,
+				links: [],
+				path: 'http://hrm-backend-vsa.fly.dev/api/staff/all?pageNumber=1&pageSize=17&search=&sort=updatedAt_desc',
+				data: promotionStaff
+			}
+		};
+
+		return generateDataTableProps(res.data);
+	}
 </script>
 
 <script lang="ts">
@@ -55,8 +76,6 @@
 	import { createEventDispatcher } from 'svelte';
 	import DispatchAlert from './DispatchAlert.svelte';
 	import { showInfo } from '$lib/utils';
-
-	export let tableDataInfo: ITableDataProps<any> | undefined;
 
 	let selectedStaff: IStaffByID[] = [];
 	let openModal = false;
@@ -85,13 +104,12 @@
 
 <div class="w-full h-full">
 	<DatatablePage
-		{tableDataInfo}
 		tableColumns={columns}
 		showAdd={false}
 		showCheckBox
 		editorComponent={{}}
 		sideModalSize="lg"
-		pageUrl="/campaigns"
+		read={load}
 		showModalButtons={false}
 		take={17}
 		height={700}

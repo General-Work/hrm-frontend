@@ -15,18 +15,35 @@
 			accessor: 'scale'
 		}
 	];
+
+	const fetchDataForTable = async (pageNumber: number, pageSize: number, filters: TableFilter) => {
+		return await readGrades({
+			pageNumber: pageNumber,
+			pageSize: pageSize,
+			search: filters.search || ''
+		});
+	};
+
+	const create = async (params: any) => {
+		// console.log(params);
+		return await postGrade({
+			categoryId: params.categoryId,
+			gradeName: params.grade,
+			level: params.level,
+			scale: params.scale,
+			marketPremium: params.marketPremium,
+			minimunStep: params.minimumStep,
+			maximumStep: params.maximumStep
+		});
+	};
 </script>
 
 <script lang="ts">
-	import DatatablePage from '$cmps/ui/datatablePage.svelte';
+	import DatatablePage, { refetchDatatable, type TableFilter } from '$cmps/ui/datatablePage.svelte';
 	import Editor, { type IGradeDto } from './editor.svelte';
-	import axios from 'axios';
-	import type { ITableDataProps } from '$lib/types';
 	import Modal from '$cmps/ui/modal.svelte';
 	import SalaryEditor from './salaryEditor.svelte';
-
-	export let tableDataInfo: ITableDataProps<any> | undefined;
-	export let category: any;
+	import { postGrade, readGrades } from '$svc/salaries';
 
 	let showModal = false;
 	let formData: IGradeDto = {
@@ -40,7 +57,6 @@
 		maximumStep: 4
 	};
 	let gradeId = '';
-	let reloadData = false;
 	function afterAction({ detail }: any) {
 		const { values, data } = detail;
 		// console.log(data)
@@ -51,7 +67,6 @@
 </script>
 
 <DatatablePage
-	{tableDataInfo}
 	tableColumns={columns}
 	showEditorIn="side-modal"
 	addButtonLabel="New Grade"
@@ -60,13 +75,12 @@
 	editorComponent={Editor}
 	sideModalSize="md"
 	showModalButtons
-	pageUrl="/applicationsetup/grade"
 	allowDispatchAfterAction
 	allowLoadAfterCreate={false}
 	on:afterAction={afterAction}
-	optionalData={{ category }}
-	{reloadData}
 	fillSpace={false}
+	read={fetchDataForTable}
+	createEntry={create}
 />
 <Modal open={showModal} dismissable={false} size="lg" title="Salaries for {formData.grade}">
 	<SalaryEditor
@@ -74,7 +88,7 @@
 		{gradeId}
 		on:close={() => {
 			showModal = false;
-			reloadData = true;
+			// reloadData = true;
 			formData = {
 				category: 0,
 				grade: '',
@@ -86,6 +100,7 @@
 				maximumStep: 0
 			};
 			gradeId = '';
+			refetchDatatable();
 		}}
 	/>
 </Modal>

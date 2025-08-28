@@ -5,12 +5,11 @@
 	import * as z from 'zod';
 	import { onMount } from 'svelte';
 	import { showError } from '$lib/utils';
-	import type { IOkResult } from '$svc/shared';
-	import type { ICategory } from '$svc/salaries';
+	import { readCategories, type ICategory } from '$svc/salaries';
 	import type { ISpecialty } from '$svc/salaries/specialty';
+	import PageLoader from '$cmps/ui/pageLoader.svelte';
 
 	export let isValid = false;
-	export let optionalData: any;
 	export let data: ISpecialty;
 	export const submit = () => {
 		form.submit();
@@ -18,8 +17,8 @@
 	};
 	let form: any;
 	let category: any[] = [];
-	let formData = { name: '', category: '' };
-	let renderId = 0;
+	let formData = { name: data.specialityName || '', category: data.category?.id || '' };
+	let busy = true;
 	const schema = z.object({
 		name: z.string().min(1, 'Name is required'),
 		category: z
@@ -34,26 +33,27 @@
 	}
 
 	onMount(async () => {
-		if (optionalData.category) {
-			try {
-				const ret: IOkResult<any> = await optionalData.category;
-				if (!ret.success) {
-					showError(ret.message);
-					return;
-				}
-				category = ret.data.map((x: ICategory) => ({ id: x.id, category: x.categoryName }));
-			} catch (error: any) {
-				showError(error);
+		try {
+			const ret = await readCategories();
+			if (!ret.success) {
+				showError(ret.message);
+				return;
 			}
-		}
-		if (data.id) {
-			formData = { name: data.specialityName, category: data.categoryId };
-			renderId++;
+			category = ret.data.map((a: ICategory) => ({
+				value: a.id,
+				label: a.categoryName
+			}));
+		} catch (error: any) {
+			showError(error?.message || error);
+		} finally {
+			busy = false;
 		}
 	});
 </script>
 
-{#key renderId}
+{#if busy}
+	<div class="w-full h-full"><PageLoader size={50} /></div>
+{:else}
 	<Form
 		{schema}
 		initialValues={formData}
@@ -76,4 +76,4 @@
 			placeholder="Enter name of specialty"
 		/>
 	</Form>
-{/key}
+{/if}

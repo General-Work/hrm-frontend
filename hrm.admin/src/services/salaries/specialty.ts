@@ -1,6 +1,6 @@
 import axiosInstance from '$lib/axios';
 import type { APIQueryParams } from '$lib/types';
-import { axiosError, callResult, queryResult } from '$svc/shared';
+import { axiosError, callResult, paginatedQueryResult, queryResult } from '$svc/shared';
 import type { ICategory } from './category';
 
 export interface SpecialtyDto {
@@ -23,13 +23,14 @@ export async function readSpecialties(params?: APIQueryParams) {
 					params: { ...params, sort: 'updatedAt_desc' }
 				})
 			: await axiosInstance.get('/speciality/all');
-		return queryResult(ret, ret.data);
+		return params ? paginatedQueryResult(ret, ret.data) : queryResult(ret, ret.data);
 	} catch (error) {
 		return axiosError(error);
 	}
 }
 
 export async function postSpecialty(data: SpecialtyDto) {
+	console.log(data);
 	try {
 		const ret = await axiosInstance.post('/speciality', data);
 		return callResult(ret, ret.data);
@@ -46,4 +47,3 @@ export async function updateSpecialty(id: string, data: SpecialtyDto) {
 		return axiosError(error);
 	}
 }
-

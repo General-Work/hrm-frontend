@@ -17,20 +17,30 @@
 			}
 		}
 	];
+
+	const fetchDataForTable = async (pageNumber: number, pageSize: number, filters: TableFilter) => {
+		return await readCategories({
+			pageNumber: pageNumber,
+			pageSize: pageSize,
+			search: filters.search || ''
+		});
+	};
+
+	const update = async (params: any) => {
+		const id = params.id;
+		delete params.id;
+		return updateCategory(id, params);
+	};
 </script>
 
 <script lang="ts">
-	import DatatablePage from '$cmps/ui/datatablePage.svelte';
+	import DatatablePage, { type TableFilter } from '$cmps/ui/datatablePage.svelte';
 	import Editor from './editor.svelte';
-	import type { ITableDataProps } from '$lib/types';
 	import dayjs from 'dayjs';
-	import type { ICategory } from '$svc/salaries';
-
-	export let tableDataInfo: ITableDataProps<any> | undefined;
+	import { postCategory, readCategories, updateCategory, type ICategory } from '$svc/salaries';
 </script>
 
 <DatatablePage
-	{tableDataInfo}
 	tableColumns={columns}
 	showEditorIn="side-modal"
 	addButtonLabel="New Category"
@@ -39,8 +49,10 @@
 	editorComponent={Editor}
 	sideModalSize="sm"
 	showModalButtons
-	pageUrl="/applicationsetup/category"
 	showActions
 	fillSpace={false}
 	showEdit
+	updateEntry={update}
+	read={fetchDataForTable}
+	createEntry={postCategory}
 />

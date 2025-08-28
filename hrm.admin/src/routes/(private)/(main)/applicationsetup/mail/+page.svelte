@@ -1,7 +1,6 @@
 <script>
 	import Mail from '$modules/setup/mail/index.svelte';
 	import { activePage, breadCrumb } from '$data/appStore';
-	export let data;
 	$activePage = {
 		title: 'Mail Templates',
 		showBreadCrumb: true
@@ -16,5 +15,5 @@
 </script>
 
 <div class="px-6 pb-6 w-full h-full">
-	<Mail tableDataInfo={data.data} />
+	<Mail />
 </div>

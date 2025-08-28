@@ -77,6 +77,27 @@
 		// 	}
 		// }
 	];
+
+	async function load() {
+		const res = {
+			success: true,
+			message: '',
+			status: 200,
+			data: {
+				totalCount: 5,
+				totalPages: 1,
+				currentPage: 1,
+				pageSize: 17,
+				nextPageUrl: null,
+				previousPageUrl: null,
+				links: [],
+				path: 'http://hrm-backend-vsa.fly.dev/api/staff/all?pageNumber=1&pageSize=17&search=&sort=updatedAt_desc',
+				data: mockInterviews
+			}
+		};
+
+		return generateDataTableProps(res.data);
+	}
 </script>
 
 <script lang="ts">
@@ -85,8 +106,8 @@
 	import type { IStaffByID, ITableDataProps } from '$lib/types';
 	import type { IDepartment } from '$svc/setup';
 	import dayjs from 'dayjs';
-
-	export let tableDataInfo: ITableDataProps<any> | undefined;
+	import { mockInterviews } from '$routes/(private)/(main)/interviews/interviewData';
+	import { generateDataTableProps } from '$lib/utils';
 
 	const actionLists: IActionList[] = [
 		{ name: 'View Detail', icon: 'solar:eye-bold-duotone' },
@@ -111,19 +132,18 @@
 </script>
 
 <DatatablePage
-	{tableDataInfo}
 	tableColumns={columns}
 	showAdd={false}
 	{actionLists}
 	editorComponent={{}}
 	sideModalSize="lg"
-	pageUrl="/campaigns"
 	showModalButtons={false}
 	take={17}
 	height={700}
 	fillSpace={false}
 	showActions
 	on:actionClicked={actionClicked}
+	read={load}
 />
 
 <Modal

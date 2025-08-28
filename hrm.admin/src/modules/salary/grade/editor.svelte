@@ -19,10 +19,10 @@
 	import { onMount } from 'svelte';
 	import { showError } from '$lib/utils';
 	import type { IOkResult } from '$svc/shared';
-	import type { ICategory } from '$svc/salaries';
+	import { readCategories, type ICategory } from '$svc/salaries';
+	import PageLoader from '$cmps/ui/pageLoader.svelte';
 
 	export let isValid = false;
-	export let optionalData: any;
 	export const submit = () => {
 		form.submit();
 		return true;
@@ -68,6 +68,7 @@
 	});
 	const high = ['H', 'L'];
 	const scale = ['SSPS', 'HSSS'];
+	let busy = true;
 	let category: any[] = [];
 	function handleChange({ detail }: any) {
 		const { form } = detail;
@@ -77,64 +78,72 @@
 	}
 
 	onMount(async () => {
-		if (optionalData.category) {
-			try {
-				const ret: IOkResult<any> = await optionalData.category;
-				if (!ret.success) {
-					showError(ret.message || 'Failed to load Categories');
-				}
-				category = ret.data.map((x: ICategory) => ({ id: x.id, name: x.categoryName }));
-			} catch (e: any) {
-				showError(e);
+		try {
+			const ret = await readCategories();
+			if (!ret.success) {
+				showError(ret.message);
+				return;
 			}
+			category = ret.data.map((a: ICategory) => ({
+				value: a.id,
+				label: a.categoryName
+			}));
+		} catch (error: any) {
+			showError(error?.message || error);
+		} finally {
+			busy = false;
 		}
 	});
 </script>
 
-<Form
-	{schema}
-	initialValues={formData}
-	class="p-4 space-y-5"
-	on:submit
-	on:change={handleChange}
-	bind:this={form}
->
-	<SelectField
-		name="categoryId"
-		label="Category"
-		required
-		placeholder="Select category"
-		options={category}
-	/>
-	<TextField name="grade" label="Name of grade" required placeholder="Enter name of grade" />
-	<SelectField
-		name="scale"
-		label="Scale"
-		required
-		placeholder="Select scale"
-		options={scale}
-		labelAsValue
-	/>
-	<div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-		<TextField name="level" label="Level" required placeholder="Enter level" type="number" />
+{#if busy}
+	<div class="w-full h-full"><PageLoader size={50} /></div>
+{:else}
+	<Form
+		{schema}
+		initialValues={formData}
+		class="p-4 space-y-5"
+		on:submit
+		on:change={handleChange}
+		bind:this={form}
+	>
 		<SelectField
-			label="High / Low"
-			name="high"
+			name="categoryId"
+			label="Category"
 			required
-			placeholder="Select high / low"
-			options={high}
+			placeholder="Select category"
+			options={category}
+		/>
+		<TextField name="grade" label="Name of grade" required placeholder="Enter name of grade" />
+		<SelectField
+			name="scale"
+			label="Scale"
+			required
+			placeholder="Select scale"
+			options={scale}
 			labelAsValue
 		/>
-	</div>
-	<TextField
-		name="marketPremium"
-		label="Market Premium (%)"
-		required
-		placeholder="Enter market premium"
-		type="number"
-	/>
-	<div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-		<TextField name="minimumStep" label="Minimum Step" required type="number" />
-		<TextField name="maximumStep" label="Maximum Step" required type="number" />
-	</div>
-</Form>
+		<div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+			<TextField name="level" label="Level" required placeholder="Enter level" type="number" />
+			<SelectField
+				label="High / Low"
+				name="high"
+				required
+				placeholder="Select high / low"
+				options={high}
+				labelAsValue
+			/>
+		</div>
+		<TextField
+			name="marketPremium"
+			label="Market Premium (%)"
+			required
+			placeholder="Enter market premium"
+			type="number"
+		/>
+		<div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+			<TextField name="minimumStep" label="Minimum Step" required type="number" />
+			<TextField name="maximumStep" label="Maximum Step" required type="number" />
+		</div>
+	</Form>
+{/if}

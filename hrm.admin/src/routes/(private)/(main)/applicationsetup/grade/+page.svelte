@@ -3,8 +3,6 @@
 	import { activePage, breadCrumb } from '$data/appStore';
 	import Grade from '$modules/salary/grade/index.svelte';
 
-	export let data;
-
 	$activePage = {
 		title: 'Grade',
 		showBreadCrumb: true
@@ -20,6 +18,6 @@
 
 <div class="w-full h-full custom-container">
 	<Box bgWhite shadow rounded>
-		<Grade tableDataInfo={data.data} category={data.optional.category} />
+		<Grade />
 	</Box>
 </div>

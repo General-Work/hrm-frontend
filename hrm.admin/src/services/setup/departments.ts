@@ -31,7 +31,7 @@ export async function readDepartments(params?: APIQueryParams) {
 					params: { ...params, sort: 'updatedAt_desc' }
 				})
 			: await axiosInstance.get('/department/all');
-		return paginatedQueryResult(ret, ret.data);
+		return params ? paginatedQueryResult(ret, ret.data) : queryResult(ret, ret.data);
 	} catch (error) {
 		return axiosError(error);
 	}

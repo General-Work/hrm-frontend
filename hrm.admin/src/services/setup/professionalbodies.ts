@@ -1,6 +1,6 @@
 import axiosInstance from '$lib/axios';
 import type { APIQueryParams, IPageInfo } from '$lib/types';
-import { axiosError, callResult, queryResult } from '$svc/shared';
+import { axiosError, callResult, paginatedQueryResult, queryResult } from '$svc/shared';
 
 export interface IProfessionalBody {
 	id: string;
@@ -17,7 +17,7 @@ export async function readProfessionalBodies(params?: APIQueryParams) {
 					params: { ...params, sort: 'updatedAt_desc' }
 				})
 			: await axiosInstance.get('/professional-body/all');
-		return queryResult(ret, ret.data);
+		return params ? paginatedQueryResult(ret, ret.data) : queryResult(ret, ret.data);
 	} catch (error) {
 		return axiosError(error);
 	}
@@ -35,7 +35,7 @@ export async function postProfessionalBody(bankName: string) {
 
 export async function updateProfessionalBody(id: string, bankName: string) {
 	try {
-		const ret = await axiosInstance.patch(`/professional-body/${id}`, { name: bankName });
+		const ret = await axiosInstance.patch(`/profesional-body/${id}`, { name: bankName });
 		return callResult(ret, ret.data);
 	} catch (error) {
 		return axiosError(error);

@@ -3,7 +3,6 @@
 	import { activePage, breadCrumb } from '$data/appStore';
 	import Banks from '$modules/setup/banks/index.svelte';
 
-	export let data;
 	$activePage = {
 		title: 'Banks',
 		showBreadCrumb: true
@@ -19,6 +18,6 @@
 
 <div class="w-full h-full custom-container">
 	<Box bgWhite shadow rounded>
-		<Banks tableDataInfo={data.data} />
+		<Banks />
 	</Box>
 </div>

@@ -15,22 +15,36 @@
 			}
 		}
 	];
+
+	const fetchDataForTable = async (pageNumber: number, pageSize: number, filters: TableFilter) => {
+		// console.log({ pageNumber, pageSize, filters });
+
+		return await readBanks({
+			pageNumber: pageNumber,
+			pageSize: pageSize,
+			search: filters.search || ''
+		});
+	};
+
+	const update = async (params: any) => {
+		return updateBank(params.id, params.bankName);
+	};
+
+	const create = async (params: any) => {
+		return postBank(params.bankName);
+	};
 </script>
 
 <script lang="ts">
-	import DatatablePage from '$cmps/ui/datatablePage.svelte';
+	import DatatablePage, { type TableFilter } from '$cmps/ui/datatablePage.svelte';
 	import type { ITableColumn } from '$cmps/ui/table.svelte';
-	import type { ITableDataProps } from '$lib/types';
-	import type { IBank } from '$svc/setup';
+	import { postBank, readBanks, updateBank, type IBank } from '$svc/setup';
 	import dayjs from 'dayjs';
 	import Editor from './editor.svelte';
-
-	export let tableDataInfo: ITableDataProps<any> | undefined;
 </script>
 
 <DatatablePage
 	tableColumns={columns}
-	{tableDataInfo}
 	editorComponent={Editor}
 	showEditorIn="side-modal"
 	addButtonLabel="New Bank"
@@ -38,8 +52,10 @@
 	updateHeading="Update Bank"
 	sideModalSize="sm"
 	showModalButtons
-	pageUrl="/applicationsetup/banks"
 	showActions
 	showEdit
 	fillSpace={false}
+	read={fetchDataForTable}
+	updateEntry={update}
+	createEntry={create}
 />

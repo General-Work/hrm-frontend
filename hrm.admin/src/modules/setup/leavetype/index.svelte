@@ -29,13 +29,10 @@
 	import type { ITableColumn } from '$cmps/ui/table.svelte';
 	import type { ITableDataProps } from '$lib/types';
 	import Editor from './editor.svelte';
-
-	export let tableDataInfo: ITableDataProps<any> | undefined;
 </script>
 
 <DatatablePage
 	tableColumns={columns}
-	{tableDataInfo}
 	editorComponent={Editor}
 	showEditorIn="side-modal"
 	addButtonLabel="New Leave Type"

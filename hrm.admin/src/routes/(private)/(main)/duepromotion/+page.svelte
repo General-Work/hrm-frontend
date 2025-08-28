@@ -3,8 +3,6 @@
 	import { activePage } from '$data/appStore';
 	import StaffDuePromotion from '$modules/promotion/staffDuePromotion.svelte';
 
-	export let data;
-
 	$activePage = {
 		title: 'Staff Due Promotion',
 		showBreadCrumb: false
@@ -13,6 +11,6 @@
 
 <div class="w-full h-full custom-container pt-4">
 	<Box bgWhite shadow rounded>
-		<StaffDuePromotion tableDataInfo={data.data} />
+		<StaffDuePromotion />
 	</Box>
 </div>
