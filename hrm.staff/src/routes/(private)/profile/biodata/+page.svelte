@@ -15,7 +15,8 @@
 		],
 		true
 	);
-	const biodata: IBiodata = (data?.user as IBiodata) ?? ({} as IBiodata);
+
+	// $: console.log({ data });
 </script>
 
-<Biodata data={biodata} />
+<Biodata data={data.biodate} />

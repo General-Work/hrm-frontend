@@ -31,7 +31,7 @@
 	import RightPanel from './panel.svelte';
 	import Canvas from '$cmps/canvas/index.svelte';
 	import type { IComponentDescriptor } from '$cmps/canvas/types';
-	import { onDestroy, onMount, tick } from 'svelte';
+	import { createEventDispatcher, onDestroy, onMount, tick } from 'svelte';
 	import { extractQueryParam, showError } from '$lib/utils';
 	import { browser } from '$app/environment';
 	import ScrollArea from '$cmps/ui/scrollArea.svelte';
@@ -70,6 +70,8 @@
 	let document: any = { actions: [], otherActions: [] };
 	let scrollingDiv: HTMLElement = {} as HTMLElement;
 	let busy = true;
+
+	const dispatch = createEventDispatcher();
 
 	async function loadDocument() {
 		// return document
@@ -230,8 +232,10 @@
 						title: cmd.args?.title || '',
 						componentConfig: { ...cmd.args, showTitle: false, title: '' },
 						onDone: async (refresh: boolean) => {
-							if (refresh && browser) {
-								window.history.back();
+							if (refresh) {
+								dispatch('removeItem', { tabId: documentId, refresh: true });
+
+								// window.history.back();
 							}
 						}
 					};

@@ -6,6 +6,7 @@
 	import Tabs, { type ITab } from '$cmps/ui/tabs.svelte';
 	import DocumentViewer from '$cmps/documents/documentViewer.svelte';
 	import { getComponent } from '$lib/requestMetaData.js';
+	import { refetchDatatable } from '$cmps/ui/datatablePage.svelte';
 	export let data;
 
 	$: searchParam = extractQueryParam($page.url.search) ?? '';
@@ -65,11 +66,16 @@
 		activeTab = detail.id;
 	}
 	function removeTab({ detail }: CustomEvent) {
-		const { tabId } = detail;
+		const { tabId, refresh } = detail;
 		tabs = tabs.filter((tab) => tab.id !== tabId);
 		activeTab = tabs[tabs.length - 1].id;
+
+		if (refresh) {
+			refetchDatatable();
+		}
 	}
 </script>
+
 
 <div class="w-full h-full custom-container pt-4">
 	<!-- <RequestTable

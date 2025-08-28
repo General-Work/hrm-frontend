@@ -10,6 +10,7 @@
 	import { endProgress, showError, showInfo, startProgress } from '$lib/utils';
 	import type { IBankDetail } from '$svc/staffdetails';
 	import axios from 'axios';
+	import { Alert } from 'flowbite-svelte';
 	import * as z from 'zod';
 
 	export let data: IBankDetail;
@@ -29,6 +30,7 @@
 		accountNumber: data.accountNumber || '',
 		accountName: data.accountName || ''
 	};
+	let readonly = data?.status === 'PENDING';
 
 	async function handleSubmit({ detail }: CustomEvent) {
 		const { values } = detail;
@@ -60,14 +62,23 @@
 				class="w-full h-full flex flex-col gap-6"
 				on:submit={handleSubmit}
 			>
+				{#if readonly}
+					<Alert color="blue">Your bank information is under review</Alert>
+				{/if}
 				<div class="grid gap-6">
-					<SelectField label="Bank Name" required name="bankId" options={banks} />
-					<TextField label="Branch" required name="branch" />
-					<SelectField label="Account Type" name="accountType" options={ACCOUNTTYPE} labelAsValue />
-					<TextField label="Account Name" required name="accountName" />
-					<TextField label="Account Number" required name="accountNumber" />
+					<SelectField label="Bank Name" required name="bankId" options={banks} {readonly} />
+					<TextField label="Branch" required name="branch" {readonly} />
+					<SelectField
+						label="Account Type"
+						name="accountType"
+						options={ACCOUNTTYPE}
+						labelAsValue
+						{readonly}
+					/>
+					<TextField label="Account Name" required name="accountName" {readonly} />
+					<TextField label="Account Number" required name="accountNumber" {readonly} />
 				</div>
-				<div class="flex justify-end gap-2 md:pb-8 pt-3">
+				<div class:hidden={readonly} class="flex justify-end gap-2 md:pb-8 pt-3">
 					<Button label="Reset" type="reset" />
 					<Button label="Submit" type="submit" color="primary" {busy} />
 				</div>

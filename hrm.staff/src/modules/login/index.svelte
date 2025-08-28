@@ -5,7 +5,7 @@
 	import axios from 'axios';
 	// import logo from '$assets/images/logo1.png';
 
-	const bgImageUrl = 'https://citinewsroom.com/wp-content/uploads/2018/06/Korle-Bu.jpg';
+	const bgImageUrl = '';
 
 	let busy = false;
 	let links: Record<

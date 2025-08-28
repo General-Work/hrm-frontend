@@ -8,6 +8,7 @@
 	import axios from 'axios';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
+	import { loginUser } from '$svc/auth';
 
 	const schema = z.object({
 		email: z.string().email(),
@@ -20,14 +21,15 @@
 		try {
 			const { values } = detail;
 			busy = true;
-			const ret = await axios.patch('/login', values);
-			if (!ret.data.success) {
-				showError(ret.data.message);
+			const ret = await loginUser({ ...values });
+			console.log({ ret });
+			if (!ret.success) {
+				showError(ret.message);
 				return;
 			}
-			showInfo(ret.data.message);
+			showInfo(ret.data);
 			const redirectTo = `${extractQueryParam($page.url.search, 'redirectTo') ?? ''}&email=${encodeURIComponent(values.email)}&pwd=${encodeURIComponent(values.password)}`;
-			console.log({ search: $page.url.search, redirectTo });
+			// console.log({ search: $page.url.search, redirectTo });
 			goto(`/otp?redirectTo=${redirectTo}`);
 		} catch (error: any) {
 			showError(error.message || error);

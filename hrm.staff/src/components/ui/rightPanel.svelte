@@ -15,7 +15,7 @@
 	<div class="flex flex-col w-full gap-4">
 		<span class=" text-gray-500 font-medium" class:hidden={!showActionLabel}>Actions</span>
 		<ul class="flex flex-col gap-4 w-full pr-1">
-			{#each buttons as item}
+			{#each buttons as item (item.path)}
 				<li class="w-full">
 					<CardButton
 						showArrow

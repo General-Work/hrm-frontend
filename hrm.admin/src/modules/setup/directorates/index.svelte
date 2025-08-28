@@ -24,21 +24,39 @@
 			}
 		}
 	];
+
+	const fetchDataForTable = async (pageNumber: number, pageSize: number, filters: TableFilter) => {
+		// console.log({ pageNumber, pageSize, filters });
+
+		return await readDirectorates({
+			pageNumber: pageNumber,
+			pageSize: pageSize,
+			search: filters.search || ''
+		});
+	};
+
+	const update = async (params: any) => {
+		const id = params.id;
+		delete params.id;
+		return updateDirectorate(id, params);
+	};
 </script>
 
 <script lang="ts">
-	import DatatablePage from '$cmps/ui/datatablePage.svelte';
+	import DatatablePage, { type TableFilter } from '$cmps/ui/datatablePage.svelte';
 	import type { ITableColumn } from '$cmps/ui/table.svelte';
-	import type { ITableDataProps } from '$lib/types';
-	import type { IDirectorate } from '$svc/setup';
+	// import type { ITableDataProps } from '$lib/types';
+	import {
+		postDirectorate,
+		readDirectorates,
+		updateDirectorate,
+		type IDirectorate
+	} from '$svc/setup';
 	import Editor from './editor.svelte';
-
-	export let tableDataInfo: ITableDataProps<any> | undefined;
 </script>
 
 <DatatablePage
 	tableColumns={columns}
-	{tableDataInfo}
 	editorComponent={Editor}
 	showEditorIn="side-modal"
 	addButtonLabel="New Directorate"
@@ -46,8 +64,10 @@
 	updateHeading="Update Directorate"
 	sideModalSize="sm"
 	showModalButtons
-	pageUrl="/applicationsetup/directorate"
 	showActions
 	showEdit
 	fillSpace={false}
+	read={fetchDataForTable}
+	createEntry={postDirectorate}
+	updateEntry={update}
 />

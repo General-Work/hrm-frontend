@@ -11,6 +11,7 @@
 	import { endProgress, showError, showInfo, startProgress } from '$lib/utils';
 	import type { IBiodata } from '$svc/staffdetails';
 	import axios from 'axios';
+	import { Alert } from 'flowbite-svelte';
 	import * as z from 'zod';
 	export let data: IBiodata;
 
@@ -29,6 +30,7 @@
 		ecowasCardNumber: data.ecowasCardNumber || ''
 	};
 	let busy = false;
+	let readonly = data.status === 'PENDING';
 	const schema = z.object({});
 
 	async function handleSubmit({ detail }: CustomEvent) {
@@ -73,28 +75,39 @@
 				class="w-full h-full flex flex-col gap-6"
 				on:submit={handleSubmit}
 			>
+				{#if readonly}
+					<Alert color="blue">Your contact information is under review</Alert>
+				{/if}
 				<div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
-					<SelectField label="Title" required name="title" options={TITLELIST} labelAsValue />
-					<TextField label="First name" required name="firstName" />
-					<TextField label="Last Name" required name="lastName" />
-					<TextField label="Other name(s)" name="otherNames" />
+					<SelectField
+						label="Title"
+						required
+						name="title"
+						options={TITLELIST}
+						labelAsValue
+						{readonly}
+					/>
+					<TextField label="First name" required name="firstName" {readonly} />
+					<TextField label="Last Name" required name="lastName" {readonly} />
+					<TextField label="Other name(s)" name="otherNames" {readonly} />
 					<!-- <SelectField label="Gender" required name="gender" /> -->
 					<!-- <DateField label="Date of Birth" required /> -->
-					<TextField label="ECOWAS Card No." name="ecowasCardNumber" />
-					<TextField label="SSNIT No." name="snnitNumber" />
-					<TextField label="Phone One" name="phone" />
-					<TextField label="Phone Two" name="phoneTwo" />
-					<TextField label="Email" />
-					<TextField label="GPS Address" name="gpsAddress" />
+					<TextField label="ECOWAS Card No." name="ecowasCardNumber" {readonly} />
+					<TextField label="SSNIT No." name="snnitNumber" {readonly} />
+					<TextField label="Phone One" name="phone" {readonly} />
+					<TextField label="Phone Two" name="phoneTwo" {readonly} />
+					<TextField label="Email" name="email" {readonly} />
+					<TextField label="GPS Address" name="gpsAddress" {readonly} />
 					<SelectField
 						label="Disability"
 						required
 						name="disability"
 						options={DISABILITYLIST}
 						labelAsValue
+						{readonly}
 					/>
 				</div>
-				<div class="flex justify-end gap-2 md:pb-8 pt-3">
+				<div class:hidden={readonly} class="flex justify-end gap-2 md:pb-8 pt-3">
 					<Button label="Reset" type="reset" />
 					<Button label="Submit" type="submit" color="primary" {busy} />
 				</div>

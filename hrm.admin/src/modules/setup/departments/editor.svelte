@@ -2,25 +2,30 @@
 	import Form from '$cmps/forms/form.svelte';
 	import SelectField from '$cmps/forms/selectField.svelte';
 	import TextField from '$cmps/forms/textField.svelte';
+	import PageLoader from '$cmps/ui/pageLoader.svelte';
 	import { showError } from '$lib/utils';
-	import type { IDepartment, IDirectorate } from '$svc/setup';
+	import {
+		getDepartmentById,
+		readDirectorates,
+		type IDepartment,
+		type IDirectorate
+	} from '$svc/setup';
 	import type { IOkResult } from '$svc/shared';
 	import { onMount } from 'svelte';
 	import * as z from 'zod';
 
 	export let isValid = false;
 	export let data: IDepartment;
-	export let optionalData: Record<string, any>;
 	export const submit = () => {
 		form.submit();
 		return true;
 	};
-	let renderId = 0;
+	let busy = true;
 	let initialValues = {
-		directorateId: '',
-		headOfDepartmentId: '',
-		depHeadOfDepartmentId: '',
-		departmentName: ''
+		directorateId: data.directorateId || '',
+		headOfDepartmentId: data.headOfDepartmentId || '',
+		depHeadOfDepartmentId: data.depHeadOfDepartmentId || '',
+		departmentName: data.departmentName
 	};
 
 	let form: any;
@@ -32,6 +37,8 @@
 		depHeadOfDepartmentId: z.string().optional()
 	});
 
+	// $: console.log({ data });
+
 	function handleChange({ detail }: any) {
 		const { form } = detail;
 
@@ -41,35 +48,47 @@
 	}
 
 	onMount(async () => {
-		if (optionalData.directorates) {
-			try {
-				const ret: IOkResult<any> = await optionalData.directorates;
-				if (!ret.success) {
-					showError(ret.message);
-					return;
-				}
-				directorates = ret.data.map((x: IDirectorate) => ({
-					id: x.id,
-					directorateName: x.directorateName
-				}));
-				// console.log(directorates)
-			} catch (error: any) {
-				showError(error);
+		try {
+			const directoratesResult = await readDirectorates();
+			if (!directoratesResult.success) {
+				showError(directoratesResult.message);
+				busy = false;
+				return;
 			}
-		}
-		if (data) {
+
+			directorates = directoratesResult.data.map((x: IDirectorate) => ({
+				id: x.id,
+				directorateName: x.directorateName
+			}));
+
+			if (!data.id) {
+				busy = false;
+				return;
+			}
+
+			const departmentResult = await getDepartmentById(data.id);
+			if (!departmentResult.success) {
+				showError(departmentResult.message);
+				return;
+			}
+
 			initialValues = {
-				directorateId: data.directorateId || '',
-				headOfDepartmentId: data.headOfDepartmentId || '',
-				depHeadOfDepartmentId: data.depHeadOfDepartmentId || '',
-				departmentName: data.departmentName
+				...initialValues,
+				directorateId: departmentResult.data.directorateId
 			};
-			renderId++;
+		} catch (error: any) {
+			showError(error?.message || error);
+		} finally {
+			busy = false;
 		}
 	});
 </script>
 
-{#key renderId}
+{#if busy}
+	<div class="w-full h-full">
+		<PageLoader size={50} />
+	</div>
+{:else}
 	<Form
 		{schema}
 		bind:this={form}
@@ -83,4 +102,4 @@
 		<SelectField label="HOD" name="headOfDepartmentId" />
 		<SelectField label="Deputy HOD" name="depHeadOfDepartmentId" />
 	</Form>
-{/key}
+{/if}

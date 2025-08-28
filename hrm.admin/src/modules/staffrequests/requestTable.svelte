@@ -68,6 +68,19 @@
 			accessor: (row: IRequest) => dayjs(row.updatedAt).format('DD-MMM-YYYY') ?? '-'
 		}
 	];
+
+	const fetchDataForTable = async (pageNumber: number, pageSize: number, filters: TableFilter) => {
+		// console.log({ pageNumber, pageSize, filters });
+
+		return await readRequests({
+			pageNumber: pageNumber,
+			pageSize: pageSize,
+			search: filters.search || '',
+			startDate: filters.startDate as string,
+			endDate: filters.endDate as string,
+			requestType: filters.requestType
+		});
+	};
 </script>
 
 <script lang="ts">
@@ -75,12 +88,13 @@
 
 	import Box from '$cmps/ui/box.svelte';
 
-	import DatatablePage from '$cmps/ui/datatablePage.svelte';
+	import DatatablePage, { refetchDatatable, type TableFilter } from '$cmps/ui/datatablePage.svelte';
 	import type { ITableColumn } from '$cmps/ui/table.svelte';
 	import Table from '$cmps/ui/table.svelte';
 	import TableFilters from '$cmps/ui/tableFilters.svelte';
 	import type { ITableDataProps } from '$lib/types';
-	import type { IRequest } from '$svc/staffrequests';
+	import { generateDataTableProps } from '$lib/utils';
+	import { readRequests, type IRequest } from '$svc/staffrequests';
 	import dayjs from 'dayjs';
 	import { createEventDispatcher } from 'svelte';
 
@@ -124,7 +138,9 @@
 	function handleTypeChange({ detail }: CustomEvent) {
 		if (detail) {
 			filters = { ...filters, requestType: detail };
-			reloadData = true;
+			refetchDatatable({
+				requestType: detail
+			});
 		}
 	}
 
@@ -135,7 +151,10 @@
 				startDate: dayjs(detail).format('YYYY-MM-DD'),
 				endDate: dayjs(dayjs(detail).add(1, 'day').toDate()).format('YYYY-MM-DD')
 			};
-			reloadData = true;
+			refetchDatatable({
+				startDate: filters.startDate,
+				endDate: filters.endDate
+			});
 		}
 	}
 
@@ -146,7 +165,10 @@
 				startDate: dayjs(filters.startDate).format('YYYY-MM-DD'),
 				endDate: dayjs(dayjs(detail).add(1, 'day').toDate()).format('YYYY-MM-DD')
 			};
-			reloadData = true;
+			refetchDatatable({
+				startDate: filters.startDate,
+				endDate: filters.endDate
+			});
 		}
 	}
 
@@ -157,7 +179,7 @@
 			requestType: '',
 			remember: false
 		};
-		reloadData = true;
+		refetchDatatable();
 	}
 </script>
 
@@ -174,19 +196,9 @@
 			showTopActionsBackground={false}
 			height={tableDataInfo?.pageSize && tableDataInfo.pageSize > 15 ? 800 : 730}
 			rowClickable
-			bind:reloadData
+			read={fetchDataForTable}
 			searchPlaceholder="Staff Number..."
-			pageUrl={`/staffrequests?requestType=${filters.requestType}&startDate=${filters.startDate}&endDate=${filters.endDate}`}
 			on:view={({ detail }) => {
-				// if (searchParam) {
-				// 	goto(
-				// 		`/staffrequests/${detail.id}?q=${searchParam}&type=${detail.requestType}&status=${detail.status}&polymorphicId=${detail.requestDetailPolymorphicId}&staffId=${detail.requestFromStaff ? detail.requestFromStaff.staffIdentificationNumber : ''}`
-				// 	);
-				// } else {
-				// 	goto(
-				// 		`/staffrequests/${detail.id}?type=${detail.requestType}&status=${detail.status}&polymorphicId=${detail.requestDetailPolymorphicId}&staffId=${detail.requestFromStaff ? detail.requestFromStaff.staffIdentificationNumber : ''}`
-				// 	);
-				// }
 				dispatch('addTab', detail);
 			}}
 		>

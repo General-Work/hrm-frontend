@@ -1,3 +1,4 @@
+
 export class PageInfo {
 	private _currentPage: number;
 	private _pageSize: number;
@@ -17,12 +18,16 @@ export class PageInfo {
 
 	private computePages() {
 		this._totalPages = Math.ceil(this._totalItems / this._pageSize);
+		this._currentPage = Math.max(1, Math.min(this._currentPage, this._totalPages))
 		this._hasNextPage = this._totalPages > this._currentPage;
 		this._hasPrevPage = this._currentPage > 1;
 	}
 
 	get currentPage() {
 		return this._currentPage;
+	}
+	set currentPage(value: number) {
+		this._currentPage = value;
 	}
 	get pageSize() {
 		return this._pageSize;

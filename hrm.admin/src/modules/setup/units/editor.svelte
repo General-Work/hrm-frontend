@@ -5,12 +5,17 @@
 	import PageLoader from '$cmps/ui/pageLoader.svelte';
 	import SlideDown from '$cmps/ui/slideDown.svelte';
 	import { showError } from '$lib/utils';
-	import { readDepartmentsInADirectorate, type IDirectorate, type IUnit } from '$svc/setup';
+	import {
+		getUnitById,
+		readDepartmentsInADirectorate,
+		readDirectorates,
+		type IDirectorate,
+		type IUnit
+	} from '$svc/setup';
 	import type { IOkResult } from '$svc/shared';
 	import { onMount } from 'svelte';
 	import * as z from 'zod';
 
-	export let optionalData: Record<string, any>;
 	export let data: IUnit;
 	export let isValid = false;
 	export const submit = () => {
@@ -22,11 +27,13 @@
 	let directorates: any[] = [];
 	let departments: any[] = [];
 	let renderId = 0;
+	let loadDepartment = false;
+
 	let initialValues = {
-		departmentId: '',
-		unitHeadId: '',
-		directorateId: '',
-		unitName: ''
+		departmentId: data.departmentId || '',
+		unitHeadId: data.unitHeadId || '',
+		directorateId: data.directorateId || '',
+		unitName: data.unitName
 	};
 
 	function handleChange({ detail }: any) {
@@ -39,6 +46,8 @@
 
 	async function readDeparments(id: string) {
 		try {
+			loadDepartment = true;
+
 			const ret = await readDepartmentsInADirectorate(id);
 			if (!ret.success) {
 				showError(ret.message || 'Failed to load departments');
@@ -48,6 +57,8 @@
 			// renderId++
 		} catch (error: any) {
 			showError(error);
+		} finally {
+			loadDepartment = false;
 		}
 	}
 
@@ -58,43 +69,74 @@
 		unitHeadId: z.string().optional()
 	});
 
-	$: if (initialValues.directorateId) {
-		readDeparments(initialValues.directorateId);
-	} else {
-		departments = [];
+	// $: if (initialValues.directorateId) {
+	// 	readDeparments(initialValues.directorateId);
+	// } else {
+	// 	departments = [];
+	// }
+
+	function handleDirectorateChange({ detail }: CustomEvent) {
+		if (!detail) return;
+		readDeparments(detail.id);
 	}
 
 	onMount(async () => {
-		if (data) {
-			if (data.directorateId) {
-				await readDeparments(data.directorateId);
+		try {
+			// Load directorates first
+			await loadDirectorates();
+
+			// If no ID provided, we're creating a new unit
+			if (!data.id) {
+				return;
 			}
-			initialValues = {
-				departmentId: data.departmentId || '',
-				unitHeadId: data.unitHeadId || '',
-				directorateId: data.directorateId || '',
-				unitName: data.unitName
-			};
-			// renderId++;
-		}
-		if (optionalData.directorates) {
-			try {
-				const ret: IOkResult<any> = await optionalData.directorates;
-				if (!ret.success) {
-					showError(ret.message);
-					return;
-				}
-				directorates = ret.data.map((x: IDirectorate) => ({
-					id: x.id,
-					directorateName: x.directorateName
-				}));
-			} catch (error: any) {
-				showError(error);
-			} finally {
-				busy = false;
-			}
+
+			// Load unit details and related data for existing unit
+			await loadUnitDetails();
+		} catch (error: any) {
+			showError(error?.message || error);
+		} finally {
+			busy = false;
 		}
 	});
+
+	async function loadDirectorates() {
+		try {
+			const result = await readDirectorates();
+			if (!result.success) {
+				throw new Error(result.message);
+			}
+
+			directorates = result.data.map((x: IDirectorate) => ({
+				id: x.id,
+				directorateName: x.directorateName
+			}));
+		} catch (error: any) {
+			showError(`${error?.message || error}`);
+			throw error; // Re-throw to be caught by main handler
+		}
+	}
+
+	async function loadUnitDetails() {
+		try {
+			const result = await getUnitById(data.id);
+			if (!result.success) {
+				throw new Error(result.message);
+			}
+
+			// Update initial values with unit data
+			initialValues = {
+				...initialValues,
+				departmentId: result.data.departmentId,
+				directorateId: result.data.directorateId
+			};
+
+			// Load departments for the selected directorate
+			await readDeparments(initialValues.directorateId);
+		} catch (error: any) {
+			showError(`${error?.message || error}`);
+			throw error; // Re-throw to be caught by main handler
+		}
+	}
 </script>
 
 {#if busy}
@@ -116,10 +158,16 @@
 				name="directorateId"
 				required
 				options={directorates}
-				on:change={() => renderId++}
+				on:change={handleDirectorateChange}
 			/>
 			{#key renderId}
-				<SelectField label="Department" name="departmentId" required options={departments} />
+				<SelectField
+					label="Department"
+					name="departmentId"
+					required
+					options={departments}
+					isLoading={loadDepartment}
+				/>
 			{/key}
 			<TextField label="Unit Name" name="unitName" required />
 			<SelectField label="Unit Head" name="unitHeadId" />

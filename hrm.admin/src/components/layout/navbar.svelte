@@ -58,7 +58,7 @@
 					</div>
 					{#if user?.role}
 						<div class="text-gray-500 truncate w-20">
-							<span>{user.role ?? ''}</span>
+							<span>{user.role.name ?? ''}</span>
 						</div>
 					{:else}
 						<p class="text-gray-500 truncate w-20">{user?.email ?? ''}</p>
@@ -73,7 +73,7 @@
 					>
 					<div class="block truncate text-sm">
 						<span class="font-light text-gray-500">Role:</span>
-						<span class="font-bold">{user?.role ?? ''}</span>
+						<span class="font-bold">{user?.role.name ?? ''}</span>
 					</div>
 					<div class="block truncate text-sm">
 						<span class="font-light text-gray-500">Email:</span>

@@ -18,7 +18,12 @@ export function getComponent(type: DocumentKind) {
 	}
 }
 
-function defaultActions(id: string, polymorphicId: string, staffNumber?: string): IRequestAction[] {
+function defaultActions(
+	id: string,
+	polymorphicId: string,
+	documentType: DocumentKind,
+	staffNumber?: string
+): IRequestAction[] {
 	return [
 		{
 			kind: 'approve',
@@ -31,7 +36,8 @@ function defaultActions(id: string, polymorphicId: string, staffNumber?: string)
 					props: {
 						documentId: id,
 						polymorphicId,
-						staffNumber: staffNumber
+						staffNumber: staffNumber,
+						documentType
 						// size?: IModalSize;
 					}
 				}
@@ -48,7 +54,9 @@ function defaultActions(id: string, polymorphicId: string, staffNumber?: string)
 					props: {
 						documentId: id,
 						polymorphicId,
-						staffNumber: staffNumber
+						staffNumber: staffNumber,
+						documentType
+
 						// size?: IModalSize;
 					}
 				}
@@ -65,7 +73,9 @@ function defaultActions(id: string, polymorphicId: string, staffNumber?: string)
 					props: {
 						documentId: id,
 						polymorphicId,
-						staffNumber: staffNumber
+						staffNumber: staffNumber,
+						documentType
+
 						// size?: IModalSize;
 					}
 				}
@@ -88,7 +98,7 @@ export function getActions(
 		case 'new-registeration':
 			buttons =
 				status === 'PENDING'
-					? defaultActions(id, polymorphicId, staffNumber)
+					? defaultActions(id, polymorphicId, type, staffNumber)
 					: status === 'APPROVED'
 						? [
 								{
@@ -104,7 +114,9 @@ export function getActions(
 											props: {
 												documentId: id,
 												polymorphicId,
-												staffNumber: staffNumber
+												staffNumber: staffNumber,
+												documentType: type
+
 												// size?: IModalSize;
 											}
 										}
@@ -145,7 +157,8 @@ export function getActions(
 												props: {
 													documentId: id,
 													polymorphicId,
-													staffNumber: staffNumber
+													staffNumber: staffNumber,
+													documentType: type
 												}
 											}
 										}
@@ -154,13 +167,13 @@ export function getActions(
 							: [];
 			break;
 		case 'bank-update':
-			buttons = defaultActions(id, polymorphicId, staffNumber);
+			buttons = defaultActions(id, polymorphicId, type, staffNumber);
 		case 'biodata':
-			buttons = defaultActions(id, polymorphicId, staffNumber);
+			buttons = defaultActions(id, polymorphicId, type, staffNumber);
 		case 'family-details':
-			buttons = defaultActions(id, polymorphicId, staffNumber);
+			buttons = defaultActions(id, polymorphicId, type, staffNumber);
 		case 'accommodation':
-			buttons = defaultActions(id, polymorphicId, staffNumber);
+			buttons = defaultActions(id, polymorphicId, type, staffNumber);
 
 		default:
 			// console.log('not found', type);
@@ -204,7 +217,8 @@ export function getRecordsActions(
 									updatable: true,
 									props: {
 										staffNumber: staffId,
-										staffDbId: dbId
+										staffDbId: dbId,
+										
 									}
 								}
 							}

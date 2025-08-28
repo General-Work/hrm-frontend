@@ -9,6 +9,7 @@ import NProgress from 'nprogress';
 import type { DecodedSession, IPageInfo, ITableDataProps, StaffNumberPrefix } from '../types';
 import { crossfade } from 'svelte/transition';
 import { quintOut } from 'svelte/easing';
+import { jwtDecode } from 'jwt-decode';
 
 // export const deployedAppURL = 'http://localhost:5181';
 // export const deployedAppURL = 'https://hrm-admin-rust.vercel.app';
@@ -284,11 +285,10 @@ export function parseQueryParams(url: string): { baseUrl: string; queryParams: Q
 	return { baseUrl, queryParams };
 }
 
-export function isSessionExpired(session: DecodedSession): boolean {
-	console.log(session.exp);
-	console.log(new Date(session.exp));
-	console.log(new Date(1719185536317));
-	return new Date(session.exp * 1000) < new Date();
+export function isSessionExpired(session: string): boolean {
+	if (!session) return false;
+	const decodedSession: DecodedSession = jwtDecode(session);
+	return new Date(decodedSession.exp * 1000) < new Date();
 }
 
 export function convertIsoToTimestamp(isoDateString: string): number {

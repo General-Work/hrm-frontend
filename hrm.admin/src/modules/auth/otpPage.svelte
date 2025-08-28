@@ -1,10 +1,8 @@
 <script lang="ts">
-	import { browser } from '$app/environment';
-	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import Button from '$cmps/ui/button.svelte';
 	import { extractQueryParam, extractRedirectToRoute, showError, showInfo } from '$lib/utils';
-	import { userInfo } from '$svc/auth';
+	import { userInfo, login, loginUser } from '$svc/auth';
 	import { signIn } from '@auth/sveltekit/client';
 	import SvelteOtp from '@k4ung/svelte-otp';
 	import axios from 'axios';
@@ -38,37 +36,8 @@
 		}
 		try {
 			busy = true;
-			const ret = await signIn('credentials', {
-				email: email,
-				otp: value,
-				redirect: false
-			});
-
-			// if (ret) {
-			// 	console.log(ret);
-			// }
-
-			if (ret) {
-				const error = await ret?.json();
-				if (error?.url.includes('?error=Configuration')) {
-					showError('Failed To Confirm OTP');
-					return;
-				}
-				const { ok } = ret;
-
-				if (ok) {
-					// const path = extractQueryParam($page.url.search, 'redirectTo');
-
-					// if (path) {
-					// 	if (browser) {
-					// 		goto(path);
-					// 	}
-					// } else {
-					// 	goto('/dashboard');
-					// }
-					if (browser) window.location.reload();
-				}
-			}
+			const ret = await login(email, value);
+			console.log({ ret });
 		} catch (e: any) {
 			showError(e.message || e);
 		} finally {
@@ -80,12 +49,13 @@
 		try {
 			isLoading = true;
 
-			const ret = await axios.patch('/login', { email, password });
-			if (!ret.data.success) {
-				showError(ret.data.message);
+			const ret = await loginUser({ email, password });
+
+			if (!ret.success) {
+				showError(ret.message);
 				return;
 			}
-			showInfo(ret.data.message);
+			showInfo(ret.data);
 			seconds = 20;
 			startCountdown();
 		} catch (e: any) {

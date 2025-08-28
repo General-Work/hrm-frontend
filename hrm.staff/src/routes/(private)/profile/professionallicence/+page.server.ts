@@ -14,11 +14,12 @@ export const load = async () => {
 			readProfessionalBodies()
 		]);
 
+		console.log({ memberData });
+
 		if (memberData.success) {
 			data = memberData.data;
 		}
 		if (banks.success) {
-			
 			bank = banks.data.map((x: IProfessionalBody) => ({ id: x.id, label: x.name }));
 		}
 	} catch (error) {}

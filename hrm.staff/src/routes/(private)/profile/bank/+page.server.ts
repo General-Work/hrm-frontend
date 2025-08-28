@@ -5,8 +5,8 @@ export const load = async () => {
 	let bank = [] as any[];
 	try {
 		const [memberData, banks] = await Promise.all([readBankDetails(), readAllBanks()]);
+		// console.log(memberData);
 		if (memberData.success) {
-      // console.log(memberData.data)
 			data = memberData.data;
 		}
 		if (banks.success) {

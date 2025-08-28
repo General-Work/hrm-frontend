@@ -1,6 +1,6 @@
 import axiosInstance from '$lib/axios';
 import type { APIQueryParams } from '$lib/types';
-import { axiosError, callResult, queryResult } from '$svc/shared';
+import { axiosError, callResult, paginatedQueryResult, queryResult } from '$svc/shared';
 
 export interface UnitDto {
 	departmentId: string;
@@ -30,7 +30,7 @@ export async function readUnits(params?: APIQueryParams) {
 					params: { ...params, sort: 'updatedAt_desc' }
 				})
 			: await axiosInstance.get('/unit/all');
-		return queryResult(ret, ret.data);
+		return paginatedQueryResult(ret, ret.data);
 	} catch (error) {
 		return axiosError(error);
 	}
@@ -65,6 +65,15 @@ export async function deleteUnit(id: string) {
 	try {
 		const ret = await axiosInstance.delete(`/unit/${id}`);
 		return callResult(ret, ret.data);
+	} catch (error) {
+		return axiosError(error);
+	}
+}
+
+export async function getUnitById(id: string) {
+	try {
+		const ret = await axiosInstance.get(`/unit/${id}`);
+		return queryResult(ret, ret.data);
 	} catch (error) {
 		return axiosError(error);
 	}

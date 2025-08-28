@@ -1,24 +1,19 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
 	import { goto } from '$app/navigation';
-	import { page } from '$app/stores';
 	import AlertDialog from '$cmps/alerts/alertDialog.svelte';
 	import Button from '$cmps/ui/button.svelte';
-	import { endProgress, extractQueryParam, showError, startProgress } from '$lib/utils';
+	import { endProgress, showError, startProgress } from '$lib/utils';
 	import axios from 'axios';
 	import { createEventDispatcher } from 'svelte';
-	import * as z from 'zod';
 
 	export let documentId: string;
 	export let polymorphicId: string;
 	export let staffNumber: string;
+	export let documentType: string;
 	let busy = false;
 	let openAlert = false;
 	const dispatch = createEventDispatcher();
-
-	const schema = z.object({
-		comment: z.string().optional()
-	});
 
 	async function submit() {
 		try {
@@ -29,8 +24,7 @@
 				showError(ret.data.message || 'Failed to approve request');
 				return;
 			}
-			const type = extractQueryParam($page.url.search, 'type');
-			if (type === 'new-registeration') {
+			if (documentType === 'new-registeration') {
 				openAlert = true;
 			} else {
 				dispatch('close', 'refresh');

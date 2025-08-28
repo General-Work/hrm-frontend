@@ -1,6 +1,6 @@
 import axiosInstance from '$lib/axios';
 import type { APIQueryParams } from '$lib/types';
-import { axiosError, callResult, queryResult } from '$svc/shared';
+import { axiosError, callResult, paginatedQueryResult, queryResult } from '$svc/shared';
 
 export interface IDepartment {
 	id: string;
@@ -31,7 +31,7 @@ export async function readDepartments(params?: APIQueryParams) {
 					params: { ...params, sort: 'updatedAt_desc' }
 				})
 			: await axiosInstance.get('/department/all');
-		return queryResult(ret, ret.data);
+		return paginatedQueryResult(ret, ret.data);
 	} catch (error) {
 		return axiosError(error);
 	}
@@ -80,6 +80,15 @@ export async function readUnitsInADepartment(departmentId: string, params?: APIQ
 					params: { ...params, sort: 'updatedAt_desc' }
 				})
 			: await axiosInstance.get(`/department/${departmentId}/unit/all`);
+		return queryResult(ret, ret.data);
+	} catch (error) {
+		return axiosError(error);
+	}
+}
+
+export async function getDepartmentById(id: string) {
+	try {
+		const ret = await axiosInstance.get(`/department/${id}`);
 		return queryResult(ret, ret.data);
 	} catch (error) {
 		return axiosError(error);

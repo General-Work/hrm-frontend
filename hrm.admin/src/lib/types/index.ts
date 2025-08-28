@@ -31,15 +31,11 @@ export interface IUserInfo {
 	lastSeen: Date;
 	isAccountActive: boolean;
 	hasResetPassword: boolean;
-	staffId: string;
-	roleId: string;
-	unitId: string;
-	departmentId: string;
 	email: string;
 	staff: IStaff;
-	role: null | any;
-	unit: null | any;
-	department: null | any;
+	role: { id: string; name: string; permissions: string[] };
+	accessToken: string;
+	initials: string;
 }
 
 export interface IRouteInfo {
@@ -105,6 +101,7 @@ export interface IRequestAction {
 				staffDbId?: string;
 				size?: IModalSize;
 				isFromRequest?: false;
+				documentType?: DocumentKind;
 			};
 		};
 	};

@@ -14,11 +14,12 @@ export interface IAccomodationDetails extends IAccomodationDto {
 	id: string;
 	createdAt: Date;
 	updatedAt: Date;
+	status?: 'PENDING';
 }
 
 export async function readAccomodationDetail() {
 	try {
-		const ret = await axiosInstance.get('/staff/accomodation');
+		const ret = await axiosInstance.get('/staff-request/auth-staff/accommodation-detail');
 		return queryResult(ret, ret.data);
 	} catch (error) {
 		return axiosError(error);

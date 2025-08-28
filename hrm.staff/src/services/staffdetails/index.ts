@@ -90,11 +90,11 @@ export interface IStaffProfile {
 }
 
 export async function readStaffProfile() {
-	try {
-		const ret = await axiosInstance.get('/staff/profile');
-		return queryResult(ret, ret.data);
-	} catch (error) {
-		console.log(error);
-		return axiosError(error);
-	}
+	// try {
+	// 	const ret = await axiosInstance.get('/staff/profile');
+	// 	return queryResult(ret, ret.data);
+	// } catch (error) {
+	// 	console.log(error);
+	// 	return axiosError(error);
+	// }
 }

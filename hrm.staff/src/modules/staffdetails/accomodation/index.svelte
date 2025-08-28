@@ -10,6 +10,7 @@
 	import type { IAccomodationDetails } from '$svc/staffdetails';
 	import axios from 'axios';
 	import dayjs from 'dayjs';
+	import { Alert } from 'flowbite-svelte';
 	import * as z from 'zod';
 
 	export let data: IAccomodationDetails;
@@ -22,6 +23,7 @@
 		allocationDate: data.allocationDate || null
 	};
 	let busy = false;
+	let readonly = data?.status === 'PENDING';
 	const schema = z
 		.object({
 			source: z.enum(['OFFICIAL', 'RENTED', 'PERSONAL']),
@@ -78,6 +80,9 @@
 		on:change={handleChange}
 		on:submit={handleSubmit}
 	>
+		{#if readonly}
+			<Alert color="blue">Your accomodation information is under review</Alert>
+		{/if}
 		<SelectField
 			options={ACCOMODATIONSOURCE}
 			label="Source"
@@ -85,12 +90,14 @@
 			name="source"
 			required
 			labelAsValue
+			{readonly}
 		/>
 		<TextField
 			label="GPS Address"
 			name="gpsAddress"
 			required
 			placeholder="Enter your GPS address"
+			{readonly}
 		/>
 		<SelectField
 			options={ACCOMODATIONTYPE}
@@ -99,17 +106,19 @@
 			label="Accomodation Type"
 			required
 			labelAsValue
+			{readonly}
 		/>
-		<TextField label="Enter flat number" name="flatNumber" />
+		<TextField label="Enter flat number" name="flatNumber" {readonly} />
 		<div class:hidden={!(init.source === 'OFFICIAL')}>
 			<DateField
 				label="Select allocation date"
 				name="allocationDate"
 				required={init.source === 'OFFICIAL'}
 				maxDate={dayjs().toDate()}
+				{readonly}
 			/>
 		</div>
-		<div class="flex justify-end gap-2 md:pb-8 pt-3">
+		<div class:hidden={readonly} class="flex justify-end gap-2 md:pb-8 pt-3">
 			<Button label="Reset" type="reset" />
 			<Button label="Submit" type="submit" color="primary" {busy} />
 		</div>

@@ -17,11 +17,12 @@ export interface IFamilyDetails extends IFamilyDetailDto {
 	staffId: string;
 	createdAt: Date;
 	updatedAt: Date;
+	status: "PENDING"
 }
 
 export async function readFamilyDetails() {
 	try {
-		const ret = await axiosInstance.get(`/staff/family-detail`);
+		const ret = await axiosInstance.get(`/staff-request/auth-staff/family-details`);
 		return queryResult(ret, ret.data);
 	} catch (error) {
 		return axiosError(error);

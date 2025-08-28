@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { browser } from '$app/environment';
-	import { goto } from '$app/navigation';
 	import AlertDialog from '$cmps/alerts/alertDialog.svelte';
 	import HeaderPanel from '$cmps/layout/headerPanel.svelte';
 	import SidePanel from '$cmps/layout/sidePanel.svelte';
@@ -18,6 +16,7 @@
 	import axios from 'axios';
 	import { Drawer, CloseButton, Modal, Button } from 'flowbite-svelte';
 	import { sineIn } from 'svelte/easing';
+	import { browser } from '$app/environment';
 
 	export let data;
 	const leftDrawerTransitionParams = {
@@ -56,7 +55,10 @@
 	}
 
 	async function showDialogs(user: IUserInfo) {
+		// console.log({ user }); 
 		if (!user) return;
+
+		return;
 
 		let message = '';
 		let service = '';

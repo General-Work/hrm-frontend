@@ -1,3 +1,4 @@
+import { generateDataTableProps } from '$lib/utils';
 import type { AxiosResponse } from 'axios';
 interface IFailureResult {
 	success: false;
@@ -48,6 +49,21 @@ export function queryResult<R, T>(
 	}
 
 	return { success: true, message: '', data: data as NonNullable<T> };
+}
+
+export function paginatedQueryResult<R, T>(
+	rawResponse: any,
+	data: T
+): IFailureResult | IOkResult<NonNullable<T>> {
+	if (rawResponse.errors) {
+		return {
+			success: false,
+			status: rawResponse.status ?? 400,
+			message: rawResponse.errors.map((x: any) => x.message).join('.\n')
+		};
+	}
+
+	return { success: true, message: '', data: generateDataTableProps(data) as NonNullable<T> };
 }
 
 export function callResult<R>(rawResponse: AxiosResponse<R>, result: any) {

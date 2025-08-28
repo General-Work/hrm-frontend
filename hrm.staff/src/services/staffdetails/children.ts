@@ -9,7 +9,7 @@ export interface IChildDto {
 export interface IChildDetails extends IChildDto {}
 export async function readChildrenDetails() {
 	try {
-		const ret = await axiosInstance.get('/staff/children-detail');
+		const ret = await axiosInstance.get('/staff-request/auth-staff/children-detail');
 		return queryResult(ret, ret.data);
 	} catch (error) {
 		return axiosError(error);

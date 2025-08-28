@@ -10,6 +10,7 @@
 	import { endProgress, showError, showInfo, startProgress } from '$lib/utils';
 	import type { IFamilyDetails } from '$svc/staffdetails';
 	import axios from 'axios';
+	import { Alert } from 'flowbite-svelte';
 	import * as z from 'zod';
 
 	export let data: IFamilyDetails;
@@ -24,6 +25,7 @@
 		emergencyPersonPhoneNumber: data.emergencyPersonPhoneNumber || ''
 	};
 	let busy = false;
+	let readonly = data?.status === 'PENDING';
 	const schema = z.object({
 		fathersName: z.string().min(1, 'Required'),
 		mothersName: z.string().min(1, 'Required'),
@@ -63,31 +65,34 @@
 			class="w-full h-full flex flex-col gap-6"
 			on:submit={handleSubmit}
 		>
+			{#if readonly}
+				<Alert color="blue">Your family information is under review</Alert>
+			{/if}
 			<Fieldset label="Parents' Info" icon="fluent-mdl2:edit-contact" kind="pink">
 				<div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
-					<TextField label="Father's Name" required name="fathersName" />
-					<TextField label="Mother's Name" required name="mothersName" />
+					<TextField label="Father's Name" required name="fathersName" {readonly} />
+					<TextField label="Mother's Name" required name="mothersName" {readonly} />
 				</div>
 			</Fieldset>
 			<Fieldset label="Spouse's Info" icon="fluent-mdl2:edit-contact" kind="pink">
 				<div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
-					<TextField label="Name" name="spouseName" />
-					<TextField label="Phone Number" name="spousePhoneNumber" />
+					<TextField label="Name" name="spouseName" {readonly} />
+					<TextField label="Phone Number" name="spousePhoneNumber" {readonly} />
 				</div>
 			</Fieldset>
 			<Fieldset label="Next of Kin Info" icon="fluent-mdl2:edit-contact" kind="pink">
 				<div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
-					<TextField label="Name" required name="nextOfKIN" />
-					<TextField label="Phone Number" required name="nextOfKINPhoneNumber" />
+					<TextField label="Name" required name="nextOfKIN" {readonly} />
+					<TextField label="Phone Number" required name="nextOfKINPhoneNumber" {readonly} />
 				</div>
 			</Fieldset>
 			<Fieldset label="Emergency Contact" icon="fluent-mdl2:edit-contact" kind="pink">
 				<div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
-					<TextField label="Name" required name="emergencyPerson" />
-					<TextField label="Phone Number" required name="emergencyPersonPhoneNumber" />
+					<TextField label="Name" required name="emergencyPerson" {readonly} />
+					<TextField label="Phone Number" required name="emergencyPersonPhoneNumber" {readonly} />
 				</div>
 			</Fieldset>
-			<div class="flex justify-end gap-2 md:pb-8 pt-3">
+			<div class:hidden={readonly} class="flex justify-end gap-2 md:pb-8 pt-3">
 				<Button label="Reset" type="reset" />
 				<Button label="Submit" type="submit" color="primary" {busy} />
 			</div>

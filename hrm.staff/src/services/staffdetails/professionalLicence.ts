@@ -15,7 +15,9 @@ export interface IProfessionalBody {
 	staffProfessionalLincense: null;
 }
 
-export interface IProfessionalLicenceDetails extends IProfessionalLicenceDto {}
+export interface IProfessionalLicenceDetails extends IProfessionalLicenceDto {
+	status: 'PENDING';
+}
 
 export async function postProfessionalLicence(params: IProfessionalLicenceDto) {
 	try {
@@ -37,7 +39,7 @@ export async function readProfessionalBodies() {
 
 export async function readProfessionalLicence() {
 	try {
-		const ret = await axiosInstance.get('/staff/professional-licence');
+		const ret = await axiosInstance.get('/staff-request/auth-staff/professional-licence');
 		return queryResult(ret, ret.data);
 	} catch (error) {
 		return axiosError(error);

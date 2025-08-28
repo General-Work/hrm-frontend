@@ -13,12 +13,12 @@
 	let showForm = false;
 
 	function toggleForm() {
-		showForm = true;
+		showForm = !showForm;
 	}
 
 	async function handleClose() {
 		try {
-			showForm = false;
+			toggleForm();
 			startProgress();
 			const ret = await axios.get('/profile/children');
 			if (!ret.data.success) {
@@ -46,10 +46,16 @@
 	{#if data.length}
 		<div class="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-6">
 			{#each data as { childName, dateOfBirth, gender }}
-				<div class="shadow-md rounded-[5px] p-2 flex items-center gap-4 border border-pink-300 bg-pink-50/20">
+				<div
+					class="shadow-md rounded-[5px] p-2 flex items-center gap-4 border border-pink-300 bg-pink-50/20"
+				>
 					<div>
 						<div class="bg-white loginbox rounded-full p-2 w-12 h-12 grid place-content-center">
-							<iconify-icon icon="fa6-solid:children" style="font-size: 20px;" class="text-pink-500" />
+							<iconify-icon
+								icon="fa6-solid:children"
+								style="font-size: 20px;"
+								class="text-pink-500"
+							/>
 						</div>
 					</div>
 					<div class="">
@@ -71,6 +77,6 @@
 	{/if}
 </div>
 
-<Modal open={showForm} title="New Child">
+<Modal open={showForm} title="New Child" on:close={toggleForm}>
 	<Editor on:close={handleClose} />
 </Modal>

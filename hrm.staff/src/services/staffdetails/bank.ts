@@ -6,7 +6,7 @@ export interface IBankDto {
 	accountType: string;
 	branch: string;
 	accountNumber: string;
-	accountName:string
+	accountName: string;
 }
 
 export interface IBankDetail extends IBankDto {
@@ -14,6 +14,7 @@ export interface IBankDetail extends IBankDto {
 	staffId: string;
 	createdAt: Date;
 	updatedAt: Date;
+	status: 'PENDING';
 }
 
 export interface IBank {
@@ -26,7 +27,7 @@ export interface IBank {
 
 export async function readBankDetails() {
 	try {
-		const ret = await axiosInstance.get(`/staff/bank-detail`);
+		const ret = await axiosInstance.get('/staff-request/auth-staff/bank-update');
 		return queryResult(ret, ret.data);
 	} catch (error) {
 		return axiosError(error);

@@ -1,15 +1,15 @@
 <script lang="ts" context="module">
 	const columns: ITableColumn[] = [
 		{
-			header: '#',
-			accessor: 'id',
+			header: 'Name',
+			accessor: 'name',
 			plugins: {
 				sort: { disable: true }
 			}
 		},
 		{
-			header: 'Name',
-			accessor: 'name',
+			header: 'Created At',
+			accessor: (row: IProfessionalBody) => dayjs(row.createdAt).format('ddd DD MMM, YYYY'),
 			plugins: {
 				sort: { disable: true }
 			}
@@ -27,7 +27,9 @@
 <script lang="ts">
 	import DatatablePage from '$cmps/ui/datatablePage.svelte';
 	import type { ITableColumn } from '$cmps/ui/table.svelte';
-	import type { ITableDataProps } from '$types/types';
+	import type { ITableDataProps } from '$lib/types';
+	import type { IProfessionalBody } from '$svc/setup';
+	import dayjs from 'dayjs';
 	import Editor from './editor.svelte';
 
 	export let tableDataInfo: ITableDataProps<any> | undefined;
@@ -43,5 +45,6 @@
 	updateHeading="Update Professional Body"
 	sideModalSize="sm"
 	showModalButtons
+	pageUrl="/applicationsetup/professionalbodies"
 	fillSpace={false}
 />

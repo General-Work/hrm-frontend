@@ -2,6 +2,18 @@
 	export interface TableFilter {
 		search?: string;
 		actions?: { [key: string]: string };
+		startDate?: Date | string | null | undefined;
+		endDate?: Date | string | null | undefined;
+		requestType?: string;
+		filter?: Record<string, any>;
+	}
+
+	export function refetchDatatable(params?: TableFilter) {
+		window.dispatchEvent(
+			new CustomEvent('reFetchTableData', {
+				detail: params
+			})
+		);
 	}
 </script>
 
@@ -29,9 +41,9 @@
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
 	import { browser } from '$app/environment';
+	import TableLoader from './tableLoader.svelte';
 
 	export let optionalData: any = {};
-	export let tableDataInfo: ITableDataProps<any> | undefined | null;
 	export let showEditorIn: 'modal' | 'side-modal' = 'side-modal';
 	export let hideSearchBox = false;
 	export let searchPlaceholder = 'Search...';
@@ -64,13 +76,29 @@
 	export let allowDispatchAfterAction = false;
 	export let allowLoadAfterCreate = true;
 	export let showAdd = true;
-	export let pageUrl = '';
+	export let loadingBodySize = 10;
+	export let loadingHeaderSize = 6;
+	// export let pageUrl = '';
 	export let take = 13;
-	export let reloadData = false;
-	export let isFormData = false;
 	export let fillSpace = true;
 	export let showTopActionsBackground = true;
+	export let customFilterValues: any = {};
 	export let addFuction: (() => void) | null = null;
+	export let read = async (skip?: number, take?: number, defn?: TableFilter) => {
+		return <any>{};
+	};
+	export let createEntry = async (x: any) => {
+		showError('Not implemented');
+		return <any>null;
+	};
+	export let updateEntry = async (x: any) => {
+		showError('Not implemented');
+		return <any>null;
+	};
+	export let deleteEntry = async (x: any) => {
+		showError('Not implemented');
+		return <any>null;
+	};
 
 	let showForm = false;
 	let oldQuery = '';
@@ -83,6 +111,7 @@
 	let isValid = false;
 	let tableData: any[] = [];
 	let isLoading = false;
+	let busy = false;
 
 	$: ({ searchParams, pathname, search } = $page.url);
 
@@ -95,44 +124,56 @@
 
 	const dispatch = createEventDispatcher();
 
-	async function fetchData(page: number, search: string) {
+	async function fetchData(page: number, params: TableFilter) {
 		try {
-			// busy = true;
+			// console.log({ page });
 			startProgress();
-
-			let baseUrl = pageUrl;
-			let params: any = {
-				pageNumber: page,
-				pageSize: pageInfo.pageSize,
-				search: search
-			};
-
-			const { baseUrl: parsedBaseUrl, queryParams } = parseQueryParams(pageUrl);
-			if (queryParams) {
-				baseUrl = parsedBaseUrl;
-				params = {
-					...queryParams,
-					...params
-				};
-			}
-
-			const ret = await axios.get(baseUrl, { params });
-
-			if (ret?.data?.success) {
-				const xs = ret.data.data;
-				pageInfo.totalItems = xs.totalCount;
-				pageInfo.setHasNextPage(xs.pageInfo.hasNextPage);
-				pageInfo.setHasPrevPage(xs.pageInfo.hasPreviousPage);
-				// pageInfo.setCure = xs.currentPage;
-				tableData = xs.items;
+			busy = true;
+			let currentPage = 0;
+			if (params.search) {
+				// if (!pageInfo.hasNextPage) {
+				pageInfo.currentPage = 1;
+				// }
+				currentPage = pageInfo.currentPage;
 			} else {
-				showError(ret?.data.message || 'Failed to load data');
+				currentPage = page || pageInfo.currentPage;
 			}
+			let newParams: any = {
+				pageNumber: currentPage,
+				pageSize: pageInfo.pageSize,
+				search: params.search ?? '',
+				filter: params.filter ?? {}
+				// order: params.order ?? []
+			};
+			const ret: { success: boolean; message: string; data?: any } = await read(
+				newParams.pageNumber,
+				newParams.pageSize,
+				{
+					...params,
+					filter: { ...customFilterValues },
+					search: filters.search || newParams.search || ''
+				}
+			);
+
+			if (!ret.success) {
+				showError(ret.message || 'Failed to load data');
+				return true;
+			}
+
+			const xs = ret.data;
+
+			pageInfo.totalItems = xs.totalCount;
+			pageInfo.setHasNextPage(xs.pageInfo.hasNextPage);
+			pageInfo.setHasPrevPage(xs.pageInfo.hasPreviousPage);
+			tableData = xs.items;
+			// if (params.search) {
+			// 	await goto(pathname);
+			// }
 		} catch (e: any) {
 			showError(e.message || e);
 		} finally {
-			// busy = false;
 			endProgress();
+			busy = false;
 		}
 	}
 
@@ -150,7 +191,7 @@
 			const search = current.toString();
 			const page = search ? `?${search}` : '';
 			await goto(`${pathname}${page}`);
-			await fetchData(value, filters.search);
+			await fetchData(value, { search: filters.search });
 		}
 	}
 
@@ -168,7 +209,7 @@
 			const search = current.toString();
 			const page = search ? `?${search}` : '';
 			await goto(`${pathname}${page}`);
-			await fetchData(value, filters.search);
+			await fetchData(value, { search: filters.search });
 		}
 	}
 
@@ -194,27 +235,18 @@
 			isLoading = true;
 			startProgress();
 
-			let axiosConfig = {};
-			if (isFormData) {
-				axiosConfig = {
-					headers: {
-						'Content-Type': 'multipart/form-data'
-					}
-				};
-			}
-
 			const ret = editing
-				? await axios.patch(`${pageUrl}`, { ...values, id: activeEntry.id }, axiosConfig)
-				: await axios.post(pageUrl, values, axiosConfig);
+				? await updateEntry({ ...values, id: activeEntry.id })
+				: await createEntry(values);
 
-			if (ret.data.success) {
+			if (ret.success) {
 				const successMessage = allowLoadAfterCreate
 					? editing
 						? 'Successfully updated record'
 						: 'Successfully added record'
 					: '';
-				showInfo(ret.data.message || successMessage);
-				allowLoadAfterCreate && (await fetchData(+filters.page, filters.search));
+				showInfo(ret.message || successMessage);
+				allowLoadAfterCreate && (await fetchData(+filters.page, { search: filters.search }));
 
 				allowDispatchAfterAction &&
 					dispatch('afterAction', { type: 'create', values, data: ret.data.data });
@@ -239,23 +271,10 @@
 
 	async function handleDone() {
 		closeSideModal();
-		await fetchData(+filters.page, filters.search);
+		await fetchData(+filters.page, { search: filters.search });
 	}
 
 	const debouncedSearch = debounce(fetchData, 300);
-
-	// $: if (filters.search) {
-	// 	oldQuery = filters.search;
-	// 	debouncedSearch(+filters.page, filters.search);
-	// } else if (oldQuery && !filters.search) {
-	// 	debouncedSearch(+filters.page, filters.search);
-	// 	oldQuery = '';
-	// }
-
-	$: if (reloadData) {
-		fetchData(+filters.page || pageInfo.currentPage, filters.search);
-		reloadData = false;
-	}
 
 	async function handleInputChange({ detail }: CustomEvent) {
 		const current = new URLSearchParams(Array.from(searchParams.entries()));
@@ -268,20 +287,39 @@
 		const search = current.toString();
 		const page = search ? `?${search}` : '';
 		// debouncedSearch(1, value);
-		debouncedSearch(pageInfo.currentPage, value);
+		// console.log({ value });
+		debouncedSearch(pageInfo.currentPage, { search: value });
 
 		// goto(`${pathname}${page}`);
 	}
 
+	function handleExternalFetch(event: CustomEvent) {
+		// console.log({ event });
+		const { requestType, startDate, endDate } = event.detail || ({} as TableFilter);
+
+		fetchData(+filters.page || pageInfo.currentPage, {
+			search: filters.search,
+			requestType,
+			startDate,
+			endDate
+		});
+	}
+
 	onMount(() => {
-		// console.log(tableDataInfo);
-		if (tableDataInfo) {
-			pageInfo.setPageSize(tableDataInfo.pageSize);
-			pageInfo.totalItems = tableDataInfo.totalCount;
-			pageInfo.setHasNextPage(tableDataInfo.pageInfo.hasNextPage);
-			pageInfo.setHasPrevPage(tableDataInfo.pageInfo.hasPreviousPage);
-			tableData = tableDataInfo.items ?? [];
+		if (filters.page) {
+			pageInfo.currentPage = +filters.page;
+			fetchData(+filters.page, { search: filters.search });
+		} else {
+			fetchData(pageInfo.currentPage, { search: filters.search });
 		}
+
+		// Listen for custom event from parent
+		window.addEventListener('reFetchTableData', handleExternalFetch as EventListener);
+
+		// Cleanup on destroy
+		return () => {
+			window.removeEventListener('reFetchTableData', handleExternalFetch as EventListener);
+		};
 	});
 </script>
 
@@ -310,7 +348,7 @@
 						hasNextPage={pageInfo.hasNextPage}
 						hasPreviousPage={pageInfo.hasPrevPage}
 						refresh={() => {
-							fetchData(+filters.page || pageInfo.currentPage, filters.search || '');
+							fetchData(+filters.page || pageInfo.currentPage, { search: filters.search });
 						}}
 						tableColumns={$allColumns}
 						bind:hiddenColumns
@@ -325,38 +363,43 @@
 	</div>
 	<div class:custom-container={!fillSpace} class="w-full h-full flex flex-col gap-2">
 		<slot name="filters" />
-		<div class="w-full h-full">
-			<DataTable
-				{height}
-				{headerColor}
-				data={tableData}
-				{bgWhite}
-				{headerTextColor}
-				{tableColumns}
-				{initialSortKeys}
-				{showActions}
-				{showCheckBox}
-				{showViewDetails}
-				{showEdit}
-				bind:selectAllChecked
-				{showMiniWidth}
-				{rowClickable}
-				{hideWhiteSpace}
-				{selectedRows}
-				{showIndex}
-				{actionLists}
-				bind:hiddenColumns
-				bind:allColumns
-				bind:sortedColumns
-				on:cancel
-				on:delete
-				on:edit={handleEdit}
-				on:feed
-				on:handleCheckbox
-				on:view
-				on:actionClicked
-			/>
-		</div>
+
+		{#if busy}
+			<TableLoader bodySize={loadingBodySize} headerSize={loadingHeaderSize} />
+		{:else}
+			<div class="w-full h-full">
+				<DataTable
+					{height}
+					{headerColor}
+					data={tableData}
+					{bgWhite}
+					{headerTextColor}
+					{tableColumns}
+					{initialSortKeys}
+					{showActions}
+					{showCheckBox}
+					{showViewDetails}
+					{showEdit}
+					bind:selectAllChecked
+					{showMiniWidth}
+					{rowClickable}
+					{hideWhiteSpace}
+					{selectedRows}
+					{showIndex}
+					{actionLists}
+					bind:hiddenColumns
+					bind:allColumns
+					bind:sortedColumns
+					on:cancel
+					on:delete
+					on:edit={handleEdit}
+					on:feed
+					on:handleCheckbox
+					on:view
+					on:actionClicked
+				/>
+			</div>
+		{/if}
 	</div>
 </div>
 

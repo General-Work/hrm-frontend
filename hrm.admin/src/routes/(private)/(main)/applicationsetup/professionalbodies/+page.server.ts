@@ -1,13 +1,14 @@
 import { readProfessionalBodies } from '$svc/setup';
-import { generateTableDataProps } from '$lib/utils';
 import { error } from '@sveltejs/kit';
+import { generateDataTableProps } from '$lib/utils';
 
 export async function load() {
-	const res = await readProfessionalBodies();
+	const res = await readProfessionalBodies({ pageNumber: 1, pageSize: 13, search: '' });
+	// console.log(res);
 	if (!res.success) {
-		error(res.status, res.message ?? 'Failed to load data');
+		error(res.status!, res.message ?? 'Failed to load data');
 	}
 	return {
-		data: generateTableDataProps(1, 10, res.data!)
+		data: generateDataTableProps(res.data)
 	};
 }

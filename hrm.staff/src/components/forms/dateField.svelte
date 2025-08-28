@@ -73,7 +73,6 @@
 		on:change={handleChange}
 		{placeholder}
 		{name}
-		{readonly}
 		class="border border-gray-300 placeholder:text-gray-500/80 border-solid h-10 rounded-[5px] w-full disabled:bg-gray-50"
 	/>
 

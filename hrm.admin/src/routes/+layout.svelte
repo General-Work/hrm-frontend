@@ -29,18 +29,17 @@
 
 </script> -->
 
-<script>
+<script lang="ts">
 	import './styles.css';
 	import 'iconify-icon';
-	import { beforeNavigate, afterNavigate } from '$app/navigation';
+	import { beforeNavigate, afterNavigate, goto } from '$app/navigation';
 	import { endProgress, hideSpinner, startProgress } from '$lib/utils';
 	import dayjs from 'dayjs';
 	import relativeTime from 'dayjs/plugin/relativeTime';
 	import advancedFormat from 'dayjs/plugin/advancedFormat';
-	import { authToken } from '$svc/auth';
+	import { authInit, authToken, isAuthenticated, refreshToken } from '$svc/auth';
 	import { Toaster } from 'svelte-french-toast';
-	import { page } from '$app/stores';
-	import { setAuthToken } from '$lib/axios';
+	import { onDestroy, onMount } from 'svelte';
 
 	dayjs.extend(relativeTime);
 	dayjs.extend(advancedFormat);
@@ -54,11 +53,28 @@
 	});
 
 	hideSpinner();
-	$: if ($page.data.session) {
-		//@ts-ignore
-		setAuthToken($page.data.session.accessToken)
-	}
-	// authToken.subscribe((val) => (token = val));
+	// $: if ($page.data.session) {
+	// 	//@ts-ignore
+	// 	setAuthToken($page.data.session.accessToken)
+	// }
+	// // authToken.subscribe((val) => (token = val));
+
+	// let bot: Typebot
+	let interval = undefined;
+	onMount(async () => {
+		// console.log("init layout")
+		interval = setInterval(() => {
+			refreshToken();
+		}, 30000);
+		authInit();
+	});
+
+	onDestroy(() => clearInterval(interval as any));
+
+	// $: if ($isAuthenticated) {
+	// 	goto('/private/dashboard');
+	// } else {
+	// }
 </script>
 
 <Toaster

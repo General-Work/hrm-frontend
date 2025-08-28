@@ -1,6 +1,7 @@
 import { convertIsoToTimestamp } from '$lib/utils';
 import { STAFF_LOGIN_KEY, authToken, loginStaff } from '$svc/auth';
 import { json } from '@sveltejs/kit';
+import { jwtDecode } from 'jwt-decode';
 
 export const POST = async ({ request, cookies }) => {
 	const body = await request.json();
@@ -13,9 +14,11 @@ export const POST = async ({ request, cookies }) => {
 			return json({ message: ret.message, status: 400, success: false });
 		}
 		const sessionCookie = ret.data.accessToken;
-		const expiresIn = convertIsoToTimestamp(ret.data.expires);
+		const decodedToken: any = jwtDecode(sessionCookie);
+
+		// const expiresIn = convertIsoToTimestamp(ret.data.expires);
 		const options = {
-			maxAge: expiresIn,
+			maxAge: decodedToken.exp.toString(),
 			httpOnly: true,
 			secure: process.env.NODE_ENV === 'production',
 			path: '/'

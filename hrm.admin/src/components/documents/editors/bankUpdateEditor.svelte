@@ -22,12 +22,13 @@
 	import Title from '$cmps/ui/title.svelte';
 
 	export let data: IBankDetails;
+
 </script>
 
 <div>
 	<Title label="Bank Details" icon="clarity:bank-solid" />
 	<div class="p-6 space-y-4">
-		<FieldPair label="Bank Name" subLabel={data.bankName || '-'} />
+		<FieldPair label="Bank Name" subLabel={data?.bank.bankName || '-'} />
 		<FieldPair label="Branch" subLabel={data.branch} />
 		<FieldPair label="Account Name" subLabel={data.accountName || '-'} />
 		<FieldPair label="Account Number" subLabel={data.accountNumber} />

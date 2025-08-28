@@ -10,19 +10,9 @@
 	import Dialog from '$cmps/ui/dialog.svelte';
 	import { CloseButton, Drawer } from 'flowbite-svelte';
 	import { sineIn } from 'svelte/easing';
-	import { browser } from '$app/environment';
-	import { signOut } from '@auth/sveltekit/client';
-	import { authToken, readAuthUser, userInfo } from '$svc/auth';
-	import { onMount } from 'svelte';
-	import { showError } from '$lib/utils';
-	import { page } from '$app/stores';
-	import { setAuthToken } from '$lib/axios';
-	import axios from 'axios';
-	// import { onMount } from 'svelte';
-	// import { showError } from '$lib/utils/index.js';
-	// import { readAuthUser, userInfo } from '$svc/auth';
+	import { signout, userInfo } from '$svc/auth';
 
-	// export let data;
+	import { setAuthToken } from '$lib/axios';
 
 	let hideSidebar = false;
 	let showAlert = false;
@@ -38,32 +28,12 @@
 	function optionClicked({ detail }: any) {
 		const { index } = detail;
 		breadCrumb.removeFromFront(index);
-		// goto(path);
 	}
 
 	async function logout() {
-		await signOut();
-		// authToken.set('');
+		await signout();
 		setAuthToken('');
-		if (browser) window.location.reload();
 	}
-
-	// async function fetchData() {
-	// 	try {
-	// 		const ret = await axios.get('/authuser');
-	// 		if (ret.data.success) {
-	// 			userInfo.set(ret.data.data);
-	// 		}
-	// 	} catch (error: any) {
-	// 		showError(error.message || error);
-	// 	}
-	// }
-
-	// $: if ($page.data.session) {
-	// 	fetchData();
-	// }
-	// onMount(() => {
-	// });
 </script>
 
 {#if !$userInfo}

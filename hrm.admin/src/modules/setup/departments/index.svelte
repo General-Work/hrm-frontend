@@ -29,22 +29,39 @@
 			}
 		}
 	];
+
+	const fetchDataForTable = async (pageNumber: number, pageSize: number, filters: TableFilter) => {
+		// console.log({ pageNumber, pageSize, filters });
+
+		return await readDepartments({
+			pageNumber: pageNumber,
+			pageSize: pageSize,
+			search: filters.search || ''
+		});
+	};
+
+	const update = async (params: any) => {
+		const id = params.id;
+		delete params.id;
+		return updateDepartment(id, params);
+	};
 </script>
 
 <script lang="ts">
-	import DatatablePage from '$cmps/ui/datatablePage.svelte';
+	import DatatablePage, { type TableFilter } from '$cmps/ui/datatablePage.svelte';
 	import type { ITableColumn } from '$cmps/ui/table.svelte';
-	import type { ITableDataProps } from '$lib/types';
-	import type { IDepartment, IDirectorate } from '$svc/setup';
+	import {
+		postDepartment,
+		readDepartments,
+		updateDepartment,
+		type IDepartment,
+		type IDirectorate
+	} from '$svc/setup';
 	import Editor from './editor.svelte';
-
-	export let tableDataInfo: ITableDataProps<any> | undefined;
-	export let directorates: any;
 </script>
 
 <DatatablePage
 	tableColumns={columns}
-	{tableDataInfo}
 	editorComponent={Editor}
 	showEditorIn="side-modal"
 	addButtonLabel="New Department"
@@ -52,9 +69,10 @@
 	updateHeading="Update Department"
 	sideModalSize="sm"
 	showModalButtons
-	pageUrl="/applicationsetup/departments"
-	optionalData={{ directorates }}
 	showActions
 	showEdit
 	fillSpace={false}
+	read={fetchDataForTable}
+	createEntry={postDepartment}
+	updateEntry={update}
 />

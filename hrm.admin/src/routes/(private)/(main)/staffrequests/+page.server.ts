@@ -42,13 +42,13 @@ const documentKinds = {
 	licence: {
 		icon: 'solar:money-bag-bold',
 		title: 'Professional Licence',
-		path: 'professional-license',
+		path: 'professional-licence',
 		iconBg: 'bg-blue-200'
 	},
 	accomodation: {
 		icon: 'solar:money-bag-bold',
 		title: 'Accomodation',
-		path: 'accomodation',
+		path: 'accommodation',
 		iconBg: 'bg-blue-200'
 	}
 	// leave_plan: {

@@ -9,6 +9,7 @@
 	import type { IProfessionalLicenceDetails } from '$svc/staffdetails';
 	import axios from 'axios';
 	import dayjs from 'dayjs';
+	import { Alert } from 'flowbite-svelte';
 	import * as z from 'zod';
 	export let data: IProfessionalLicenceDetails;
 	export let bodies: any[] = [];
@@ -23,10 +24,11 @@
 	let init = {
 		professionalBodyId: data.professionalBodyId || '',
 		pin: data.pin || '',
-		issuedDate: data.issuedDate || null,
-		expiryDate: data.expiryDate || null
+		issuedDate: data?.issuedDate || null,
+		expiryDate: data?.expiryDate || null
 	};
 	let busy = false;
+	let readonly = data?.status === 'PENDING';
 
 	async function handleSubmit({ detail }: CustomEvent) {
 		const { values } = detail;
@@ -54,20 +56,25 @@
 
 <Fieldset label="Professional Details" kind="pink" icon="gridicons:institution">
 	<Form {schema} initialValues={init} class="space-y-6" on:submit={handleSubmit}>
+		{#if readonly}
+			<Alert color="blue">Your Professional Licence information is under review</Alert>
+		{/if}
 		<SelectField
 			label="Professional Body"
 			placeholder="Select professional body"
 			required
 			name="professionalBodyId"
 			options={bodies}
+			{readonly}
 		/>
-		<TextField label="PIN" name="pin" placeholder="Enter your PIN" required />
+		<TextField label="PIN" name="pin" placeholder="Enter your PIN" required {readonly} />
 		<DateField
 			label="Issue Date"
 			placeholder="Select pin issue date"
 			name="issuedDate"
 			required
 			maxDate={dayjs().toDate()}
+			{readonly}
 		/>
 		<DateField
 			label="Expiry Date"
@@ -75,8 +82,9 @@
 			name="expiryDate"
 			required
 			minDate={dayjs().toDate()}
+			{readonly}
 		/>
-		<div class="flex justify-end gap-2 md:pb-8 pt-3">
+		<div class:hidden={readonly} class="flex justify-end gap-2 md:pb-8 pt-3">
 			<Button label="Reset" type="reset" />
 			<Button label="Submit" type="submit" color="primary" {busy} />
 		</div>

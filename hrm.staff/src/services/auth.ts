@@ -63,6 +63,7 @@ export async function loginStaff(data: { staffId: string; password: string }) {
 			staffIdentificationNumber: data.staffId,
 			password: data.password
 		});
+		// console.log({ ret });
 		return queryResult(ret, ret.data);
 	} catch (error) {
 		return axiosError(error);
