@@ -14,7 +14,8 @@
 		familyDetails: FamilyDetails,
 		accomodation: AccomodationEditor,
 		appointementDetailsForm: AppointmentDetails,
-		postingDetailsForm: Postings
+		postingDetailsForm: Postings,
+		professionalLicence: ProfessionalLicenceEditor
 	};
 
 	function textToComponent(typeName: string): ConstructorOfATypedSvelteComponent {
@@ -49,11 +50,12 @@
 	import FamilyDetails from './editors/familyDetails.svelte';
 	import AccomodationEditor from './editors/accomodationEditor.svelte';
 	import { readRequest } from '$svc/staffrequests';
-	import { getActions, getComponent } from '$lib/requestMetaData';
+	import { getActions, getComponent, getSupportingData } from '$lib/requestMetaData';
 	import PageLoader from '$cmps/ui/pageLoader.svelte';
 	import { slide } from 'svelte/transition';
 	import AppointmentDetails from '$modules/staffrecords/appointmentDetails.svelte';
 	import Postings from '$modules/staffrecords/postings.svelte';
+	import ProfessionalLicenceEditor from './editors/professionalLicenceEditor.svelte';
 
 	initMappers(); // set the component mappers
 
@@ -73,59 +75,11 @@
 
 	const dispatch = createEventDispatcher();
 
-	async function loadDocument() {
-		// return document
-		// try {
-		// 	const ret = await getDocumentMetaData(documentId);
-		// 	if (!ret.success) {
-		// 		showError(ret.message);
-		// 		return;
-		// 	}
-		// 	// console.log(document);
-		// 	$actions = ret.data.actions;
-		// 	document = ret.data;
-		// 	return true;
-		// } catch (e: any) {
-		// 	showError(e?.message || e);
-		// 	return false;
-		// }
-	}
-
-	// var onDocumentUpdateStore: OnDocumentUpdateStore;
 	onMount(async () => {
-		// try {
-		// 	if (!(await loadDocument())) {
-		// 		return;
-		// 	}
-		// title = document.title;
-		// 	add(
-		// 		{
-		// 			type: document.viewer,
-		// 			// type: 'recommendLoan',
-		// 			collapsed: false,
-		// 			collapsible: false,
-		// 			closable: false,
-		// 			title: '',
-		// 			props: { documentId: document.id }
-		// 		},
-		// 		true
-		// 	); // sample current form data
-		// 	const ret = await onDocumentUpdate(documentId);
-		// 	if (ret.success) {
-		// 		onDocumentUpdateStore = ret.store;
-		// 		onDocumentUpdateStore.subscribe(async (x) => {
-		// 			await loadDocument();
-		// 		});
-		// 	} else {
-		// 		showError(ret.message);
-		// 	}
-		// } catch (e: any) {
-		// 	showError(e?.message || e);
-		// }
-
 		try {
 			const ret = await readRequest(documentId);
 			// console.log({ ret });
+			// console.log({ documentType });
 
 			if (ret.success) {
 				requestData = ret.data;
@@ -143,9 +97,11 @@
 						documentId,
 						polymorphicId,
 						currentStatatus,
-
 						ret.data?.staff?.staffIdentificationNumber || staffId
 					),
+					otherActions: ret?.data?.previousData?.id
+						? getSupportingData(documentType, documentId, ret.data.status, ret.data?.previousData)
+						: [],
 					status: currentStatatus
 					// feeds: readRequestFeeds(id)
 				};
@@ -208,6 +164,8 @@
 			return;
 		}
 		const cmd = detail.cmd;
+
+		console.log({ cmd });
 		switch (cmd.action) {
 			case 'inlineViewer':
 				if (!cmd.args) {
@@ -287,7 +245,7 @@
 		props: {
 			showActions,
 			actions: meta.actions,
-			otherActions: document.otherActions,
+			otherActions: meta.otherActions,
 			status: meta.status,
 			feeds: meta.feeds,
 			// on:click:{onAction}
@@ -327,7 +285,7 @@
 				<RightPanel
 					{showActions}
 					actions={meta.actions}
-					otherActions={document.otherActions}
+					otherActions={meta.otherActions}
 					status={meta.status}
 					on:click={onAction}
 					{documentId}

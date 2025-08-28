@@ -17,6 +17,8 @@
 	const dispatch = createEventDispatcher();
 	let panelSize = '300px'; // todo: update this for chat
 	$: smallScreen = browser && window.innerWidth < 768 ? true : false;
+
+	// $: console.log({ otherActions });
 </script>
 
 <div class="overflow pl-2 flex-grow flex flex-col right-panel" style:width={panelSize}>
@@ -44,10 +46,9 @@
 				{/if}
 				{#if otherActions?.length}
 					<div class="font-thin mt-3 mb-1 text-gray-400">Supporting Documents</div>
-					<div class="flex flex-col gap-1">
+					<div class="flex flex-col gap-1 px-1">
 						{#each otherActions as action}
 							<ActionButton
-								showBg={false}
 								moreShadow
 								showArrow
 								{...action}

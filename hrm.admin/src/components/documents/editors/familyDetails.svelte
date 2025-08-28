@@ -24,10 +24,13 @@
 	import Title from '$cmps/ui/title.svelte';
 
 	export let data: IFamilyDetails;
+	export let hideTitle = false;
 </script>
 
 <div>
-	<Title label="Family Details" icon="fluent-mdl2:family" />
+	{#if hideTitle}
+		<Title label="Family Details" icon="fluent-mdl2:family" />
+	{/if}
 	<div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
 		<FieldPair label="Father's Name" subLabel={data.fathersName} isColumn={false} />
 		<FieldPair label="Mother's Name" subLabel={data.mothersName} isColumn={false} />

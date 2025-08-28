@@ -5,13 +5,16 @@
 	import dayjs from 'dayjs';
 
 	export let data: IStaff;
+	export let hideTitle = false;
 
 	// console.log(data);
 </script>
 
 <div>
 	<div class="space-y-2">
-		<Title label="Bio Data" icon="fluent:person-32-filled" />
+		{#if !hideTitle}
+			<Title label="Bio Data" icon="fluent:person-32-filled" />
+		{/if}
 		<div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
 			<FieldPair label="Title" subLabel={data.title} isColumn={false} />
 			<FieldPair label="First Name" subLabel={data.firstName} isColumn={false} />

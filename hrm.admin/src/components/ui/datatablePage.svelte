@@ -5,6 +5,7 @@
 		startDate?: Date | string | null | undefined;
 		endDate?: Date | string | null | undefined;
 		requestType?: string;
+		status?: string;
 		filter?: Record<string, any>;
 	}
 
@@ -295,13 +296,14 @@
 
 	function handleExternalFetch(event: CustomEvent) {
 		// console.log({ event });
-		const { requestType, startDate, endDate } = event.detail || ({} as TableFilter);
+		const { requestType, startDate, endDate, status } = event.detail || ({} as TableFilter);
 
 		fetchData(+filters.page || pageInfo.currentPage, {
 			search: filters.search,
 			requestType,
 			startDate,
-			endDate
+			endDate,
+			status
 		});
 	}
 

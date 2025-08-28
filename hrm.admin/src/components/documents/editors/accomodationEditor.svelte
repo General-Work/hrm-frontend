@@ -22,10 +22,13 @@
 	import dayjs from 'dayjs';
 
 	export let data: IAccomodationData;
+	export let hideTitle = false;
 </script>
 
 <div>
-	<Title label="Accomodation Details" icon="clarity:bank-solid" />
+	{#if !hideTitle}
+		<Title label="Accomodation Details" icon="clarity:bank-solid" />
+	{/if}
 	<div class="p-6 space-y-4">
 		<FieldPair label="Source" subLabel={data.source || '-'} />
 		<FieldPair label="GPS Address" subLabel={data.gpsAddress || '-'} />

@@ -78,7 +78,8 @@
 			search: filters.search || '',
 			startDate: filters.startDate as string,
 			endDate: filters.endDate as string,
-			requestType: filters.requestType
+			requestType: filters.requestType,
+			status: filters.status
 		});
 	};
 </script>
@@ -88,10 +89,7 @@
 
 	import DatatablePage, { refetchDatatable, type TableFilter } from '$cmps/ui/datatablePage.svelte';
 	import type { ITableColumn } from '$cmps/ui/table.svelte';
-	import Table from '$cmps/ui/table.svelte';
 	import TableFilters from '$cmps/ui/tableFilters.svelte';
-	import type { ITableDataProps } from '$lib/types';
-	import { generateDataTableProps } from '$lib/utils';
 	import { readRequests, type IRequest } from '$svc/staffrequests';
 	import dayjs from 'dayjs';
 	import { createEventDispatcher } from 'svelte';
@@ -100,43 +98,30 @@
 	export let requestTypes: any[] = [];
 	export let currentRequest: any = {};
 
-	let reloadData = false;
 	let filters = {
 		startDate: '',
 		endDate: '',
 		requestType: '',
+		status: '',
 		remember: false
 	};
 
 	const dispatch = createEventDispatcher();
-
-	function handleFilter({ detail }: any) {
-		const { values } = detail;
-		console.log(values);
-		let startDate = '';
-		let endDate = '';
-		if (values.dateRange) {
-			var tokens =
-				values.dateRange && values.dateRange.includes('to') && values.dateRange.split(' to ');
-			if (tokens.length === 2) {
-				startDate = tokens[0];
-				endDate = tokens[1];
-			}
-		}
-		filters = {
-			startDate,
-			endDate,
-			remember: values.remember,
-			requestType: values.requestType
-		};
-		reloadData = true;
-	}
 
 	function handleTypeChange({ detail }: CustomEvent) {
 		if (detail) {
 			filters = { ...filters, requestType: detail };
 			refetchDatatable({
 				requestType: detail
+			});
+		}
+	}
+
+	function handleStatusChange({ detail }: CustomEvent) {
+		if (detail) {
+			filters = { ...filters, status: detail };
+			refetchDatatable({
+				status: detail
 			});
 		}
 	}
@@ -174,6 +159,7 @@
 			startDate: '',
 			endDate: '',
 			requestType: '',
+			status: '',
 			remember: false
 		};
 		refetchDatatable();
@@ -206,6 +192,7 @@
 					on:typeChange={handleTypeChange}
 					on:startDate={handleStartDate}
 					on:endDate={handleEndDate}
+					on:statusChange={handleStatusChange}
 				/>
 			</div>
 		</DatatablePage>

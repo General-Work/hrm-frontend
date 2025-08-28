@@ -114,6 +114,7 @@ export interface APIQueryParams {
 	startDate?: string;
 	endDate?: string;
 	requestType?: string;
+	status?: string;
 }
 
 export type DocumentKind =
@@ -124,7 +125,7 @@ export type DocumentKind =
 	| 'bank-update'
 	| 'family-details'
 	| 'children-details'
-	| 'professional-license'
+	| 'professional-licence'
 	| 'accommodation'
 	| 'leave_plan'
 	| 'leave_request';
@@ -197,6 +198,8 @@ interface IStaffPosting {
 }
 
 export type IPromotionType = 'Special' | 'First' | 'Subsquent';
+
+export type IRequestStatus = 'PENDING' | 'APPROVED' | 'APPOINTED' | 'REJECTED' | 'POSTED';
 
 export interface IStaff {
 	id: string;

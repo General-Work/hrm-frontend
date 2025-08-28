@@ -37,22 +37,30 @@
 			}
 		}
 	];
+
+	const fetchDataForTable = async (pageNumber: number, pageSize: number, filters: TableFilter) => {
+		// console.log({ pageNumber, pageSize, filters });
+
+		return await readStaffs({
+			pageNumber: pageNumber,
+			pageSize: pageSize,
+			search: filters.search || ''
+		});
+	};
 </script>
 
 <script lang="ts">
-	import { goto } from '$app/navigation';
-
-	import DatatablePage from '$cmps/ui/datatablePage.svelte';
+	import DatatablePage, { type TableFilter } from '$cmps/ui/datatablePage.svelte';
 	import type { ITableColumn } from '$cmps/ui/table.svelte';
-	import type { IStaff, ITableDataProps } from '$lib/types';
+	import type { IStaff } from '$lib/types';
+	import { readStaffs } from '$svc/staff';
 	import { createEventDispatcher } from 'svelte';
 
-	export let tableDataInfo: ITableDataProps<any> | undefined | null;
 	// export let searchParam = '';
 	// export let requestTypes: any[] = [];
 	// export let currentRequest: any = {};
 
-	let reloadData = false;
+	// let reloadData = false;
 
 	const dispatch = createEventDispatcher();
 </script>
@@ -60,15 +68,13 @@
 <DatatablePage
 	showIndex
 	{tableColumns}
-	{tableDataInfo}
 	editorComponent={{}}
 	fillSpace={false}
 	showAdd={false}
 	showTopActionsBackground={true}
 	rowClickable
-	bind:reloadData
 	searchPlaceholder="Search..."
-	pageUrl={`/staffrecords`}
+	read={fetchDataForTable}
 	on:view={({ detail }) => {
 		dispatch('addTab', detail);
 

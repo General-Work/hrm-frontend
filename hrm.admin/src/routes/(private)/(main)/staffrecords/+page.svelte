@@ -1,11 +1,11 @@
 <script lang="ts">
-	import Box from '$cmps/ui/box.svelte';
+	// import Box from '$cmps/ui/box.svelte';
 	import Tabs, { type ITab } from '$cmps/ui/tabs.svelte';
 	import { activePage } from '$data/appStore';
-	import StaffTable from '$modules/staffTable.svelte';
+	// import StaffTable from '$modules/staffTable.svelte';
 	import MainPage from './MainPage.svelte';
 	import RecordsViewer from './RecordsViewer.svelte';
-	export let data;
+	// export let data;
 	$activePage = {
 		title: 'Staff Records',
 		showBreadCrumb: false
@@ -18,10 +18,7 @@
 			label: 'Home',
 			id: '1',
 			component: MainPage,
-			isClosable: false,
-			props: {
-				data: data.data
-			}
+			isClosable: false
 		}
 	];
 

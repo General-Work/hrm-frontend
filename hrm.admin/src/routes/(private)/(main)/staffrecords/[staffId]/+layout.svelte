@@ -7,7 +7,7 @@
 	import type { ISideMenu } from '$lib/types';
 	import { extractQueryParam } from '$lib/utils/index.js';
 	import { onDestroy } from 'svelte';
-	export let data;
+	export let data: any;
 	$: isApplicant = extractQueryParam($page.url.search, 'applicant');
 	$: $sideQuickActions = {
 		component: RightPanel,

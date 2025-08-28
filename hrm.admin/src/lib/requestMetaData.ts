@@ -1,4 +1,4 @@
-import type { DocumentKind, DocumentStatus, IRequestAction } from './types';
+import type { DocumentKind, DocumentStatus, IRequestAction, IRequestStatus } from './types';
 
 export function getComponent(type: DocumentKind) {
 	switch (type) {
@@ -12,6 +12,8 @@ export function getComponent(type: DocumentKind) {
 			return 'familyDetails';
 		case 'accommodation':
 			return 'accomodation';
+		case 'professional-licence':
+			return 'professionalLicence';
 		default:
 			// console.log('not found', type);
 			return null;
@@ -175,11 +177,145 @@ export function getActions(
 		case 'accommodation':
 			buttons = defaultActions(id, polymorphicId, type, staffNumber);
 
+		case 'professional-licence':
+			buttons = defaultActions(id, polymorphicId, type, staffNumber);
+
 		default:
 			// console.log('not found', type);
 			break;
 	}
 	return buttons;
+}
+
+export function getSupportingData(
+	type: DocumentKind,
+	id: string,
+	status: IRequestStatus,
+	data?: any,
+	staffNumber?: string
+) {
+	if (status !== 'PENDING') {
+		return [];
+	}
+	let returnData;
+
+	switch (type) {
+		case 'professional-licence':
+			returnData = [
+				{
+					kind: 'file',
+					label: 'Current Details',
+					cmd: {
+						action: 'inlineViewer',
+						args: {
+							type: 'professionalLicence',
+							title: 'Current Details',
+							props: {
+								documentId: id,
+								documentType: type,
+								data,
+								staffNumber: staffNumber,
+								hideTitle: true
+							}
+						}
+					}
+				}
+			];
+			break;
+
+		case 'accommodation':
+			returnData = [
+				{
+					kind: 'file',
+					label: 'Current Details',
+					cmd: {
+						action: 'inlineViewer',
+						args: {
+							type: 'accomodation',
+							title: 'Current Details',
+							props: {
+								documentId: id,
+								documentType: type,
+								data,
+								staffNumber: staffNumber,
+								hideTitle: true
+							}
+						}
+					}
+				}
+			];
+			break;
+
+		case 'bank-update':
+			returnData = [
+				{
+					kind: 'file',
+					label: 'Current Details',
+					cmd: {
+						action: 'inlineViewer',
+						args: {
+							type: 'bankUpdate',
+							title: 'Current Details',
+							props: {
+								documentId: id,
+								documentType: type,
+								data,
+								staffNumber: staffNumber,
+								hideTitle: true
+							}
+						}
+					}
+				}
+			];
+			break;
+
+		case 'biodata':
+			returnData = [
+				{
+					kind: 'file',
+					label: 'Current Details',
+					cmd: {
+						action: 'inlineViewer',
+						args: {
+							type: 'biodata',
+							title: 'Current Details',
+							props: {
+								documentId: id,
+								documentType: type,
+								data,
+								staffNumber: staffNumber,
+								hideTitle: true
+							}
+						}
+					}
+				}
+			];
+			break;
+
+		case 'family-details':
+			returnData = [
+				{
+					kind: 'file',
+					label: 'Current Details',
+					cmd: {
+						action: 'inlineViewer',
+						args: {
+							type: 'familyDetails',
+							title: 'Current Details',
+							props: {
+								documentId: id,
+								documentType: type,
+								data,
+								staffNumber: staffNumber,
+								hideTitle: true
+							}
+						}
+					}
+				}
+			];
+			break;
+	}
+	return returnData;
 }
 
 interface IRecordsActions {
@@ -217,8 +353,7 @@ export function getRecordsActions(
 									updatable: true,
 									props: {
 										staffNumber: staffId,
-										staffDbId: dbId,
-										
+										staffDbId: dbId
 									}
 								}
 							}

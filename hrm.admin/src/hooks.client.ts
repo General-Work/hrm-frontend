@@ -1,6 +1,7 @@
 import { menuItems } from '$data/userStore';
 import type { IRouteItem } from '$lib/types';
-import { isAuthenticated } from '$svc/auth';
+import { isSessionExpired } from '$lib/utils';
+import { accessToken, isAuthenticated, signout } from '$svc/auth';
 import { get } from 'svelte/store';
 
 const currentLocation = window.location.pathname;
@@ -8,9 +9,24 @@ const currentLocation = window.location.pathname;
 const authRoutes = getAllPaths();
 
 const load = () => {
-	isAuthenticated.subscribe((val) => {
-		if (!val) {
-		} else if (val && !authRoutes.includes(currentLocation)) {
+	isAuthenticated.subscribe((isAuth) => {
+		const session = get(accessToken);
+		const hasExpired = isSessionExpired(session);
+		const isAuthRoute = authRoutes.includes(currentLocation);
+
+		if (!isAuth) {
+			if (hasExpired) {
+				signout();
+			}
+			return;
+		}
+
+		if (hasExpired) {
+			signout();
+			return;
+		}
+
+		if (!isAuthRoute) {
 			window.location.href = '/dashboard';
 		}
 	});

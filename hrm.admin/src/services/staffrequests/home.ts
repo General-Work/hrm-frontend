@@ -22,13 +22,14 @@ export async function readRequests(params?: APIQueryParams) {
 						search: params.search,
 						pageNumber: params.pageNumber,
 						pageSize: params.pageSize,
+						status: params.status && params.status === 'ALL' ? null : params.status,
 						requestType:
 							params.requestType && params.requestType === 'all' ? null : params.requestType,
-						sort: 'createdAt_desc'
+						sort: 'updatedAt_desc'
 					}
 				})
 			: await axiosInstance.get('/staff-request/all');
-		console.log({ data: ret.data });
+		// console.log({ data: ret.data });
 		return paginatedQueryResult(ret, ret.data);
 	} catch (error) {
 		console.log({ error });

@@ -13,7 +13,7 @@
 		staff: null;
 		isApproved: boolean;
 		isAlterable: boolean;
-		bank: null;
+		bank: any;
 	}
 </script>
 
@@ -22,11 +22,13 @@
 	import Title from '$cmps/ui/title.svelte';
 
 	export let data: IBankDetails;
-
+	export let hideTitle = false;
 </script>
 
 <div>
-	<Title label="Bank Details" icon="clarity:bank-solid" />
+	{#if !hideTitle}
+		<Title label="Bank Details" icon="clarity:bank-solid" />
+	{/if}
 	<div class="p-6 space-y-4">
 		<FieldPair label="Bank Name" subLabel={data?.bank.bankName || '-'} />
 		<FieldPair label="Branch" subLabel={data.branch} />

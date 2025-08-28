@@ -12,16 +12,11 @@
 	const dispatch = createEventDispatcher();
 	const schema = z.object({});
 	let formData = {
-		requestType: '',
+		requestType: currentRequest?.path || '',
 		startDate: '',
 		endDate: '',
 		remember: ''
 	};
-
-	$: if (currentRequest) {
-		// console.log(currentRequest)
-		formData = { ...formData, requestType: currentRequest.path };
-	}
 </script>
 
 <Form
@@ -36,13 +31,22 @@
 		> -->
 		<div class="flex flex-col lg:flex-row gap-2">
 			<div class=" flex-grow max-w-7xl">
-				<div class="grid grid-col-1 lg:grid-cols-4 gap-3 items-center">
+				<div class="grid grid-col-1 lg:grid-cols-3 xl:grid-cols-5 gap-3 items-center">
 					<SelectField
 						options={requestTypes.map((x) => ({ path: x.path, title: x.title }))}
 						placeholder="Request Types"
 						name="requestType"
 						on:change={({ detail }) => dispatch('typeChange', detail.path)}
 						clearable={false}
+					/>
+
+					<SelectField
+						options={['ALL', 'PENDING', 'APPOINTED', 'APPROVED', 'REJECTED', 'POSTED']}
+						placeholder="Request Status"
+						name="status"
+						on:change={({ detail }) => dispatch('statusChange', detail.label)}
+						clearable={false}
+						labelAsValue
 					/>
 					<DateField
 						name="startDate"
