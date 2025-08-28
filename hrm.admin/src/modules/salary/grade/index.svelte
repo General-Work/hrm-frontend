@@ -29,7 +29,7 @@
 		return await postGrade({
 			categoryId: params.categoryId,
 			gradeName: params.grade,
-			level: params.level,
+			level: `${params.level}${params.high}`,
 			scale: params.scale,
 			marketPremium: params.marketPremium,
 			minimunStep: params.minimumStep,

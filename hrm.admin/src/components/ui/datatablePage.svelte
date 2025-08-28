@@ -249,7 +249,7 @@
 				allowLoadAfterCreate && (await fetchData(+filters.page, { search: filters.search }));
 
 				allowDispatchAfterAction &&
-					dispatch('afterAction', { type: 'create', values, data: ret.data.data });
+					dispatch('afterAction', { type: 'create', values, data: ret.data });
 				closeSideModal();
 			} else {
 				showError(ret.data.message);
