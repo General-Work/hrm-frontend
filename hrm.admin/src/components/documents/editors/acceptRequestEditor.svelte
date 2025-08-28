@@ -4,7 +4,7 @@
 	import AlertDialog from '$cmps/alerts/alertDialog.svelte';
 	import Button from '$cmps/ui/button.svelte';
 	import { endProgress, showError, startProgress } from '$lib/utils';
-	import axios from 'axios';
+	import { approveRequest } from '$svc/staffrequests';
 	import { createEventDispatcher } from 'svelte';
 
 	export let documentId: string;
@@ -19,9 +19,10 @@
 		try {
 			startProgress();
 			busy = true;
-			const ret = await axios.patch(`/staffrequests/${documentId}`, { id: documentId });
-			if (!ret.data.success) {
-				showError(ret.data.message || 'Failed to approve request');
+			// const ret = await axios.patch(`/staffrequests/${documentId}`, { id: documentId });
+			const ret = await approveRequest(documentId);
+			if (!ret.success) {
+				showError(ret.message || 'Failed to approve request');
 				return;
 			}
 			if (documentType === 'new-registeration') {

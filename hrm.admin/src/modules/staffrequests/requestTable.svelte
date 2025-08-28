@@ -84,8 +84,6 @@
 </script>
 
 <script lang="ts">
-	import { goto } from '$app/navigation';
-
 	import Box from '$cmps/ui/box.svelte';
 
 	import DatatablePage, { refetchDatatable, type TableFilter } from '$cmps/ui/datatablePage.svelte';
@@ -98,7 +96,6 @@
 	import dayjs from 'dayjs';
 	import { createEventDispatcher } from 'svelte';
 
-	export let tableDataInfo: ITableDataProps<IRequest> | undefined | null;
 	export let searchParam = '';
 	export let requestTypes: any[] = [];
 	export let currentRequest: any = {};
@@ -189,12 +186,11 @@
 		<DatatablePage
 			showIndex
 			{tableColumns}
-			{tableDataInfo}
 			editorComponent={{}}
 			fillSpace={false}
 			showAdd={false}
 			showTopActionsBackground={false}
-			height={tableDataInfo?.pageSize && tableDataInfo.pageSize > 15 ? 800 : 730}
+			height={800}
 			rowClickable
 			read={fetchDataForTable}
 			searchPlaceholder="Staff Number..."

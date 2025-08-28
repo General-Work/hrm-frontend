@@ -79,7 +79,7 @@
 	export let loadingBodySize = 10;
 	export let loadingHeaderSize = 6;
 	// export let pageUrl = '';
-	export let take = 13;
+	export let take = 15;
 	export let fillSpace = true;
 	export let showTopActionsBackground = true;
 	export let customFilterValues: any = {};

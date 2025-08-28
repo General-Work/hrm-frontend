@@ -7,7 +7,6 @@
 	import { extractQueryParam } from '$lib/utils';
 	// import Specialty from '$modules/salary/specialty/index.svelte';
 
-	export let data;
 	$: searchParam = extractQueryParam($page.url.search) ?? '';
 	$: requestId = $page.params.requestId;
 
@@ -27,5 +26,5 @@
 </script>
 
 <div class="w-full h-full custom-container">
-	<DocumentViewer bind:title documentId={requestId} meta={data.meta} requestData={data.data} />
+	<DocumentViewer bind:title documentId={requestId} />
 </div>

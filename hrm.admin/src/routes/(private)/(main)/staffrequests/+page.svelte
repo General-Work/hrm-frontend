@@ -1,13 +1,11 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import { activePage } from '$data/appStore';
+	import { activePage, documentKinds } from '$data/appStore';
 	import RequestTable from '$modules/staffrequests/requestTable.svelte';
 	import { extractQueryParam } from '$lib/utils';
 	import Tabs, { type ITab } from '$cmps/ui/tabs.svelte';
 	import DocumentViewer from '$cmps/documents/documentViewer.svelte';
-	import { getComponent } from '$lib/requestMetaData.js';
 	import { refetchDatatable } from '$cmps/ui/datatablePage.svelte';
-	export let data;
 
 	$: searchParam = extractQueryParam($page.url.search) ?? '';
 	$activePage = {
@@ -29,13 +27,10 @@
 			component: RequestTable,
 			isClosable: false,
 			props: {
-				tableDataInfo: data.data,
 				searchParam,
-				requestTypes: Object.values(data.documentKinds),
+				requestTypes: Object.values(documentKinds),
 				currentRequest:
-					searchParam && data.documentKinds
-						? data.documentKinds[searchParam]
-						: data.documentKinds['all']
+					searchParam && documentKinds ? documentKinds[searchParam] : documentKinds['all']
 			}
 		}
 	];
@@ -75,7 +70,6 @@
 		}
 	}
 </script>
-
 
 <div class="w-full h-full custom-container pt-4">
 	<!-- <RequestTable

@@ -3,7 +3,7 @@
 	import TextAreaField from '$cmps/forms/textAreaField.svelte';
 	import Button from '$cmps/ui/button.svelte';
 	import { endProgress, showError, showInfo, startProgress } from '$lib/utils';
-	import axios from 'axios';
+	import { rejectRequest } from '$svc/staffrequests';
 	import { createEventDispatcher } from 'svelte';
 	// import { get } from 'svelte/store';
 	import * as z from 'zod';
@@ -24,15 +24,16 @@
 		try {
 			busy = true;
 			startProgress();
-			const ret = await axios.post(`/staffrequests/${documentId}`, {
-				id: documentId,
-				description: reason
-			});
-			if (!ret.data.success) {
-				showError(ret.data.message);
+			// const ret = await axios.post(`/staffrequests/${documentId}`, {
+			// 	id: documentId,
+			// 	description: reason
+			// });
+			const ret = await rejectRequest(documentId, reason);
+			if (!ret.success) {
+				showError(ret.message);
 				return;
 			}
-			showInfo(ret.data.message);
+			showInfo(ret.message);
 			dispatch('close', 'refresh');
 		} catch (error: any) {
 			showError(error.message || error);
