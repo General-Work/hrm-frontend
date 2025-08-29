@@ -1,9 +1,7 @@
 <script lang="ts">
 	import type { IStaffProfile } from '$svc/staffdetails';
 
-	export let data: IStaffProfile;
-
-	$:console.log(data);
+	let data: IStaffProfile;
 </script>
 
 <div class="w-full h-full">

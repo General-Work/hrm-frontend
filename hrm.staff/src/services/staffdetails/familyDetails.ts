@@ -1,4 +1,4 @@
-import { axiosInstance } from '$routes/+layout.svelte';
+import axiosInstance from '$lib/axios';
 import { axiosError, callResult, queryResult } from '$svc/shared';
 
 export interface IFamilyDetailDto {
@@ -17,7 +17,7 @@ export interface IFamilyDetails extends IFamilyDetailDto {
 	staffId: string;
 	createdAt: Date;
 	updatedAt: Date;
-	status: "PENDING"
+	status: 'PENDING';
 }
 
 export async function readFamilyDetails() {

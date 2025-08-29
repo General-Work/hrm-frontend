@@ -13,12 +13,12 @@
 	} from '$data/appStore';
 	import type { IUserInfo } from '$lib/types';
 	import { showSearchBox } from '$svc/command';
-	import axios from 'axios';
-	import { Drawer, CloseButton, Modal, Button } from 'flowbite-svelte';
+	import { Drawer, CloseButton, Modal } from 'flowbite-svelte';
 	import { sineIn } from 'svelte/easing';
-	import { browser } from '$app/environment';
+	import { authInit, refreshToken, signout, userInfo } from '$svc/auth';
+	import { menuItems } from '$data/userStore';
+	import { onDestroy, onMount } from 'svelte';
 
-	export let data;
 	const leftDrawerTransitionParams = {
 		x: -320,
 		duration: 200,
@@ -30,6 +30,7 @@
 		easing: sineIn
 	};
 	let dialogInfo = { show: false, message: '', service: '', action: '' };
+	let interval: NodeJS.Timer;
 
 	$: rightDrawerOptions = $sideQuickActions;
 	$: activeBreadCrumb = $breadCrumb[$breadCrumb.length - 1].title;
@@ -37,8 +38,7 @@
 	let showAlert = false;
 
 	const logout = async () => {
-		await axios.delete('/login');
-		if (browser) window.location.reload();
+		signout('STAFF');
 	};
 
 	const toggleLogout = () => {
@@ -55,7 +55,7 @@
 	}
 
 	async function showDialogs(user: IUserInfo) {
-		// console.log({ user }); 
+		// console.log({ user });
 		if (!user) return;
 
 		return;
@@ -91,90 +91,107 @@
 		}
 	}
 
-	$: if (data.user) {
-		showDialogs(data.user);
+	$: if ($userInfo) {
+		showDialogs($userInfo);
 	}
+
+	onMount(async () => {
+		await authInit('STAFF');
+		interval = setInterval(() => refreshToken('STAFF'), 10000); // refresh every 30s
+	});
+	onDestroy(() => clearInterval(interval));
 </script>
 
 {#if $showSearchBox}
 	<CommandPallete on:close={(_) => ($showSearchBox = false)} />
 {/if}
-<div class="w-screen h-svh overflow-hidden">
-	<div class="flex w-full h-full">
-		<div class="w-[19rem] h-full hidden lg:flex shrink-0">
-			<SidePanel menuItems={data.menuItems} on:click={toggleLogout} user={data.user} />
-		</div>
-		<div class="flex-grow flex flex-col h-full gap-4">
-			<HeaderPanel
-				on:search={() => ($showSearchBox = true)}
-				on:leftDrawer={() => ($hideNavDrawer = false)}
-				on:rightDrawer={() => ($hideRightDrawer = !$hideRightDrawer)}
-			/>
-			<div class="h-full w-full">
-				{#if $activePage.showBreadCrumb}
-					<div class="">
-						<div class="pl-6 lg:container lg:mx-auto">
-							<BreadCrumb options={$breadCrumb} {activeBreadCrumb} on:click={optionClicked} />
+
+{#if !$userInfo}
+	<div class="w-screen h-screen flex items-center justify-center">
+		<iconify-icon
+			icon="svg-spinners:3-dots-move"
+			class="text-purple-600"
+			style="font-size: 80px;"
+		/>
+	</div>
+{:else}
+	<div class="w-screen h-svh overflow-hidden">
+		<div class="flex w-full h-full">
+			<div class="w-[19rem] h-full hidden lg:flex shrink-0">
+				<SidePanel menuItems={$menuItems} on:click={toggleLogout} user={$userInfo} />
+			</div>
+			<div class="flex-grow flex flex-col h-full gap-4">
+				<HeaderPanel
+					on:search={() => ($showSearchBox = true)}
+					on:leftDrawer={() => ($hideNavDrawer = false)}
+					on:rightDrawer={() => ($hideRightDrawer = !$hideRightDrawer)}
+				/>
+				<div class="h-full w-full">
+					{#if $activePage.showBreadCrumb}
+						<div class="">
+							<div class="pl-6 lg:container lg:mx-auto">
+								<BreadCrumb options={$breadCrumb} {activeBreadCrumb} on:click={optionClicked} />
+							</div>
 						</div>
+					{/if}
+					<div class="pt-5 w-full h-full flex-grow overflow-hidden lg:container lg:mx-auto">
+						<slot />
 					</div>
-				{/if}
-				<div class="pt-5 w-full h-full flex-grow overflow-hidden lg:container lg:mx-auto">
-					<slot />
 				</div>
 			</div>
 		</div>
 	</div>
-</div>
 
-<div class="nav-drawer lg:hidden">
-	<Drawer
-		bind:hidden={$hideNavDrawer}
-		transitionType="fly"
-		transitionParams={leftDrawerTransitionParams}
-		bgOpacity="bg-opacity-50"
-		divClass="overflow-y-hidden z-[50] pt-5 bg-gray-50 dark:bg-gray-800 "
-	>
-		<div class="h-full flex flex-col overflow-y-hidden">
-			<div class="flex items-center">
-				<h5 class="text-base font-semibold text-gray-500">&nbsp;</h5>
-				<CloseButton on:click={(_) => ($hideNavDrawer = true)} />
-			</div>
-			<div
-				class="flex-grow shrink-0 overflow-y-auto scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch"
-			>
-				<SidePanel user={data.user} menuItems={data.menuItems} on:click={toggleLogout} />
-			</div>
-		</div>
-	</Drawer>
-</div>
-
-<div class="md:hidden">
-	{#if rightDrawerOptions}
+	<div class="nav-drawer lg:hidden">
 		<Drawer
-			bind:hidden={$hideRightDrawer}
+			bind:hidden={$hideNavDrawer}
 			transitionType="fly"
-			transitionParams={rightDrawerTransitionParams}
-			backdrop={true}
-			placement="right"
+			transitionParams={leftDrawerTransitionParams}
 			bgOpacity="bg-opacity-50"
-			width="w-[25rem]"
-			divClass="overflow-y-hidden fixed z-50 pt-4 px-4 bg-white dark:bg-gray-800"
-			title={rightDrawerOptions.title || 'Quick Actions'}
+			divClass="overflow-y-hidden z-[50] pt-5 bg-gray-50 dark:bg-gray-800 "
 		>
 			<div class="h-full flex flex-col overflow-y-hidden">
 				<div class="flex items-center">
-					<h5 class="text-base font-semibold text-gray-500">
-						{rightDrawerOptions.title || 'Quick Actions'}
-					</h5>
-					<CloseButton on:click={(_) => ($hideRightDrawer = true)} />
+					<h5 class="text-base font-semibold text-gray-500">&nbsp;</h5>
+					<CloseButton on:click={(_) => ($hideNavDrawer = true)} />
 				</div>
-				<div class="flex-grow overflow-y-auto">
-					<svelte:component this={rightDrawerOptions.component} />
+				<div
+					class="flex-grow shrink-0 overflow-y-auto scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch"
+				>
+					<SidePanel user={$userInfo} menuItems={$menuItems} on:click={toggleLogout} />
 				</div>
 			</div>
 		</Drawer>
-	{/if}
-</div>
+	</div>
+
+	<div class="md:hidden">
+		{#if rightDrawerOptions}
+			<Drawer
+				bind:hidden={$hideRightDrawer}
+				transitionType="fly"
+				transitionParams={rightDrawerTransitionParams}
+				backdrop={true}
+				placement="right"
+				bgOpacity="bg-opacity-50"
+				width="w-[25rem]"
+				divClass="overflow-y-hidden fixed z-50 pt-4 px-4 bg-white dark:bg-gray-800"
+				title={rightDrawerOptions.title || 'Quick Actions'}
+			>
+				<div class="h-full flex flex-col overflow-y-hidden">
+					<div class="flex items-center">
+						<h5 class="text-base font-semibold text-gray-500">
+							{rightDrawerOptions.title || 'Quick Actions'}
+						</h5>
+						<CloseButton on:click={(_) => ($hideRightDrawer = true)} />
+					</div>
+					<div class="flex-grow overflow-y-auto">
+						<svelte:component this={rightDrawerOptions.component} />
+					</div>
+				</div>
+			</Drawer>
+		{/if}
+	</div>
+{/if}
 
 <AlertDialog
 	bind:open={showAlert}

@@ -221,6 +221,7 @@ export interface IStaff {
 	disability: string;
 	passportPicture: string;
 	ecowasCardNumber: string;
+	phoneTwo: string
 	isApproved: boolean;
 	isAlterable: boolean;
 	user: null | any;

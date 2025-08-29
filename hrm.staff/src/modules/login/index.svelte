@@ -2,8 +2,7 @@
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { extractRedirectToRoute, showError } from '$lib/utils';
-	import axios from 'axios';
-	// import logo from '$assets/images/logo1.png';
+	import { generalLogin } from '$svc/auth';
 
 	const bgImageUrl = '';
 
@@ -21,20 +20,18 @@
 	async function handleLogin() {
 		try {
 			busy = true;
-			const ret = await axios.post('/login', {
-				staffId: formData.username,
-				password: formData.password
-			});
-			if (!ret.data.success) {
-				showError(ret.data.message);
-				return;
-			}
-			const redirect = extractRedirectToRoute($page.url.search);
-			if (redirect) {
-				goto(redirect);
-				return;
-			}
-			goto('/home');
+			// const ret = await axios.post('/login', {
+			// 	staffId: formData.username,
+			// 	password: formData.password
+			// });
+			const ret = await generalLogin(formData.username, formData.password, 'STAFF');
+
+			// const redirect = extractRedirectToRoute($page.url.search);
+			// if (redirect) {
+			// 	goto(redirect);
+			// 	return;
+			// }
+			// goto('/home');
 		} catch (error: any) {
 			showError(error.message || error);
 		} finally {

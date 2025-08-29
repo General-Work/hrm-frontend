@@ -35,7 +35,7 @@
 			/>
 			<FieldPair label="SSNIT No." subLabel={data.snnitNumber || '-'} isColumn={false} />
 			<FieldPair label="Phone One" subLabel={data.phone} isColumn={false} />
-			<!-- <FieldPair label="Phone Two" subLabel={data.phoneTwo || '-'} isColumn={false} /> -->
+			<FieldPair label="Phone Two" subLabel={data.phoneTwo || '-'} isColumn={false} />
 			<FieldPair label="Email" subLabel={data.email || '-'} isColumn={false} />
 			<FieldPair label="GPS" subLabel={data.gpsAddress || '-'} isColumn={false} />
 			<FieldPair label="Disability" subLabel={data.disability} isColumn={false} />

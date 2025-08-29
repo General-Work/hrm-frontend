@@ -1,4 +1,5 @@
 import type { IRouteItems, IUserInfo } from '$lib/types';
+import { userInfo } from '$svc/auth';
 import { writable } from 'svelte/store';
 
 const allMenuItems: IRouteItems[] = [
@@ -64,3 +65,9 @@ export function generateMenutItems(user: IUserInfo | null) {
 		return allMenuItems;
 	}
 }
+
+export const menuItems = writable<IRouteItems[]>([]);
+
+userInfo.subscribe((user) => {
+	menuItems.set(generateMenutItems(user));
+});

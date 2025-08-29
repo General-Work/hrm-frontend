@@ -1,7 +1,6 @@
 <script>
 	import { activePage, breadCrumb } from '$data/appStore';
 	import Bank from '$modules/staffdetails/bank/index.svelte';
-	export let data;
 	$activePage = {
 		title: 'Bank Details',
 		showBreadCrumb: true
@@ -16,4 +15,4 @@
 	);
 </script>
 
-<Bank data={data.bankDetails} banks={data.banks} />
+<Bank />

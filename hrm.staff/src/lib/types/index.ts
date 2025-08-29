@@ -48,19 +48,40 @@ export interface IUserInfo {
 	passportPicture: string;
 	unreadCount: number;
 	newStaffPrerequisiteCheck: IRequiredForm;
+	initials: string;
+
+	directorate?: {
+		id: string;
+		createdAt: Date;
+		updatedAt: Date;
+		directorateName: string;
+	};
+	department?: {
+		id: string;
+		createdAt: Date;
+		updatedAt: Date;
+		departmentName: string;
+	};
+	unit: {
+		id: string;
+		createdAt: Date;
+		updatedAt: Date;
+		unitName: Date;
+	};
 }
 
 export interface IApplicantInfo {
 	id: string;
 	createdAt: Date;
 	updatedAt: Date;
-	firsName: string;
+	firstName: string;
 	lastName: string;
 	email: string | null;
 	contact: string;
 	hasSubmittedApplication: boolean;
 	accessToken?: string;
 	applicationStatus?: ApplicantApplicationStatus;
+	initials: string;
 }
 
 export interface IPageInfo {

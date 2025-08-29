@@ -1,5 +1,3 @@
-import { axiosInstance } from '$routes/+layout.svelte';
-import { axiosError, queryResult } from '$svc/shared';
 import type { IAccomodationDetails } from './accomodation';
 import type { IBankDetail } from './bank';
 import type { IChildDetails } from './children';
@@ -11,7 +9,7 @@ export * from './bank';
 export * from './familyDetails';
 export * from './accomodation';
 export * from './professionalLicence';
-export * from "./biodata"
+export * from './biodata';
 
 interface StaffPosting {
 	id: string;

@@ -1,6 +1,6 @@
 // import axiosInstance from '$lib/axios';
+import axiosInstance from '$lib/axios';
 import { formDataConfig } from '$lib/constants';
-import { axiosInstance } from '$routes/+layout.svelte';
 import { axiosError, callResult, queryResult } from './shared';
 
 export interface ApplicantBiodataDto {
