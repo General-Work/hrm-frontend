@@ -10,6 +10,7 @@ import type { IPageInfo, ITableDataProps } from '$lib/types';
 import dayjs from 'dayjs';
 import Holidays from 'date-holidays';
 import * as z from 'zod';
+import { jwtDecode } from 'jwt-decode';
 
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
@@ -264,4 +265,15 @@ export const fileOrStringValidation = (
 export function convertIsoToTimestamp(isoDateString: string): number {
 	const date = new Date(isoDateString);
 	return date.getTime();
+}
+
+export function isSessionExpired(session: string): boolean {
+	if (!session) return false;
+	const decodedSession: DecodedSession = jwtDecode(session);
+	return new Date(decodedSession.exp * 1000) < new Date();
+}
+
+export interface DecodedSession {
+	exp: number;
+	// Add other properties as needed
 }

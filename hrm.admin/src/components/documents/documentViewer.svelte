@@ -15,7 +15,8 @@
 		accomodation: AccomodationEditor,
 		appointementDetailsForm: AppointmentDetails,
 		postingDetailsForm: Postings,
-		professionalLicence: ProfessionalLicenceEditor
+		professionalLicence: ProfessionalLicenceEditor,
+		childrenRequest: ChildrenEditor
 	};
 
 	function textToComponent(typeName: string): ConstructorOfATypedSvelteComponent {
@@ -56,6 +57,7 @@
 	import AppointmentDetails from '$modules/staffrecords/appointmentDetails.svelte';
 	import Postings from '$modules/staffrecords/postings.svelte';
 	import ProfessionalLicenceEditor from './editors/professionalLicenceEditor.svelte';
+	import ChildrenEditor from './editors/childrenEditor.svelte';
 
 	initMappers(); // set the component mappers
 

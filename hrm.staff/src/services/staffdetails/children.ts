@@ -16,9 +16,9 @@ export async function readChildrenDetails() {
 	}
 }
 
-export async function postChildrenDetail(params: IChildDto) {
+export async function postChildrenDetail(params: IChildDto[]) {
 	try {
-		const ret = await axiosInstance.post('/staff-request/children-details', params);
+		const ret = await axiosInstance.post('/staff-request/children-details', { children: params });
 		return callResult(ret, ret.data);
 	} catch (error) {
 		return axiosError(error);

@@ -1,7 +1,6 @@
 <script>
 	import { activePage, breadCrumb } from '$data/appStore';
 	import Children from '$modules/staffdetails/children/index.svelte';
-	export let data;
 	$activePage = {
 		title: 'Children Details',
 		showBreadCrumb: true
@@ -16,4 +15,4 @@
 	);
 </script>
 
-<Children data={data.children} />
+<Children />

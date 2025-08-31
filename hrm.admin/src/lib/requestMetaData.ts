@@ -14,6 +14,9 @@ export function getComponent(type: DocumentKind) {
 			return 'accomodation';
 		case 'professional-licence':
 			return 'professionalLicence';
+
+		case 'children-details':
+			return 'childrenRequest';
 		default:
 			// console.log('not found', type);
 			return null;
@@ -180,6 +183,9 @@ export function getActions(
 		case 'professional-licence':
 			buttons = defaultActions(id, polymorphicId, type, staffNumber);
 
+		case 'children-details':
+			buttons = defaultActions(id, polymorphicId, type, staffNumber);
+
 		default:
 			// console.log('not found', type);
 			break;
@@ -301,6 +307,29 @@ export function getSupportingData(
 						action: 'inlineViewer',
 						args: {
 							type: 'familyDetails',
+							title: 'Current Details',
+							props: {
+								documentId: id,
+								documentType: type,
+								data,
+								staffNumber: staffNumber,
+								hideTitle: true
+							}
+						}
+					}
+				}
+			];
+			break;
+
+		case 'children-details':
+			returnData = [
+				{
+					kind: 'file',
+					label: 'Current Details',
+					cmd: {
+						action: 'inlineViewer',
+						args: {
+							type: 'childrenRequest',
 							title: 'Current Details',
 							props: {
 								documentId: id,

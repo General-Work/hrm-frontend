@@ -4,46 +4,63 @@
 	import axios from 'axios';
 	import type { ITableDataProps } from '$lib/types';
 	import dayjs from 'dayjs';
-	import type { IChildDetails } from '$svc/staffdetails';
+	import { readChildrenDetails, type IChildDetails } from '$svc/staffdetails';
 	import Button from '$cmps/ui/button.svelte';
 	import Modal from '$cmps/ui/modal.svelte';
 	import { endProgress, showError, startProgress } from '$lib/utils';
+	import bg from '$lib/images/chat1.png';
+	import { onMount } from 'svelte';
+	import PageLoader from '$cmps/ui/pageLoader.svelte';
 
-	export let data: IChildDetails[];
 	let showForm = false;
 
 	function toggleForm() {
 		showForm = !showForm;
 	}
 
+	let data: any[] = [];
+	let isLoading = true;
+
 	async function handleClose() {
+		toggleForm();
+	}
+
+	async function fetchData() {
 		try {
-			toggleForm();
-			startProgress();
-			const ret = await axios.get('/profile/children');
-			if (!ret.data.success) {
-				showError(ret.data.message || 'Failed to load children');
+			const ret = await readChildrenDetails();
+			if (!ret.success) {
+				if (ret.message === 'Staff children details not found.') return;
+				showError(ret.message);
 				return;
 			}
-			data = ret.data.data;
+			console.log(ret);
+			data = ret.data.children;
 		} catch (error: any) {
-			showError(error.message || error);
-		} finally {
-			endProgress();
+			showError(error?.message || error);
 		}
 	}
+
+	onMount(async () => {
+		await fetchData();
+		isLoading = false;
+	});
 </script>
 
-<div class="flex flex-col gap-4">
-	<div class="flex justify-end">
-		<Button
-			label="Add Child"
-			color="primary"
-			leadingIcon="line-md:plus-circle"
-			on:click={toggleForm}
-		/>
+{#if isLoading}
+	<div class="w-full h-full">
+		<PageLoader size={50} />
 	</div>
-	{#if data.length}
+{:else}
+	<div class="flex flex-col gap-4 w-full h-full">
+		<div class:hidden={!Boolean(data.length > 0)} class="flex justify-end">
+			<Button
+				label="Add New Child"
+				color="primary"
+				leadingIcon="line-md:plus-circle"
+				on:click={toggleForm}
+			/>
+		</div>
+		<!-- {#if data.length}
 		<div class="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-6">
 			{#each data as { childName, dateOfBirth, gender }}
 				<div
@@ -74,9 +91,54 @@
 				</div>
 			{/each}
 		</div>
-	{/if}
-</div>
+	{/if} -->
 
-<Modal open={showForm} title="New Child" on:close={toggleForm}>
+		{#if data.length > 0}
+			<div class="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-6">
+				{#each data as { childName, dateOfBirth, gender }}
+					<div
+						class="shadow-md rounded-[5px] p-2 flex items-center gap-4 border border-pink-300 bg-pink-50/20"
+					>
+						<div>
+							<div class="bg-white loginbox rounded-full p-2 w-12 h-12 grid place-content-center">
+								<iconify-icon
+									icon="fluent-emoji-high-contrast:child"
+									style="font-size: 20px;"
+									class="text-pink-500"
+								/>
+							</div>
+						</div>
+						<div class="">
+							<div class="text-lg font-semibold">
+								{childName}
+							</div>
+							<div>
+								<span>Date of birth:</span>
+								{dayjs(dateOfBirth).format('DD-MMM-YYYY')}
+							</div>
+							<div>
+								<span>Gender:</span>
+								{gender}
+							</div>
+						</div>
+					</div>
+				{/each}
+			</div>
+		{:else}
+			<div class="min-h-96 justify-center items-center w-full flex">
+				<div class="">
+					<img src={bg} alt="" class="h-96" />
+					<div class="text-center text-xl text-gray-500">
+						No children added, <button class="text-pink-500" on:click={toggleForm}
+							>Add a child</button
+						>
+					</div>
+				</div>
+			</div>
+		{/if}
+	</div>
+{/if}
+
+<Modal size="lg" open={showForm} title="Add Children" on:close={toggleForm}>
 	<Editor on:close={handleClose} />
 </Modal>
