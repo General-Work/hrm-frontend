@@ -7,6 +7,7 @@
 		requestType?: string;
 		status?: string;
 		filter?: Record<string, any>;
+		currentPage?: number;
 	}
 
 	export function refetchDatatable(params?: TableFilter) {
@@ -296,9 +297,10 @@
 
 	function handleExternalFetch(event: CustomEvent) {
 		// console.log({ event });
-		const { requestType, startDate, endDate, status } = event.detail || ({} as TableFilter);
+		const { requestType, startDate, endDate, status, currentPage } =
+			event.detail || ({} as TableFilter);
 
-		fetchData(+filters.page || pageInfo.currentPage, {
+		fetchData(currentPage || +filters.page || pageInfo.currentPage, {
 			search: filters.search,
 			requestType,
 			startDate,

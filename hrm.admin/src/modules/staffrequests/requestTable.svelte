@@ -112,7 +112,8 @@
 		if (detail) {
 			filters = { ...filters, requestType: detail };
 			refetchDatatable({
-				requestType: detail
+				requestType: detail,
+				currentPage: 1
 			});
 		}
 	}
@@ -121,7 +122,8 @@
 		if (detail) {
 			filters = { ...filters, status: detail };
 			refetchDatatable({
-				status: detail
+				status: detail,
+				currentPage: 1
 			});
 		}
 	}
@@ -135,7 +137,8 @@
 			};
 			refetchDatatable({
 				startDate: filters.startDate,
-				endDate: filters.endDate
+				endDate: filters.endDate,
+				currentPage: 1
 			});
 		}
 	}
@@ -149,7 +152,8 @@
 			};
 			refetchDatatable({
 				startDate: filters.startDate,
-				endDate: filters.endDate
+				endDate: filters.endDate,
+				currentPage: 1
 			});
 		}
 	}

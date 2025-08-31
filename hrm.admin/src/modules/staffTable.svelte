@@ -47,14 +47,25 @@
 			search: filters.search || ''
 		});
 	};
+
+	const create = async (params: any) => {
+		return createStaff({
+			...params,
+			dateOfBirth: dayjs(params.dateOfBirth).format('YYYY-MM-DD')
+		});
+	};
 </script>
 
 <script lang="ts">
 	import DatatablePage, { type TableFilter } from '$cmps/ui/datatablePage.svelte';
 	import type { ITableColumn } from '$cmps/ui/table.svelte';
 	import type { IStaff } from '$lib/types';
-	import { readStaffs } from '$svc/staff';
+	import { createStaff, readStaffs } from '$svc/staff';
 	import { createEventDispatcher } from 'svelte';
+	import NewStaff from './staffrecords/newStaff.svelte';
+	import dayjs from 'dayjs';
+
+	export let showAdd = false;
 
 	// export let searchParam = '';
 	// export let requestTypes: any[] = [];
@@ -68,13 +79,18 @@
 <DatatablePage
 	showIndex
 	{tableColumns}
-	editorComponent={{}}
+	editorComponent={NewStaff}
 	fillSpace={false}
-	showAdd={false}
+	{showAdd}
 	showTopActionsBackground={true}
 	rowClickable
 	searchPlaceholder="Search..."
+	addButtonLabel="New Staff"
+	addNewHeading="New Staff"
+	sideModalSize="lg"
+	showModalButtons
 	read={fetchDataForTable}
+	createEntry={create}
 	on:view={({ detail }) => {
 		dispatch('addTab', detail);
 

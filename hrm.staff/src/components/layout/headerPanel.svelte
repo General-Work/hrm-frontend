@@ -91,11 +91,11 @@
 			</a>
 		</Dropdown>
 	</div>
-	<button
+	<!-- <button
 		class="grid place-content-center pl-2 text-pink-600 md:hidden hover:text-pink-900"
 		type="button"
 		on:click={(_) => dispatch('rightDrawer')}
 	>
 		<iconify-icon icon="heroicons-solid:menu-alt-3" class="text-2xl" />
-	</button>
+	</button> -->
 </header>

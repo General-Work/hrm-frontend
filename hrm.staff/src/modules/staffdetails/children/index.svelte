@@ -1,13 +1,10 @@
 <script lang="ts">
-	import DatatablePage from '$cmps/ui/datatablePage.svelte';
 	import Editor from './editor.svelte';
-	import axios from 'axios';
-	import type { ITableDataProps } from '$lib/types';
 	import dayjs from 'dayjs';
-	import { readChildrenDetails, type IChildDetails } from '$svc/staffdetails';
+	import { readChildrenDetails } from '$svc/staffdetails';
 	import Button from '$cmps/ui/button.svelte';
 	import Modal from '$cmps/ui/modal.svelte';
-	import { endProgress, showError, startProgress } from '$lib/utils';
+	import { showError } from '$lib/utils';
 	import bg from '$lib/images/chat1.png';
 	import { onMount } from 'svelte';
 	import PageLoader from '$cmps/ui/pageLoader.svelte';

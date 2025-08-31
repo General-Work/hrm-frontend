@@ -5,6 +5,6 @@
 
 <div class="w-full h-full custom-container">
 	<Box bgWhite shadow rounded>
-		<StaffTable on:addTab />
+		<StaffTable on:addTab showAdd />
 	</Box>
 </div>

@@ -1,6 +1,6 @@
 import axiosInstance from '$lib/axios';
 import type { APIQueryParams } from '$lib/types';
-import { axiosError, paginatedQueryResult, queryResult } from '$svc/shared';
+import { axiosError, callResult, paginatedQueryResult, queryResult } from '$svc/shared';
 
 export async function readStaffs(params?: APIQueryParams) {
 	try {
@@ -17,6 +17,15 @@ export async function readStaffById(id: string) {
 	try {
 		const ret = await axiosInstance.get(`/staff/${id}`);
 		return queryResult(ret, ret.data);
+	} catch (error) {
+		return axiosError(error);
+	}
+}
+
+export async function createStaff(params: any) {
+	try {
+		const ret = await axiosInstance.post('/staff', params);
+		return callResult(ret, ret.data);
 	} catch (error) {
 		return axiosError(error);
 	}
